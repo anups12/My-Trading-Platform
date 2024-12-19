@@ -1,0 +1,660 @@
+2024-12-19 12:05:48,049 [INFO] Initialized TradingStrategy1 with ID: 52
+2024-12-19 12:05:48,051 [INFO] Strategy started for strategy id: 52
+2024-12-19 12:05:48,068 [INFO] websocket started
+2024-12-19 12:05:48,083 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:05:48,084 [INFO] Placing initial market order.. for level: Level 0 | 5.750 | 52
+2024-12-19 12:05:48,086 [INFO] Placing initial market order...Level 0 | 5.750 | 52
+2024-12-19 12:05:48,087 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:05:48,089 [DEBUG] Order Price: 5.75, Quantity: 25
+2024-12-19 12:05:48,091 [INFO] Creating order data
+2024-12-19 12:05:48,091 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-19 12:05:48,325 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900258581'}
+2024-12-19 12:05:48,334 [DEBUG] Entry order object created:.....
+2024-12-19 12:05:48,338 [INFO] Processing after placing the order
+2024-12-19 12:05:48,341 [DEBUG] Order placed successfully: 24121900258581
+2024-12-19 12:05:48,343 [INFO] Processing next Level Index: 0
+2024-12-19 12:05:48,346 [INFO] reached here second time
+2024-12-19 12:05:48,356 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:05:48,356 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:05:48,362 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:05:48,365 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:05:48,366 [INFO] Creating order data
+2024-12-19 12:05:48,367 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:05:48,646 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900258585'}
+2024-12-19 12:05:48,654 [DEBUG] Entry order object created:.....
+2024-12-19 12:05:48,654 [INFO] Processing after placing the order
+2024-12-19 12:05:48,656 [DEBUG] Order placed successfully: 24121900258585
+2024-12-19 12:05:48,658 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:05:48,658 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:05:48,660 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:05:48,661 [INFO] Creating order data
+2024-12-19 12:05:48,661 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:05:48,841 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900258587'}
+2024-12-19 12:05:48,853 [DEBUG] Exit order object created:.....
+2024-12-19 12:05:48,853 [INFO] Processing after placing the order
+2024-12-19 12:05:48,857 [DEBUG] Order placed successfully: 24121900258587
+2024-12-19 12:05:48,857 [INFO] Both orders sent for level 0: Entry=24121900258585, Exit=24121900258587
+2024-12-19 12:09:24,093 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900258585', 'exchOrdId': '1400000132479923', 'qty': 25, 'filledQty': 25, 'limitPrice': 5.15, 'tradedPrice': 5.15, 'type': 1, 'fyToken': '101124121947392', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924200CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:09:26', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24200 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900258585:2'}}
+2024-12-19 12:09:24,096 [DEBUG] Orders checking: entry_order=24121900258585, exit_order=24121900258587
+2024-12-19 12:09:24,097 [INFO] Processing entry order: 24121900258585
+2024-12-19 12:09:24,098 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:09:24,106 [DEBUG] Entry order received for next level Orders object (95), Level: Level 0 | 5.750 | 52
+2024-12-19 12:09:24,116 [INFO] Order Updated successfully: Entry Order:24121900258585 Level Level 0 | 5.750 | 52
+2024-12-19 12:09:24,117 [DEBUG] Cancelling order 24121900258587
+2024-12-19 12:09:24,273 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900258587'}
+2024-12-19 12:09:24,273 [INFO] Processing next level... 1
+2024-12-19 12:09:24,274 [INFO] reached here second time
+2024-12-19 12:09:24,285 [INFO] New Levels, Current: Level 1 | 5.175 | 52, Next: Level 2 | 4.600 | 52, Previous: Level 0 | 5.750 | 52
+2024-12-19 12:09:24,286 [DEBUG] Processing Level: 1, Current: Level 1 | 5.175 | 52, Previous: Level 0 | 5.750 | 52, Next: Level 2 | 4.600 | 52
+2024-12-19 12:09:24,286 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:09:24,287 [DEBUG] Order Price: 4.6000000000000005, Quantity: 25
+2024-12-19 12:09:24,287 [INFO] Creating order data
+2024-12-19 12:09:24,288 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.6000000000000005, 'validity': 'DAY'}
+2024-12-19 12:09:24,424 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900263636'}
+2024-12-19 12:09:24,430 [DEBUG] Entry order object created:.....
+2024-12-19 12:09:24,430 [INFO] Processing after placing the order
+2024-12-19 12:09:24,431 [DEBUG] Order placed successfully: 24121900263636
+2024-12-19 12:09:24,432 [DEBUG] Placing exit order... Level 1 | 5.175 | 52
+2024-12-19 12:09:24,432 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:09:24,433 [DEBUG] Order Price: 5.7, Quantity: 25
+2024-12-19 12:09:24,433 [INFO] Creating order data
+2024-12-19 12:09:24,433 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.7, 'validity': 'DAY'}
+2024-12-19 12:09:24,566 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900263643'}
+2024-12-19 12:09:24,574 [DEBUG] Exit order object created:.....
+2024-12-19 12:09:24,575 [INFO] Processing after placing the order
+2024-12-19 12:09:24,576 [DEBUG] Order placed successfully: 24121900263643
+2024-12-19 12:09:24,576 [INFO] Both orders sent for level 1: Entry=24121900263636, Exit=24121900263643
+2024-12-19 12:09:58,007 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900263643', 'exchOrdId': '1400000133980883', 'qty': 25, 'filledQty': 25, 'limitPrice': 5.7, 'tradedPrice': 5.7, 'type': 1, 'fyToken': '101124121947392', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924200CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:10:00', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24200 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900263643:2'}}
+2024-12-19 12:09:58,007 [DEBUG] Orders checking: entry_order=24121900263636, exit_order=24121900263643
+2024-12-19 12:09:58,008 [INFO] Processing exit order: 24121900263643
+2024-12-19 12:09:58,008 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:09:58,012 [DEBUG] Exit order found Order: Orders object (95)
+2024-12-19 12:09:58,013 [INFO] Updating Exit order: Order Level: 24121900263643, Level: 1
+2024-12-19 12:09:58,029 [INFO] Exit Order updated successfully: 24121900263643
+2024-12-19 12:09:58,030 [DEBUG] Cancelling order 24121900263636
+2024-12-19 12:09:58,262 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900263636'}
+2024-12-19 12:09:58,262 [INFO] Processing next level...
+2024-12-19 12:09:58,263 [INFO] reached here second time
+2024-12-19 12:09:58,268 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:09:58,268 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:09:58,269 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:09:58,270 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:09:58,270 [INFO] Creating order data
+2024-12-19 12:09:58,271 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:09:58,414 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900264265'}
+2024-12-19 12:09:58,421 [DEBUG] Entry order object created:.....
+2024-12-19 12:09:58,421 [INFO] Processing after placing the order
+2024-12-19 12:09:58,422 [DEBUG] Order placed successfully: 24121900264265
+2024-12-19 12:09:58,422 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:09:58,423 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:09:58,423 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:09:58,424 [INFO] Creating order data
+2024-12-19 12:09:58,424 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924200CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:09:58,650 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900264275'}
+2024-12-19 12:09:58,657 [DEBUG] Exit order object created:.....
+2024-12-19 12:09:58,657 [INFO] Processing after placing the order
+2024-12-19 12:09:58,658 [DEBUG] Order placed successfully: 24121900264275
+2024-12-19 12:09:58,658 [INFO] Both orders sent for level 0: Entry=24121900264265, Exit=24121900264275
+2024-12-19 12:14:03,756 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900264275', 'exchOrdId': '1400000134265119', 'qty': 25, 'filledQty': 25, 'limitPrice': 6.3, 'tradedPrice': 6.3, 'type': 1, 'fyToken': '101124121947392', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924200CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:14:06', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24200 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900264275:2'}}
+2024-12-19 12:14:03,757 [DEBUG] Orders checking: entry_order=24121900264265, exit_order=24121900264275
+2024-12-19 12:14:03,757 [INFO] Processing exit order: 24121900264275
+2024-12-19 12:14:03,758 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:14:03,762 [DEBUG] Exit order found Order: Orders object (94)
+2024-12-19 12:14:03,762 [INFO] Updating Exit order: Order Level: 24121900264275, Level: 0
+2024-12-19 12:14:03,780 [INFO] Exit Order updated successfully: 24121900264275
+2024-12-19 12:14:03,781 [INFO] Exit strategy logic triggered
+2024-12-19 12:14:03,782 [DEBUG] Exit strategy mechanism triggered
+2024-12-19 12:14:04,508 [INFO] All Open orders closed. Closed Orders {'code': 200, 'message': 'Position NSE:NIFTY24D1924200CE-INTRADAY is closed.', 's': 'ok'}
+2024-12-19 12:14:04,743 [INFO] Strategy started for strategy id: 52
+2024-12-19 12:14:04,748 [INFO] websocket started
+2024-12-19 12:14:04,754 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:14:04,755 [INFO] Placing initial market order.. for level: Level 0 | 5.750 | 52
+2024-12-19 12:14:04,756 [INFO] Placing initial market order...Level 0 | 5.750 | 52
+2024-12-19 12:14:04,757 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:14:04,757 [DEBUG] Order Price: 5.75, Quantity: 25
+2024-12-19 12:14:04,758 [INFO] Creating order data
+2024-12-19 12:14:04,758 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1923750PE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-19 12:14:04,938 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900267564'}
+2024-12-19 12:14:04,944 [DEBUG] Entry order object created:.....
+2024-12-19 12:14:04,945 [INFO] Processing after placing the order
+2024-12-19 12:14:04,945 [DEBUG] Order placed successfully: 24121900267564
+2024-12-19 12:14:04,945 [INFO] Processing next Level Index: 0
+2024-12-19 12:14:04,946 [INFO] reached here second time
+2024-12-19 12:14:04,951 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:14:04,952 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:14:04,952 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:14:04,953 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:14:04,953 [INFO] Creating order data
+2024-12-19 12:14:04,954 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1923750PE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:14:05,199 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900267573'}
+2024-12-19 12:14:05,205 [DEBUG] Entry order object created:.....
+2024-12-19 12:14:05,206 [INFO] Processing after placing the order
+2024-12-19 12:14:05,207 [DEBUG] Order placed successfully: 24121900267573
+2024-12-19 12:14:05,207 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:14:05,208 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:14:05,208 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:14:05,208 [INFO] Creating order data
+2024-12-19 12:14:05,209 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1923750PE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:14:05,418 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900267577'}
+2024-12-19 12:14:05,425 [DEBUG] Exit order object created:.....
+2024-12-19 12:14:05,426 [INFO] Processing after placing the order
+2024-12-19 12:14:05,426 [DEBUG] Order placed successfully: 24121900267577
+2024-12-19 12:14:05,426 [INFO] Both orders sent for level 0: Entry=24121900267573, Exit=24121900267577
+2024-12-19 12:15:08,558 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900264265', 'exchOrdId': '1400000134262459', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947392', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924200CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:11', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'W', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24200 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900264265:6'}}
+2024-12-19 12:15:08,558 [DEBUG] Orders checking: entry_order=24121900267573, exit_order=24121900267577
+2024-12-19 12:15:08,559 [DEBUG] Order ID 24121900264265 does not match entry or exit orders.
+2024-12-19 12:15:08,660 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900264265', 'exchOrdId': '1400000134262459', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947392', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924200CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:11', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 1, 'source': 'W', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24200 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900264265:1'}}
+2024-12-19 12:15:08,661 [DEBUG] Orders checking: entry_order=24121900267573, exit_order=24121900267577
+2024-12-19 12:15:08,661 [DEBUG] Order ID 24121900264265 does not match entry or exit orders.
+2024-12-19 12:15:11,885 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900267577', 'exchOrdId': '1100000090565022', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947369', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1923750PE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:14', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'W', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 23750 PE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900267577:6'}}
+2024-12-19 12:15:11,887 [DEBUG] Orders checking: entry_order=24121900267573, exit_order=24121900267577
+2024-12-19 12:15:11,887 [INFO] Processing exit order: 24121900267577
+2024-12-19 12:15:11,888 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:11,897 [DEBUG] Exit order found Order: Orders object (94)
+2024-12-19 12:15:11,898 [INFO] Updating Exit order: Order Level: 24121900267577, Level: 0
+2024-12-19 12:15:11,907 [INFO] Exit Order updated successfully: 24121900267577
+2024-12-19 12:15:11,907 [INFO] Exit strategy logic triggered
+2024-12-19 12:15:11,908 [DEBUG] Exit strategy mechanism triggered
+2024-12-19 12:15:12,767 [INFO] All Open orders closed. Closed Orders {'code': 200, 'message': 'Position NSE:NIFTY24D1923750PE-INTRADAY is closed.', 's': 'ok'}
+2024-12-19 12:15:12,948 [INFO] Strategy started for strategy id: 52
+2024-12-19 12:15:12,950 [INFO] websocket started
+2024-12-19 12:15:12,964 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:12,964 [INFO] Placing initial market order.. for level: Level 0 | 5.750 | 52
+2024-12-19 12:15:12,965 [INFO] Placing initial market order...Level 0 | 5.750 | 52
+2024-12-19 12:15:12,966 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:12,967 [DEBUG] Order Price: 5.75, Quantity: 25
+2024-12-19 12:15:12,967 [INFO] Creating order data
+2024-12-19 12:15:12,970 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-19 12:15:13,261 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268367'}
+2024-12-19 12:15:13,267 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:13,267 [INFO] Processing after placing the order
+2024-12-19 12:15:13,268 [DEBUG] Order placed successfully: 24121900268367
+2024-12-19 12:15:13,269 [INFO] Processing next Level Index: 0
+2024-12-19 12:15:13,273 [INFO] reached here second time
+2024-12-19 12:15:13,281 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:13,281 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:15:13,282 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:13,282 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:15:13,282 [INFO] Creating order data
+2024-12-19 12:15:13,284 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:15:13,467 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268368'}
+2024-12-19 12:15:13,481 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:13,482 [INFO] Processing after placing the order
+2024-12-19 12:15:13,484 [DEBUG] Order placed successfully: 24121900268368
+2024-12-19 12:15:13,485 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:15:13,496 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:13,498 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:15:13,498 [INFO] Creating order data
+2024-12-19 12:15:13,499 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:13,773 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268374'}
+2024-12-19 12:15:13,783 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:13,783 [INFO] Processing after placing the order
+2024-12-19 12:15:13,784 [DEBUG] Order placed successfully: 24121900268374
+2024-12-19 12:15:13,789 [INFO] Both orders sent for level 0: Entry=24121900268368, Exit=24121900268374
+2024-12-19 12:15:13,795 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268367', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268367:4'}}
+2024-12-19 12:15:13,797 [DEBUG] Orders checking: entry_order=24121900268368, exit_order=24121900268374
+2024-12-19 12:15:13,798 [DEBUG] Order ID 24121900268367 does not match entry or exit orders.
+2024-12-19 12:15:13,900 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268367', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268367:4'}}
+2024-12-19 12:15:13,900 [DEBUG] Orders checking: entry_order=24121900268368, exit_order=24121900268374
+2024-12-19 12:15:13,900 [DEBUG] Order ID 24121900268367 does not match entry or exit orders.
+2024-12-19 12:15:14,005 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268367', 'exchOrdId': '1500000106369453', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268367:6'}}
+2024-12-19 12:15:14,006 [DEBUG] Orders checking: entry_order=24121900268368, exit_order=24121900268374
+2024-12-19 12:15:14,006 [DEBUG] Order ID 24121900268367 does not match entry or exit orders.
+2024-12-19 12:15:14,109 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268367', 'exchOrdId': '1500000106369453', 'qty': 25, 'filledQty': 25, 'limitPrice': 5.4, 'tradedPrice': 5.4, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268367:2'}}
+2024-12-19 12:15:14,110 [DEBUG] Orders checking: entry_order=24121900268368, exit_order=24121900268374
+2024-12-19 12:15:14,110 [DEBUG] Order ID 24121900268367 does not match entry or exit orders.
+2024-12-19 12:15:14,212 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268368', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268368:4'}}
+2024-12-19 12:15:14,212 [DEBUG] Orders checking: entry_order=24121900268368, exit_order=24121900268374
+2024-12-19 12:15:14,213 [INFO] Processing entry order: 24121900268368
+2024-12-19 12:15:14,214 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:14,216 [DEBUG] Entry order received for next level Orders object (101), Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:14,227 [INFO] Order Updated successfully: Entry Order:24121900268368 Level Level 0 | 5.750 | 52
+2024-12-19 12:15:14,228 [DEBUG] Cancelling order 24121900268374
+2024-12-19 12:15:14,347 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268374'}
+2024-12-19 12:15:14,348 [INFO] Processing next level... 1
+2024-12-19 12:15:14,348 [INFO] reached here second time
+2024-12-19 12:15:14,360 [INFO] New Levels, Current: Level 1 | 5.175 | 52, Next: Level 2 | 4.600 | 52, Previous: Level 0 | 5.750 | 52
+2024-12-19 12:15:14,361 [DEBUG] Processing Level: 1, Current: Level 1 | 5.175 | 52, Previous: Level 0 | 5.750 | 52, Next: Level 2 | 4.600 | 52
+2024-12-19 12:15:14,362 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:14,362 [DEBUG] Order Price: 4.6000000000000005, Quantity: 25
+2024-12-19 12:15:14,363 [INFO] Creating order data
+2024-12-19 12:15:14,363 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.6000000000000005, 'validity': 'DAY'}
+2024-12-19 12:15:14,648 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268384'}
+2024-12-19 12:15:14,660 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:14,660 [INFO] Processing after placing the order
+2024-12-19 12:15:14,665 [DEBUG] Order placed successfully: 24121900268384
+2024-12-19 12:15:14,665 [DEBUG] Placing exit order... Level 1 | 5.175 | 52
+2024-12-19 12:15:14,665 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:14,666 [DEBUG] Order Price: 5.7, Quantity: 25
+2024-12-19 12:15:14,666 [INFO] Creating order data
+2024-12-19 12:15:14,670 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.7, 'validity': 'DAY'}
+2024-12-19 12:15:15,000 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268387'}
+2024-12-19 12:15:15,020 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:15,021 [INFO] Processing after placing the order
+2024-12-19 12:15:15,021 [DEBUG] Order placed successfully: 24121900268387
+2024-12-19 12:15:15,039 [INFO] Both orders sent for level 1: Entry=24121900268384, Exit=24121900268387
+2024-12-19 12:15:15,049 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268368', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268368:4'}}
+2024-12-19 12:15:15,071 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,071 [DEBUG] Order ID 24121900268368 does not match entry or exit orders.
+2024-12-19 12:15:15,176 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268368', 'exchOrdId': '1500000106370468', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268368:6'}}
+2024-12-19 12:15:15,177 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,177 [DEBUG] Order ID 24121900268368 does not match entry or exit orders.
+2024-12-19 12:15:15,281 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268374', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268374:4'}}
+2024-12-19 12:15:15,283 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,284 [DEBUG] Order ID 24121900268374 does not match entry or exit orders.
+2024-12-19 12:15:15,384 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268374', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268374:4'}}
+2024-12-19 12:15:15,389 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,394 [DEBUG] Order ID 24121900268374 does not match entry or exit orders.
+2024-12-19 12:15:15,496 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268374', 'exchOrdId': '1500000106371560', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:16', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268374:6'}}
+2024-12-19 12:15:15,496 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,497 [DEBUG] Order ID 24121900268374 does not match entry or exit orders.
+2024-12-19 12:15:15,599 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268374', 'exchOrdId': '1500000106371560', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268374:6'}}
+2024-12-19 12:15:15,600 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,604 [DEBUG] Order ID 24121900268374 does not match entry or exit orders.
+2024-12-19 12:15:15,710 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268374', 'exchOrdId': '1500000106371560', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 1, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268374:1'}}
+2024-12-19 12:15:15,711 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,712 [DEBUG] Order ID 24121900268374 does not match entry or exit orders.
+2024-12-19 12:15:15,813 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268384', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268384:4'}}
+2024-12-19 12:15:15,813 [DEBUG] Orders checking: entry_order=24121900268384, exit_order=24121900268387
+2024-12-19 12:15:15,814 [INFO] Processing entry order: 24121900268384
+2024-12-19 12:15:15,816 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:15,823 [DEBUG] Entry order received for next level Orders object (102), Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:15,834 [INFO] Order Updated successfully: Entry Order:24121900268384 Level Level 1 | 5.175 | 52
+2024-12-19 12:15:15,835 [DEBUG] Cancelling order 24121900268387
+2024-12-19 12:15:16,029 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268387'}
+2024-12-19 12:15:16,030 [INFO] Processing next level... 2
+2024-12-19 12:15:16,030 [INFO] reached here second time
+2024-12-19 12:15:16,044 [INFO] New Levels, Current: Level 2 | 4.600 | 52, Next: Level 3 | 4.025 | 52, Previous: Level 1 | 5.175 | 52
+2024-12-19 12:15:16,045 [DEBUG] Processing Level: 2, Current: Level 2 | 4.600 | 52, Previous: Level 1 | 5.175 | 52, Next: Level 3 | 4.025 | 52
+2024-12-19 12:15:16,049 [DEBUG] Extracting Price for Level: Level 3 | 4.025 | 52
+2024-12-19 12:15:16,049 [DEBUG] Order Price: 4.0, Quantity: 25
+2024-12-19 12:15:16,050 [INFO] Creating order data
+2024-12-19 12:15:16,054 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.0, 'validity': 'DAY'}
+2024-12-19 12:15:16,298 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268399'}
+2024-12-19 12:15:16,310 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:16,312 [INFO] Processing after placing the order
+2024-12-19 12:15:16,312 [DEBUG] Order placed successfully: 24121900268399
+2024-12-19 12:15:16,314 [DEBUG] Placing exit order... Level 2 | 4.600 | 52
+2024-12-19 12:15:16,315 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:16,316 [DEBUG] Order Price: 5.050000000000001, Quantity: 25
+2024-12-19 12:15:16,316 [INFO] Creating order data
+2024-12-19 12:15:16,323 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.050000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:16,530 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268404'}
+2024-12-19 12:15:16,555 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:16,589 [INFO] Processing after placing the order
+2024-12-19 12:15:16,590 [DEBUG] Order placed successfully: 24121900268404
+2024-12-19 12:15:16,596 [INFO] Both orders sent for level 2: Entry=24121900268399, Exit=24121900268404
+2024-12-19 12:15:16,597 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268384', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268384:4'}}
+2024-12-19 12:15:16,598 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:16,604 [DEBUG] Order ID 24121900268384 does not match entry or exit orders.
+2024-12-19 12:15:16,709 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268384', 'exchOrdId': '1500000106374948', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268384:6'}}
+2024-12-19 12:15:16,710 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:16,710 [DEBUG] Order ID 24121900268384 does not match entry or exit orders.
+2024-12-19 12:15:16,812 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268387', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268387:4'}}
+2024-12-19 12:15:16,812 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:16,813 [DEBUG] Order ID 24121900268387 does not match entry or exit orders.
+2024-12-19 12:15:16,915 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268387', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268387:4'}}
+2024-12-19 12:15:16,915 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:16,916 [DEBUG] Order ID 24121900268387 does not match entry or exit orders.
+2024-12-19 12:15:17,021 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268387', 'exchOrdId': '1500000106376283', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:17', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268387:6'}}
+2024-12-19 12:15:17,022 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:17,023 [DEBUG] Order ID 24121900268387 does not match entry or exit orders.
+2024-12-19 12:15:17,174 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268387', 'exchOrdId': '1500000106376283', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:18', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268387:6'}}
+2024-12-19 12:15:17,204 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:17,228 [DEBUG] Order ID 24121900268387 does not match entry or exit orders.
+2024-12-19 12:15:17,463 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268387', 'exchOrdId': '1500000106376283', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:18', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 1, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268387:1'}}
+2024-12-19 12:15:17,463 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:17,464 [DEBUG] Order ID 24121900268387 does not match entry or exit orders.
+2024-12-19 12:15:17,566 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268399', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:19', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268399:4'}}
+2024-12-19 12:15:17,566 [DEBUG] Orders checking: entry_order=24121900268399, exit_order=24121900268404
+2024-12-19 12:15:17,567 [INFO] Processing entry order: 24121900268399
+2024-12-19 12:15:17,568 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:17,572 [DEBUG] Entry order received for next level Orders object (103), Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:17,581 [INFO] Order Updated successfully: Entry Order:24121900268399 Level Level 2 | 4.600 | 52
+2024-12-19 12:15:17,582 [DEBUG] Cancelling order 24121900268404
+2024-12-19 12:15:17,890 [DEBUG] Cancelled order response: {'code': -52, 'message': 'Not a pending order', 's': 'error', 'id': '24121900268404'}
+2024-12-19 12:15:17,890 [INFO] Processing next level... 3
+2024-12-19 12:15:17,891 [INFO] reached here second time
+2024-12-19 12:15:17,904 [INFO] New Levels, Current: Level 3 | 4.025 | 52, Next: Level 4 | 3.450 | 52, Previous: Level 2 | 4.600 | 52
+2024-12-19 12:15:17,905 [DEBUG] Processing Level: 3, Current: Level 3 | 4.025 | 52, Previous: Level 2 | 4.600 | 52, Next: Level 4 | 3.450 | 52
+2024-12-19 12:15:17,906 [DEBUG] Extracting Price for Level: Level 4 | 3.450 | 52
+2024-12-19 12:15:17,907 [DEBUG] Order Price: 3.45, Quantity: 25
+2024-12-19 12:15:17,908 [INFO] Creating order data
+2024-12-19 12:15:17,909 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 3.45, 'validity': 'DAY'}
+2024-12-19 12:15:18,175 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268419'}
+2024-12-19 12:15:18,181 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:18,181 [INFO] Processing after placing the order
+2024-12-19 12:15:18,181 [DEBUG] Order placed successfully: 24121900268419
+2024-12-19 12:15:18,181 [DEBUG] Placing exit order... Level 3 | 4.025 | 52
+2024-12-19 12:15:18,181 [DEBUG] Extracting Price for Level: Level 3 | 4.025 | 52
+2024-12-19 12:15:18,183 [DEBUG] Order Price: 4.45, Quantity: 25
+2024-12-19 12:15:18,183 [INFO] Creating order data
+2024-12-19 12:15:18,184 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 4.45, 'validity': 'DAY'}
+2024-12-19 12:15:18,437 [INFO] Handling order response after placing order {'code': -99, 'message': 'RED:Margin Shortfall:INR 85,606.62 Available:INR 3,656.30 for C-XA46525 [FYERS_RISK_CUG]', 's': 'error', 'id': '24121900268422'}
+2024-12-19 12:15:18,540 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:18,641 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:18,742 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:18,742 [INFO] Strategy started for strategy id: 52
+2024-12-19 12:15:18,744 [INFO] websocket started
+2024-12-19 12:15:18,751 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:18,752 [INFO] Placing initial market order.. for level: Level 0 | 5.750 | 52
+2024-12-19 12:15:18,752 [INFO] Placing initial market order...Level 0 | 5.750 | 52
+2024-12-19 12:15:18,753 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:18,753 [DEBUG] Order Price: 5.75, Quantity: 25
+2024-12-19 12:15:18,754 [INFO] Creating order data
+2024-12-19 12:15:18,754 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-19 12:15:18,984 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268429'}
+2024-12-19 12:15:18,990 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:18,990 [INFO] Processing after placing the order
+2024-12-19 12:15:18,991 [DEBUG] Order placed successfully: 24121900268429
+2024-12-19 12:15:18,991 [INFO] Processing next Level Index: 0
+2024-12-19 12:15:18,992 [INFO] reached here second time
+2024-12-19 12:15:18,997 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:18,998 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:15:18,998 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:18,999 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:15:18,999 [INFO] Creating order data
+2024-12-19 12:15:19,000 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:15:19,240 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268434'}
+2024-12-19 12:15:19,246 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:19,246 [INFO] Processing after placing the order
+2024-12-19 12:15:19,247 [DEBUG] Order placed successfully: 24121900268434
+2024-12-19 12:15:19,247 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:15:19,248 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:19,248 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:15:19,249 [INFO] Creating order data
+2024-12-19 12:15:19,249 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:19,413 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268438'}
+2024-12-19 12:15:19,420 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:19,421 [INFO] Processing after placing the order
+2024-12-19 12:15:19,422 [DEBUG] Order placed successfully: 24121900268438
+2024-12-19 12:15:19,422 [INFO] Both orders sent for level 0: Entry=24121900268434, Exit=24121900268438
+2024-12-19 12:15:19,423 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268429', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:21', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268429:4'}}
+2024-12-19 12:15:19,424 [DEBUG] Orders checking: entry_order=24121900268434, exit_order=24121900268438
+2024-12-19 12:15:19,424 [DEBUG] Order ID 24121900268429 does not match entry or exit orders.
+2024-12-19 12:15:19,526 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268429', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:21', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268429:4'}}
+2024-12-19 12:15:19,526 [DEBUG] Orders checking: entry_order=24121900268434, exit_order=24121900268438
+2024-12-19 12:15:19,527 [DEBUG] Order ID 24121900268429 does not match entry or exit orders.
+2024-12-19 12:15:19,628 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268429', 'exchOrdId': '1500000106392305', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:21', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268429:6'}}
+2024-12-19 12:15:19,628 [DEBUG] Orders checking: entry_order=24121900268434, exit_order=24121900268438
+2024-12-19 12:15:19,629 [DEBUG] Order ID 24121900268429 does not match entry or exit orders.
+2024-12-19 12:15:19,733 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268429', 'exchOrdId': '1500000106392305', 'qty': 25, 'filledQty': 25, 'limitPrice': 5.4, 'tradedPrice': 5.4, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:21', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268429:2'}}
+2024-12-19 12:15:19,733 [DEBUG] Orders checking: entry_order=24121900268434, exit_order=24121900268438
+2024-12-19 12:15:19,734 [DEBUG] Order ID 24121900268429 does not match entry or exit orders.
+2024-12-19 12:15:19,840 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268434', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268434:4'}}
+2024-12-19 12:15:19,841 [DEBUG] Orders checking: entry_order=24121900268434, exit_order=24121900268438
+2024-12-19 12:15:19,847 [INFO] Processing entry order: 24121900268434
+2024-12-19 12:15:19,849 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:19,855 [DEBUG] Entry order received for next level Orders object (106), Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:19,876 [INFO] Order Updated successfully: Entry Order:24121900268434 Level Level 0 | 5.750 | 52
+2024-12-19 12:15:19,876 [DEBUG] Cancelling order 24121900268438
+2024-12-19 12:15:20,139 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268438'}
+2024-12-19 12:15:20,141 [INFO] Processing next level... 1
+2024-12-19 12:15:20,146 [INFO] reached here second time
+2024-12-19 12:15:20,165 [INFO] New Levels, Current: Level 1 | 5.175 | 52, Next: Level 2 | 4.600 | 52, Previous: Level 0 | 5.750 | 52
+2024-12-19 12:15:20,165 [DEBUG] Processing Level: 1, Current: Level 1 | 5.175 | 52, Previous: Level 0 | 5.750 | 52, Next: Level 2 | 4.600 | 52
+2024-12-19 12:15:20,169 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:20,191 [DEBUG] Order Price: 4.6000000000000005, Quantity: 25
+2024-12-19 12:15:20,191 [INFO] Creating order data
+2024-12-19 12:15:20,192 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.6000000000000005, 'validity': 'DAY'}
+2024-12-19 12:15:20,522 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268450'}
+2024-12-19 12:15:20,530 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:20,530 [INFO] Processing after placing the order
+2024-12-19 12:15:20,531 [DEBUG] Order placed successfully: 24121900268450
+2024-12-19 12:15:20,533 [DEBUG] Placing exit order... Level 1 | 5.175 | 52
+2024-12-19 12:15:20,533 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:20,533 [DEBUG] Order Price: 5.7, Quantity: 25
+2024-12-19 12:15:20,534 [INFO] Creating order data
+2024-12-19 12:15:20,534 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.7, 'validity': 'DAY'}
+2024-12-19 12:15:20,683 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268454'}
+2024-12-19 12:15:20,693 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:20,693 [INFO] Processing after placing the order
+2024-12-19 12:15:20,694 [DEBUG] Order placed successfully: 24121900268454
+2024-12-19 12:15:20,694 [INFO] Both orders sent for level 1: Entry=24121900268450, Exit=24121900268454
+2024-12-19 12:15:20,695 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268434', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268434:4'}}
+2024-12-19 12:15:20,695 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:20,696 [DEBUG] Order ID 24121900268434 does not match entry or exit orders.
+2024-12-19 12:15:20,802 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268434', 'exchOrdId': '1500000106393542', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268434:6'}}
+2024-12-19 12:15:20,802 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:20,804 [DEBUG] Order ID 24121900268434 does not match entry or exit orders.
+2024-12-19 12:15:20,906 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268438', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268438:4'}}
+2024-12-19 12:15:20,906 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:20,907 [DEBUG] Order ID 24121900268438 does not match entry or exit orders.
+2024-12-19 12:15:21,010 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268438', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268438:4'}}
+2024-12-19 12:15:21,010 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:21,012 [DEBUG] Order ID 24121900268438 does not match entry or exit orders.
+2024-12-19 12:15:21,113 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268438', 'exchOrdId': '1500000106394526', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:22', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268438:6'}}
+2024-12-19 12:15:21,113 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:21,113 [DEBUG] Order ID 24121900268438 does not match entry or exit orders.
+2024-12-19 12:15:21,214 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268438', 'exchOrdId': '1500000106394526', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268438:6'}}
+2024-12-19 12:15:21,214 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:21,214 [DEBUG] Order ID 24121900268438 does not match entry or exit orders.
+2024-12-19 12:15:21,316 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268438', 'exchOrdId': '1500000106394526', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 1, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268438:1'}}
+2024-12-19 12:15:21,317 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:21,331 [DEBUG] Order ID 24121900268438 does not match entry or exit orders.
+2024-12-19 12:15:21,500 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268450', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268450:4'}}
+2024-12-19 12:15:21,500 [DEBUG] Orders checking: entry_order=24121900268450, exit_order=24121900268454
+2024-12-19 12:15:21,501 [INFO] Processing entry order: 24121900268450
+2024-12-19 12:15:21,502 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:21,587 [DEBUG] Entry order received for next level Orders object (107), Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:21,619 [INFO] Order Updated successfully: Entry Order:24121900268450 Level Level 1 | 5.175 | 52
+2024-12-19 12:15:21,620 [DEBUG] Cancelling order 24121900268454
+2024-12-19 12:15:22,199 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268454'}
+2024-12-19 12:15:22,201 [INFO] Processing next level... 2
+2024-12-19 12:15:22,201 [INFO] reached here second time
+2024-12-19 12:15:22,256 [INFO] New Levels, Current: Level 2 | 4.600 | 52, Next: Level 3 | 4.025 | 52, Previous: Level 1 | 5.175 | 52
+2024-12-19 12:15:22,257 [DEBUG] Processing Level: 2, Current: Level 2 | 4.600 | 52, Previous: Level 1 | 5.175 | 52, Next: Level 3 | 4.025 | 52
+2024-12-19 12:15:22,293 [DEBUG] Extracting Price for Level: Level 3 | 4.025 | 52
+2024-12-19 12:15:22,294 [DEBUG] Order Price: 4.0, Quantity: 25
+2024-12-19 12:15:22,294 [INFO] Creating order data
+2024-12-19 12:15:22,295 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.0, 'validity': 'DAY'}
+2024-12-19 12:15:22,571 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268486'}
+2024-12-19 12:15:22,577 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:22,578 [INFO] Processing after placing the order
+2024-12-19 12:15:22,578 [DEBUG] Order placed successfully: 24121900268486
+2024-12-19 12:15:22,578 [DEBUG] Placing exit order... Level 2 | 4.600 | 52
+2024-12-19 12:15:22,579 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:22,579 [DEBUG] Order Price: 5.050000000000001, Quantity: 25
+2024-12-19 12:15:22,580 [INFO] Creating order data
+2024-12-19 12:15:22,581 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.050000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:22,847 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268489'}
+2024-12-19 12:15:22,862 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:22,862 [INFO] Processing after placing the order
+2024-12-19 12:15:22,862 [DEBUG] Order placed successfully: 24121900268489
+2024-12-19 12:15:22,863 [INFO] Both orders sent for level 2: Entry=24121900268486, Exit=24121900268489
+2024-12-19 12:15:22,863 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268450', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268450:4'}}
+2024-12-19 12:15:22,864 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:22,865 [DEBUG] Order ID 24121900268450 does not match entry or exit orders.
+2024-12-19 12:15:22,969 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268450', 'exchOrdId': '1500000106398529', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268450:6'}}
+2024-12-19 12:15:22,969 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:22,969 [DEBUG] Order ID 24121900268450 does not match entry or exit orders.
+2024-12-19 12:15:23,071 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268454', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268454:4'}}
+2024-12-19 12:15:23,071 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,072 [DEBUG] Order ID 24121900268454 does not match entry or exit orders.
+2024-12-19 12:15:23,173 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268454', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268454:4'}}
+2024-12-19 12:15:23,173 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,173 [DEBUG] Order ID 24121900268454 does not match entry or exit orders.
+2024-12-19 12:15:23,275 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268454', 'exchOrdId': '1500000106399859', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:23', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268454:6'}}
+2024-12-19 12:15:23,275 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,276 [DEBUG] Order ID 24121900268454 does not match entry or exit orders.
+2024-12-19 12:15:23,377 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268454', 'exchOrdId': '1500000106399859', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:25', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268454:6'}}
+2024-12-19 12:15:23,377 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,378 [DEBUG] Order ID 24121900268454 does not match entry or exit orders.
+2024-12-19 12:15:23,479 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268454', 'exchOrdId': '1500000106399859', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:25', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 1, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268454:1'}}
+2024-12-19 12:15:23,479 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,482 [DEBUG] Order ID 24121900268454 does not match entry or exit orders.
+2024-12-19 12:15:23,586 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268486', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:25', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268486:4'}}
+2024-12-19 12:15:23,586 [DEBUG] Orders checking: entry_order=24121900268486, exit_order=24121900268489
+2024-12-19 12:15:23,587 [INFO] Processing entry order: 24121900268486
+2024-12-19 12:15:23,588 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:23,594 [DEBUG] Entry order received for next level Orders object (108), Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:23,600 [INFO] Order Updated successfully: Entry Order:24121900268486 Level Level 2 | 4.600 | 52
+2024-12-19 12:15:23,601 [DEBUG] Cancelling order 24121900268489
+2024-12-19 12:15:23,828 [DEBUG] Cancelled order response: {'code': -52, 'message': 'Not a pending order', 's': 'error', 'id': '24121900268489'}
+2024-12-19 12:15:23,828 [INFO] Processing next level... 3
+2024-12-19 12:15:23,829 [INFO] reached here second time
+2024-12-19 12:15:23,834 [INFO] New Levels, Current: Level 3 | 4.025 | 52, Next: Level 4 | 3.450 | 52, Previous: Level 2 | 4.600 | 52
+2024-12-19 12:15:23,834 [DEBUG] Processing Level: 3, Current: Level 3 | 4.025 | 52, Previous: Level 2 | 4.600 | 52, Next: Level 4 | 3.450 | 52
+2024-12-19 12:15:23,835 [DEBUG] Extracting Price for Level: Level 4 | 3.450 | 52
+2024-12-19 12:15:23,835 [DEBUG] Order Price: 3.45, Quantity: 25
+2024-12-19 12:15:23,836 [INFO] Creating order data
+2024-12-19 12:15:23,836 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 3.45, 'validity': 'DAY'}
+2024-12-19 12:15:23,989 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268513'}
+2024-12-19 12:15:23,993 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:23,994 [INFO] Processing after placing the order
+2024-12-19 12:15:23,994 [DEBUG] Order placed successfully: 24121900268513
+2024-12-19 12:15:23,994 [DEBUG] Placing exit order... Level 3 | 4.025 | 52
+2024-12-19 12:15:23,995 [DEBUG] Extracting Price for Level: Level 3 | 4.025 | 52
+2024-12-19 12:15:23,995 [DEBUG] Order Price: 4.45, Quantity: 25
+2024-12-19 12:15:23,996 [INFO] Creating order data
+2024-12-19 12:15:23,996 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 4.45, 'validity': 'DAY'}
+2024-12-19 12:15:24,159 [INFO] Handling order response after placing order {'code': -99, 'message': 'RED:Margin Shortfall:INR 86,158.34 Available:INR 3,656.30 for C-XA46525 [FYERS_RISK_CUG]', 's': 'error', 'id': '24121900268516'}
+2024-12-19 12:15:24,261 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:24,363 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:24,465 [INFO] Exiting order confirmation loop.
+2024-12-19 12:15:24,466 [INFO] Strategy started for strategy id: 52
+2024-12-19 12:15:24,471 [INFO] websocket started
+2024-12-19 12:15:24,486 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:24,488 [INFO] Placing initial market order.. for level: Level 0 | 5.750 | 52
+2024-12-19 12:15:24,490 [INFO] Placing initial market order...Level 0 | 5.750 | 52
+2024-12-19 12:15:24,491 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:24,492 [DEBUG] Order Price: 5.75, Quantity: 25
+2024-12-19 12:15:24,494 [INFO] Creating order data
+2024-12-19 12:15:24,495 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-19 12:15:24,771 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268520'}
+2024-12-19 12:15:24,781 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:24,782 [INFO] Processing after placing the order
+2024-12-19 12:15:24,782 [DEBUG] Order placed successfully: 24121900268520
+2024-12-19 12:15:24,782 [INFO] Processing next Level Index: 0
+2024-12-19 12:15:24,785 [INFO] reached here second time
+2024-12-19 12:15:24,790 [INFO] New Levels, Current: Level 0 | 5.750 | 52, Next: Level 1 | 5.175 | 52, Previous: None
+2024-12-19 12:15:24,791 [DEBUG] Processing Level: 0, Current: Level 0 | 5.750 | 52, Previous: None, Next: Level 1 | 5.175 | 52
+2024-12-19 12:15:24,791 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:24,792 [DEBUG] Order Price: 5.15, Quantity: 25
+2024-12-19 12:15:24,792 [INFO] Creating order data
+2024-12-19 12:15:24,792 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 5.15, 'validity': 'DAY'}
+2024-12-19 12:15:24,984 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268526'}
+2024-12-19 12:15:25,000 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:25,001 [INFO] Processing after placing the order
+2024-12-19 12:15:25,001 [DEBUG] Order placed successfully: 24121900268526
+2024-12-19 12:15:25,005 [DEBUG] Placing exit order... Level 0 | 5.750 | 52
+2024-12-19 12:15:25,005 [DEBUG] Extracting Price for Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:25,007 [DEBUG] Order Price: 6.300000000000001, Quantity: 25
+2024-12-19 12:15:25,008 [INFO] Creating order data
+2024-12-19 12:15:25,008 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 6.300000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:25,255 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268530'}
+2024-12-19 12:15:25,296 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:25,297 [INFO] Processing after placing the order
+2024-12-19 12:15:25,300 [DEBUG] Order placed successfully: 24121900268530
+2024-12-19 12:15:25,300 [INFO] Both orders sent for level 0: Entry=24121900268526, Exit=24121900268530
+2024-12-19 12:15:25,301 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268520', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268520:4'}}
+2024-12-19 12:15:25,303 [DEBUG] Orders checking: entry_order=24121900268526, exit_order=24121900268530
+2024-12-19 12:15:25,303 [DEBUG] Order ID 24121900268520 does not match entry or exit orders.
+2024-12-19 12:15:25,405 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268520', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268520:4'}}
+2024-12-19 12:15:25,405 [DEBUG] Orders checking: entry_order=24121900268526, exit_order=24121900268530
+2024-12-19 12:15:25,407 [DEBUG] Order ID 24121900268520 does not match entry or exit orders.
+2024-12-19 12:15:25,509 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268520', 'exchOrdId': '1500000106423278', 'qty': 25, 'remainingQuantity': 25, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268520:6'}}
+2024-12-19 12:15:25,510 [DEBUG] Orders checking: entry_order=24121900268526, exit_order=24121900268530
+2024-12-19 12:15:25,511 [DEBUG] Order ID 24121900268520 does not match entry or exit orders.
+2024-12-19 12:15:25,613 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268520', 'exchOrdId': '1500000106423278', 'qty': 25, 'filledQty': 25, 'limitPrice': 5.3, 'tradedPrice': 5.3, 'type': 2, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 2, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268520:2'}}
+2024-12-19 12:15:25,614 [DEBUG] Orders checking: entry_order=24121900268526, exit_order=24121900268530
+2024-12-19 12:15:25,616 [DEBUG] Order ID 24121900268520 does not match entry or exit orders.
+2024-12-19 12:15:25,718 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268526', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268526:4'}}
+2024-12-19 12:15:25,718 [DEBUG] Orders checking: entry_order=24121900268526, exit_order=24121900268530
+2024-12-19 12:15:25,719 [INFO] Processing entry order: 24121900268526
+2024-12-19 12:15:25,721 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:25,724 [DEBUG] Entry order received for next level Orders object (111), Level: Level 0 | 5.750 | 52
+2024-12-19 12:15:25,729 [INFO] Order Updated successfully: Entry Order:24121900268526 Level Level 0 | 5.750 | 52
+2024-12-19 12:15:25,729 [DEBUG] Cancelling order 24121900268530
+2024-12-19 12:15:25,950 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268530'}
+2024-12-19 12:15:25,950 [INFO] Processing next level... 1
+2024-12-19 12:15:25,952 [INFO] reached here second time
+2024-12-19 12:15:25,958 [INFO] New Levels, Current: Level 1 | 5.175 | 52, Next: Level 2 | 4.600 | 52, Previous: Level 0 | 5.750 | 52
+2024-12-19 12:15:25,958 [DEBUG] Processing Level: 1, Current: Level 1 | 5.175 | 52, Previous: Level 0 | 5.750 | 52, Next: Level 2 | 4.600 | 52
+2024-12-19 12:15:25,958 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:25,959 [DEBUG] Order Price: 4.6000000000000005, Quantity: 25
+2024-12-19 12:15:25,959 [INFO] Creating order data
+2024-12-19 12:15:25,959 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.6000000000000005, 'validity': 'DAY'}
+2024-12-19 12:15:26,190 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268546'}
+2024-12-19 12:15:26,196 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:26,197 [INFO] Processing after placing the order
+2024-12-19 12:15:26,197 [DEBUG] Order placed successfully: 24121900268546
+2024-12-19 12:15:26,198 [DEBUG] Placing exit order... Level 1 | 5.175 | 52
+2024-12-19 12:15:26,199 [DEBUG] Extracting Price for Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:26,199 [DEBUG] Order Price: 5.7, Quantity: 25
+2024-12-19 12:15:26,199 [INFO] Creating order data
+2024-12-19 12:15:26,199 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.7, 'validity': 'DAY'}
+2024-12-19 12:15:26,446 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268550'}
+2024-12-19 12:15:26,452 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:26,453 [INFO] Processing after placing the order
+2024-12-19 12:15:26,454 [DEBUG] Order placed successfully: 24121900268550
+2024-12-19 12:15:26,454 [INFO] Both orders sent for level 1: Entry=24121900268546, Exit=24121900268550
+2024-12-19 12:15:26,455 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268526', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268526:4'}}
+2024-12-19 12:15:26,456 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,456 [DEBUG] Order ID 24121900268526 does not match entry or exit orders.
+2024-12-19 12:15:26,558 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268526', 'exchOrdId': '1500000106424433', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.15, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:27', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268526:6'}}
+2024-12-19 12:15:26,558 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,559 [DEBUG] Order ID 24121900268526 does not match entry or exit orders.
+2024-12-19 12:15:26,660 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268530', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:28', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268530:4'}}
+2024-12-19 12:15:26,660 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,660 [DEBUG] Order ID 24121900268530 does not match entry or exit orders.
+2024-12-19 12:15:26,762 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268530', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:28', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268530:4'}}
+2024-12-19 12:15:26,762 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,762 [DEBUG] Order ID 24121900268530 does not match entry or exit orders.
+2024-12-19 12:15:26,863 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268530', 'exchOrdId': '1500000106425600', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:28', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268530:6'}}
+2024-12-19 12:15:26,863 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,865 [DEBUG] Order ID 24121900268530 does not match entry or exit orders.
+2024-12-19 12:15:26,971 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268530', 'exchOrdId': '1500000106425600', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:28', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268530:6'}}
+2024-12-19 12:15:26,971 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:26,972 [DEBUG] Order ID 24121900268530 does not match entry or exit orders.
+2024-12-19 12:15:27,073 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268530', 'exchOrdId': '1500000106425600', 'qty': 25, 'remainingQuantity': 0, 'limitPrice': 6.3, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:28', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 1, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268530:1'}}
+2024-12-19 12:15:27,073 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:27,073 [DEBUG] Order ID 24121900268530 does not match entry or exit orders.
+2024-12-19 12:15:27,174 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268546', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268546:4'}}
+2024-12-19 12:15:27,174 [DEBUG] Orders checking: entry_order=24121900268546, exit_order=24121900268550
+2024-12-19 12:15:27,174 [INFO] Processing entry order: 24121900268546
+2024-12-19 12:15:27,176 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-19 12:15:27,178 [DEBUG] Entry order received for next level Orders object (112), Level: Level 1 | 5.175 | 52
+2024-12-19 12:15:27,183 [INFO] Order Updated successfully: Entry Order:24121900268546 Level Level 1 | 5.175 | 52
+2024-12-19 12:15:27,184 [DEBUG] Cancelling order 24121900268550
+2024-12-19 12:15:27,289 [DEBUG] Cancelled order response: {'code': 1103, 'message': 'Successfully cancelled order', 's': 'ok', 'id': '24121900268550'}
+2024-12-19 12:15:27,289 [INFO] Processing next level... 2
+2024-12-19 12:15:27,290 [INFO] reached here second time
+2024-12-19 12:15:27,296 [INFO] New Levels, Current: Level 2 | 4.600 | 52, Next: Level 3 | 4.025 | 52, Previous: Level 1 | 5.175 | 52
+2024-12-19 12:15:27,296 [DEBUG] Processing Level: 2, Current: Level 2 | 4.600 | 52, Previous: Level 1 | 5.175 | 52, Next: Level 3 | 4.025 | 52
+2024-12-19 12:15:27,297 [DEBUG] Extracting Price for Level: Level 3 | 4.025 | 52
+2024-12-19 12:15:27,297 [DEBUG] Order Price: 4.0, Quantity: 25
+2024-12-19 12:15:27,297 [INFO] Creating order data
+2024-12-19 12:15:27,298 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 4.0, 'validity': 'DAY'}
+2024-12-19 12:15:27,427 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268565'}
+2024-12-19 12:15:27,433 [DEBUG] Entry order object created:.....
+2024-12-19 12:15:27,433 [INFO] Processing after placing the order
+2024-12-19 12:15:27,434 [DEBUG] Order placed successfully: 24121900268565
+2024-12-19 12:15:27,434 [DEBUG] Placing exit order... Level 2 | 4.600 | 52
+2024-12-19 12:15:27,435 [DEBUG] Extracting Price for Level: Level 2 | 4.600 | 52
+2024-12-19 12:15:27,435 [DEBUG] Order Price: 5.050000000000001, Quantity: 25
+2024-12-19 12:15:27,435 [INFO] Creating order data
+2024-12-19 12:15:27,436 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924250CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 5.050000000000001, 'validity': 'DAY'}
+2024-12-19 12:15:27,593 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121900268566'}
+2024-12-19 12:15:27,599 [DEBUG] Exit order object created:.....
+2024-12-19 12:15:27,599 [INFO] Processing after placing the order
+2024-12-19 12:15:27,601 [DEBUG] Order placed successfully: 24121900268566
+2024-12-19 12:15:27,601 [INFO] Both orders sent for level 2: Entry=24121900268565, Exit=24121900268566
+2024-12-19 12:15:27,602 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268546', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268546:4'}}
+2024-12-19 12:15:27,603 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:27,603 [DEBUG] Order ID 24121900268546 does not match entry or exit orders.
+2024-12-19 12:15:27,703 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268546', 'exchOrdId': '1500000106430307', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 4.6, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': 1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268546:6'}}
+2024-12-19 12:15:27,704 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:27,704 [DEBUG] Order ID 24121900268546 does not match entry or exit orders.
+2024-12-19 12:15:27,805 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268550', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268550:4'}}
+2024-12-19 12:15:27,805 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:27,805 [DEBUG] Order ID 24121900268550 does not match entry or exit orders.
+2024-12-19 12:15:27,907 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268550', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 4, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268550:4'}}
+2024-12-19 12:15:27,907 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:27,907 [DEBUG] Order ID 24121900268550 does not match entry or exit orders.
+2024-12-19 12:15:28,008 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268550', 'exchOrdId': '1500000106431537', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:29', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268550:6'}}
+2024-12-19 12:15:28,008 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:28,008 [DEBUG] Order ID 24121900268550 does not match entry or exit orders.
+2024-12-19 12:15:28,110 [DEBUG] Message received: {'s': 'ok', 'orders': {'clientId': 'XA46525', 'id': '24121900268550', 'exchOrdId': '1500000106431537', 'qty': 25, 'remainingQuantity': 25, 'limitPrice': 5.7, 'type': 1, 'fyToken': '101124121947395', 'exchange': 10, 'segment': 11, 'symbol': 'NSE:NIFTY24D1924250CE', 'instrument': 14, 'offlineOrder': False, 'orderDateTime': '19-Dec-2024 12:15:30', 'orderValidity': 'DAY', 'productType': 'INTRADAY', 'side': -1, 'status': 6, 'source': 'API', 'ex_sym': 'NIFTY', 'description': '24 Dec 19 24250 CE', 'orderTag': '2:Untagged', 'orderNumStatus': '24121900268550:6'}}
+2024-12-19 12:15:28,110 [DEBUG] Orders checking: entry_order=24121900268565, exit_order=24121900268566
+2024-12-19 12:15:28,111 [DEBUG] Order ID 24121900268550 does not match entry or exit orders.

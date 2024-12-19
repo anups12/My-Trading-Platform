@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{target_url}}
+  <div class="container mt-5 ">
+        <div class="row justify-content-center ">
+            <div class="col-md-6 shadow-lg p-3 mb-5 bg-body rounded">
+                <div class="card shadow" style="border: 1px solid lightseagreen; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="card-header text-white text-center" style="background-color: lightseagreen; border-radius: 12px 12px 0 0;">
+                        <h5>Enter API Credentials</h5>
+                    </div>
+                    <div class="card-body" style="background-color: #f9f9f9; padding: 2rem;">
+                        <form id="apiForm" method="POST" action="{% url 'oauth_login' %}">
+                            {% csrf_token %}
+                            <!-- API Key Field -->
+                            <div class="mb-5">
+                                <label for="api_key" class="form-label" style="color: lightseagreen;">API Key</label>
+                                <input type="text" class="form-control" id="api_key" name="api_key" placeholder="Enter your API Key" required style="border: 1px solid lightseagreen;">
+                            </div>
+                            <!-- API Secret Field -->
+                            <div class="mb-5">
+                                <label for="api_secret" class="form-label" style="color: lightseagreen;">API Secret</label>
+                                <input type="password" class="form-control" id="api_secret" name="api_secret" placeholder="Enter your API Secret" required style="border: 1px solid lightseagreen;">
+                            </div>
+                            <!-- Save Button -->
+                            <div class="d-grid text-center">
+                                <button type="submit" class="btn text-white w-50" style="background-color: lightseagreen; border-radius: 8px; margin: 0 auto;">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

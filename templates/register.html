@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Register</h2>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ data.name }}">
+            {% if errors.name %}
+                <div class="text-danger">{{ errors.name.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ data.email }}">
+            {% if errors.email %}
+                <div class="text-danger">{{ errors.email.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="phone_number" class="form-label">Phone Number</label>
+            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ data.phone_number }}">
+            {% if errors.phone_number %}
+                <div class="text-danger">{{ errors.phone_number.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+            {% if errors.password %}
+                <div class="text-danger">{{ errors.password.0 }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+{% endblock %}

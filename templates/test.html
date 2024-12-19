@@ -1,0 +1,83 @@
+<!-- templates/strategy_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2>Strategy {{ strategy.id }}</h2>
+
+  <form id="strategy-settings-form" method="post">
+    <div class="mb-3">
+      <label for="stop-buy-below" class="form-label">Stop Buying Below Level</label>
+      <input type="number" class="form-control" id="stop-buy-below" name="stop_buy_below_level"
+             value="{{ settings.stop_buy_below_level }}">
+    </div>
+    <button type="button" id="update-settings-btn" class="btn btn-primary">Update Strategy</button>
+  </form>
+
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for level in levels %}
+      <tr>
+        <td>{{ level.level }}</td>
+        <td><input type="text" class="form-control" id="price-{{ level.id }}" value="{{ level.price }}"></td>
+        <td><input type="text" class="form-control" id="quantity-{{ level.id }}" value="{{ level.quantity }}"></td>
+        <td>
+          <button type="button" class="btn btn-success" onclick="updateOrderLevel({{ level.id }})">Update</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.getElementById('update-settings-btn').addEventListener('click', function() {
+    const stopBuyBelowLevel = document.getElementById('stop-buy-below').value;
+
+    fetch("{% url 'update_strategy_settings' strategy.id %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({
+        stop_buy_below_level: stopBuyBelowLevel
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert('Strategy settings updated');
+    });
+  });
+
+  function updateOrderLevel(levelId) {
+    const price = document.getElementById('price-' + levelId).value;
+    const quantity = document.getElementById('quantity-' + levelId).value;
+
+    fetch(`/api/update_order_level/{{ strategy.id }}/` + levelId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({
+        price: price,
+        quantity: quantity
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert('Order level updated');
+    });
+  }
+</script>
+
+{% endblock %}
