@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-5">
+
+    <!-- Loop through strategy IDs and create a table for each strategy -->
+    {% for strategy in strategy_forms %}
+    <h3 class="text-center text-primary">Strategy {{ strategy.strategy_id }}</h3>
+
+    <!-- Button to trigger the modal -->
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#strategyModal-{{ strategy.strategy_id }}">
+        Modify Table {{ strategy.strategy_id }}
+    </button>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm rounded" id="dynamic-table-{{ strategy.strategy_id }}" style="background-color: #fff;">
+            <thead class="thead-dark">
+            <tr>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Target</th>
+                <th>Cum quan</th>
+                <th>Amount</th>
+                <th>Cum Amount</th>
+                <th>Target Difference</th>
+                <th>P/L</th>
+                <th>Hed Price</th>
+                <th>Hed Quantity</th>
+                <th>Hed Amount</th>
+                <th>Hed Diff</th>
+                <th>Main Exit</th>
+                <th>Hed Exit</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="strategyModal-{{ strategy.strategy_id }}" tabindex="-1" aria-labelledby="strategyModalLabel-{{ strategy.strategy_id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="strategyModalLabel-{{ strategy.strategy_id }}">Edit Strategy {{ strategy.strategy_id }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div>
+                    <h3 class="text-center text-primary">Strategy {{ strategy.strategy_form.instance.id }}</h3>
+                    <form method="post" class="p-5">
+                        {% csrf_token %}
+                        <input type="hidden" name="strategy_id" value="{{ strategy.strategy_form.instance.id }}">
+                        <div class="mb-3">
+                            <h4 class="text-primary">Strategy Details</h4>
+                            <div class="row">
+                                {% for field in strategy.strategy_form %}
+                                <div class="col-md-3">
+                                    <div class="form-group mb-2">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                        <div class="invalid-feedback d-block">{{ field.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {% for level_form in strategy.level_forms %}
+                        <div class="mb-4">
+                            <div class="row align-items-center">
+                                {% for field in level_form %}
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                        <div class="invalid-feedback d-block">{{ field.errors.as_text }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Load jQuery for AJAX and DOM manipulation -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function fetchStaticData(strategyId) {
+    $.getJSON(`/api/get_table_data/${strategyId}/`, function(data) {
+        const tableBody = $(`#dynamic-table-${strategyId} tbody`);
+        tableBody.empty();
+
+        let cumulativeAmount = 0; // Initialize cumulative amount
+
+        data.forEach(row => {
+            cumulativeAmount += row.value;
+
+            tableBody.append(`
+                <tr data-id="${row.id}">
+                    <td>${row.main_percentage}</td>
+                    <td>${row.main_quantity}</td>
+                    <td>${row.main_target}</td>
+                    <td>${row.cumulative_quantity}</td>
+                    <td>${row.value}</td>
+                    <td>${cumulativeAmount.toFixed(2)}</td>
+                    <td>${row.target_difference}</td>
+                    <td class="dynamic-difference">0</td>
+                    <td>${row.hedging_price || '-'}</td>
+                    <td>${row.hedging_quantity || '-'}</td>
+                    <td>${row.hedging_amount || '-'}</td>
+                    <td class="dynamic-hedging-difference">0</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm exit-button" data-order-id="${row.exit_order_id}" disabled>Exit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-warning btn-sm hedging-exit-button" data-order-id="${row.hedging_exit_order_id}" disabled>Exit Hed</button>
+                    </td>
+                </tr>
+            `);
+        });
+    });
+}
+
+
+function updateDynamicFields(strategyId) {
+    $.getJSON(`/api/get_dynamic_fields/?strategy_id=${strategyId}`, function(data) {
+        console.log('Dynamic Data:', data); // Debugging log
+
+        // Iterate through each rowId and its corresponding data
+        for (const [rowId, rowData] of Object.entries(data)) {
+            const tableRow = $(`#dynamic-table-${strategyId} tr[data-id="${rowId}"]`);
+
+            if (tableRow.length) {
+                // Update Dynamic Difference
+                const dynamicDiffCell = tableRow.find('.dynamic-difference');
+                dynamicDiffCell.text(rowData.price.toFixed(2)); // Use 'price' field
+                dynamicDiffCell.css('color', rowData.price >= 0 ? 'green' : 'red');
+
+                // Update Exit Button
+                const exitButton = tableRow.find('.exit-button');
+                if (rowData.order_id) {
+                    exitButton.data('order-id', rowData.order_id); // Set order ID
+                    exitButton.prop('disabled', false); // Enable button
+                } else {
+                    exitButton.prop('disabled', true); // Disable if no order_id
+                }
+
+                // Update Hedging Exit Button
+                const hedgingExitButton = tableRow.find('.hedging-exit-button');
+                if (rowData.hedging_order_id) {
+                    hedgingExitButton.data('order-id', rowData.hedging_order_id); // Set hedging order ID
+                    hedgingExitButton.prop('disabled', false); // Enable button
+                } else {
+                    hedgingExitButton.prop('disabled', true); // Disable if no hedging_order_id
+                }
+            }
+        }
+    }).fail(function(xhr, status, error) {
+        console.error(`Failed to fetch dynamic fields for strategy ${strategyId}:`, error);
+    });
+}
+
+$(document).ready(function() {
+    {% for strategy in strategy_forms %}
+        fetchStaticData({{ strategy.strategy_id }});
+
+        setInterval(function() {
+            updateDynamicFields({{ strategy.strategy_id }});
+        }, 2000);
+    {% endfor %}
+
+    $(document).on('click', '.exit-button, .hedging-exit-button', function() {
+        const orderId = $(this).data('order-id');
+        const buttonType = $(this).hasClass('exit-button') ? 'Main Trade' : 'Hedging Trade';
+
+        $.post(`/api/exit_order/${orderId}/`, function(response) {
+            if (response.success) {
+                alert(`${buttonType} exited successfully!`);
+            } else {
+                alert(`Failed to exit ${buttonType}.`);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

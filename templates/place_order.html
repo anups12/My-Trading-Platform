@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block broker_login %}
+<!-- Broker login/logout logic -->
+{% if access_token %}
+<li class="nav-item"><a class="nav-link">Broker Added</a></li>
+{% else %}
+<li class="nav-item"><a class="nav-link" href="{% url 'oauth_login' %}">Login To Broker</a></li>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 p-4 shadow-lg p-3 mb-5 bg-body rounded" style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px;">
+
+    <!-- Display balance -->
+    <h3 class="text-center" style="color: lightseagreen;">Start Strategy</h3>
+
+    <!-- Trade Form -->
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Row for primary dropdowns -->
+        <div class="row">
+            <!-- Index Selection -->
+            <div class="col-md-3 mb-4">
+                <label for="indexSelect" style="color: lightseagreen;">Select Option</label>
+                <select name="indexSelect" id="indexSelect" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                    <option value="NSE:NIFTY50-INDEX">Nifty</option>
+                    <option value="NSE:NIFTYBANK-INDEX">Bank Nifty</option>
+                    <option value="NSE:FINNIFTY-INDEX">Fin Nifty</option>
+                    <option value="NSE:MIDCPNIFTY-INDEX">Midcap Nifty</option>
+                </select>
+            </div>
+
+            <!-- Strike Direction -->
+            <div class="col-md-2 mb-4">
+                <label for="strikeDirection" style="color: lightseagreen;">Strike Direction</label>
+                <select name="strikeDirection" id="strikeDirection" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                    <option value="call" selected>Call</option>
+                    <option value="put">Put</option>
+                </select>
+            </div>
+
+            <!-- Strike Distance -->
+            <div class="col-md-3 mb-4">
+                <label for="strikeDistance" style="color: lightseagreen;">Strike Distance</label>
+                <input type="number" name="strikeDistance" id="strikeDistance" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter Strike Distance" required>
+            </div>
+        </div>
+
+        <!-- Row for table selection -->
+        <div class="row">
+            <div class="mb-4 col-md-3">
+                <label for="table-select" class="form-label" style="color: lightseagreen;">Choose a Table</label>
+                <select id="table-select" name="selected_table" class="form-select border rounded" style="border-color: lightseagreen; width: 100%;" required>
+                    <option value="" disabled selected>Select a table</option>
+                    {% for table_name, table_id in table_options.items %}
+                    <option value="{{ table_id.id }}" data-id="{{ table_id }}">
+                        {{ table_id.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Placeholder for dynamic input fields -->
+            <div id="input-fields" class="mb-4"></div>
+        </div>
+
+        <!-- Trade Mode and Type -->
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <label for="tradeMode" style="color: lightseagreen;">Trade Mode</label>
+                <select name="tradeMode" id="tradeMode" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                    <option value="single_trade">Single Trade</option>
+                    <option value="flip_trade">Flip Trade</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <label style="color: lightseagreen;">Trade Type</label><br>
+                <div class="btn-group" role="group" style="width: 100%;">
+                    <input type="radio" class="btn-check" name="transactionType" id="buy" value="buy" autocomplete="off" checked>
+                    <label class="btn btn-outline-success w-50" for="buy">Buy</label>
+
+                    <input type="radio" class="btn-check" name="transactionType" id="sell" value="sell" autocomplete="off">
+                    <label class="btn btn-outline-danger w-50" for="sell">Sell</label>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <label for="orderType" style="color: lightseagreen;">Order Type</label>
+                <select name="orderType" id="orderType" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" onchange="toggleInputField()">
+                    <option value="market">----Select Order Type----</option>
+                    <option value="market">Market</option>
+                    <option value="limit">Limit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Additional input fields -->
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <label for="limitPrice" style="color: lightseagreen;">Limit Price</label>
+                <input type="text" name="limitPrice" id="limitPrice" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter price for limit order">
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <label for="quantity" style="color: lightseagreen;">Quantity / Capital Allocation</label>
+                <input type="number" name="quantity" id="quantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter fixed quantity or capital" required>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <label for="profitTarget" style="color: lightseagreen;">Profit Target</label>
+                <input type="number" name="profitTarget" id="profitTarget" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Set profit target" required>
+            </div>
+        </div>
+
+        <!-- Hedging-related fields -->
+        <div class="row" id="hedgingOptions">
+            <div class="col-md-2 mb-4">
+                <label for="hedgeStrikeDistance" style="color: lightseagreen;">Hedging Strike Distance</label>
+                <input type="number" name="hedgeStrikeDistance" id="hedgeStrikeDistance" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Strike Distance" required>
+            </div>
+            <div class="col-md-2 mb-4">
+                <label for="hedgingQuantity" style="color: lightseagreen;">Hedging Market Quantity</label>
+                <input type="number" name="hedgingQuantity" id="hedgingQuantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Market Quantity" required>
+            </div>
+            <div class="col-md-2 mb-4">
+                <label for="hedgingLimitQuantity" style="color: lightseagreen;">Hedging Limit Quantity</label>
+                <input type="number" name="hedgingLimitQuantity" id="hedgingLimitQuantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Limit Quantity" required>
+            </div>
+            <div class="col-md-2 mb-4">
+                <label for="hedgingLimitPercentage" style="color: lightseagreen;">Hedging Limit Price</label>
+                <input type="number" name="hedgingLimitPercentage" id="hedgingLimitPercentage" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Limit %" required>
+            </div>
+            <div class="col-md-2 mb-4">
+                <label for="HedgingTimeToChangeOrder" style="color: lightseagreen;">Hedging Limit Order Time</label>
+                <input type="number" name="HedgingTimeToChangeOrder" id="HedgingTimeToChangeOrder" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Time after which LO becomes MO" required>
+            </div>
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-success mt-4 w-50 shadow-lg p-3" style="border-radius: 30px;">Submit</button>
+    </form>
+</div>
+{% endblock %}

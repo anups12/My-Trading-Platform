@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="email_or_phone" class="form-label">Email or Phone</label>
+            <input type="text" class="form-control" id="email_or_phone" name="email_or_phone" value="{{ data.email_or_phone }}">
+            {% if errors.email_or_phone %}
+                <div class="text-danger">{{ errors.email_or_phone.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+            {% if errors.password %}
+                <div class="text-danger">{{ errors.password.0 }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    {% if errors.non_field_errors %}
+        <div class="text-danger">{{ errors.non_field_errors.0 }}</div>
+    {% endif %}
+</div>
+{% endblock %}

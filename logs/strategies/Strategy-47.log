@@ -1,0 +1,78 @@
+2024-12-18 14:36:49,785 [INFO] Initialized TradingStrategy1 with ID: 47
+2024-12-18 14:36:49,787 [INFO] Strategy started for strategy id: 47
+2024-12-18 14:36:49,791 [INFO] websocket started
+2024-12-18 14:36:49,806 [INFO] New Levels, Current: Level 0 | 24.300 | 47, Next: Level 1 | 21.870 | 47, Previous: None
+2024-12-18 14:36:49,808 [INFO] Placing initial market order.. for level: Level 0 | 24.300 | 47
+2024-12-18 14:36:49,810 [INFO] Placing initial market order...Level 0 | 24.300 | 47
+2024-12-18 14:36:49,811 [DEBUG] Extracting Price for Level: Level 0 | 24.300 | 47
+2024-12-18 14:36:49,811 [DEBUG] Order Price: 24.3, Quantity: 25
+2024-12-18 14:36:49,812 [INFO] Creating order data
+2024-12-18 14:36:49,812 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-18 14:36:49,988 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800383544'}
+2024-12-18 14:36:49,996 [DEBUG] Entry order object created:.....
+2024-12-18 14:36:49,996 [INFO] Processing after placing the order
+2024-12-18 14:36:49,997 [DEBUG] Order placed successfully: 24121800383544
+2024-12-18 14:36:49,997 [INFO] Processing next Level Index: 0
+2024-12-18 14:36:49,998 [INFO] reached here second time
+2024-12-18 14:36:50,003 [INFO] New Levels, Current: Level 0 | 24.300 | 47, Next: Level 1 | 21.870 | 47, Previous: None
+2024-12-18 14:36:50,003 [DEBUG] Processing Level: 0, Current: Level 0 | 24.300 | 47, Previous: None, Next: Level 1 | 21.870 | 47
+2024-12-18 14:36:50,004 [DEBUG] Extracting Price for Level: Level 1 | 21.870 | 47
+2024-12-18 14:36:50,004 [DEBUG] Order Price: 21.85, Quantity: 25
+2024-12-18 14:36:50,004 [INFO] Creating order data
+2024-12-18 14:36:50,005 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 21.85, 'validity': 'DAY'}
+2024-12-18 14:36:50,137 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800383546'}
+2024-12-18 14:36:50,142 [DEBUG] Entry order object created:.....
+2024-12-18 14:36:50,143 [INFO] Processing after placing the order
+2024-12-18 14:36:50,143 [DEBUG] Order placed successfully: 24121800383546
+2024-12-18 14:36:50,143 [DEBUG] Placing exit order... Level 0 | 24.300 | 47
+2024-12-18 14:36:50,145 [DEBUG] Extracting Price for Level: Level 0 | 24.300 | 47
+2024-12-18 14:36:50,145 [DEBUG] Order Price: 26.75, Quantity: 25
+2024-12-18 14:36:50,145 [INFO] Creating order data
+2024-12-18 14:36:50,145 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 26.75, 'validity': 'DAY'}
+2024-12-18 14:36:50,287 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800383547'}
+2024-12-18 14:36:50,296 [DEBUG] Exit order object created:.....
+2024-12-18 14:36:50,296 [INFO] Processing after placing the order
+2024-12-18 14:36:50,297 [DEBUG] Order placed successfully: 24121800383547
+2024-12-18 14:36:50,297 [INFO] Both orders sent for level 0: Entry=24121800383546, Exit=24121800383547
+2024-12-18 14:48:04,947 [DEBUG] Orders checking: entry_order=24121800383546, exit_order=24121800383547
+2024-12-18 14:48:04,948 [INFO] Inside handle entry order: Order placed from websocket {}
+2024-12-18 14:48:04,954 [DEBUG] Exit order found Order: Orders object (51)
+2024-12-18 14:48:04,954 [INFO] Updating Exit order: Order Level: 24121800383547, Level: 0
+2024-12-18 14:48:04,960 [INFO] Exit Order updated successfully: 24121800383547
+2024-12-18 14:48:04,961 [INFO] Exit strategy logic triggered
+2024-12-18 14:48:04,961 [DEBUG] Exit strategy mechanism triggered
+2024-12-18 14:48:05,908 [INFO] Strategy started for strategy id: 47
+2024-12-18 14:48:05,909 [INFO] websocket started
+2024-12-18 14:48:05,917 [INFO] New Levels, Current: Level 0 | 24.300 | 47, Next: Level 1 | 21.870 | 47, Previous: None
+2024-12-18 14:48:05,918 [INFO] Placing initial market order.. for level: Level 0 | 24.300 | 47
+2024-12-18 14:48:05,919 [INFO] Placing initial market order...Level 0 | 24.300 | 47
+2024-12-18 14:48:05,920 [DEBUG] Extracting Price for Level: Level 0 | 24.300 | 47
+2024-12-18 14:48:05,920 [DEBUG] Order Price: 24.3, Quantity: 25
+2024-12-18 14:48:05,920 [INFO] Creating order data
+2024-12-18 14:48:05,921 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 2, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': None, 'validity': 'DAY'}
+2024-12-18 14:48:06,070 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800390537'}
+2024-12-18 14:48:06,076 [DEBUG] Entry order object created:.....
+2024-12-18 14:48:06,077 [INFO] Processing after placing the order
+2024-12-18 14:48:06,077 [DEBUG] Order placed successfully: 24121800390537
+2024-12-18 14:48:06,077 [INFO] Processing next Level Index: 0
+2024-12-18 14:48:06,078 [INFO] reached here second time
+2024-12-18 14:48:06,082 [INFO] New Levels, Current: Level 0 | 24.300 | 47, Next: Level 1 | 21.870 | 47, Previous: None
+2024-12-18 14:48:06,083 [DEBUG] Processing Level: 0, Current: Level 0 | 24.300 | 47, Previous: None, Next: Level 1 | 21.870 | 47
+2024-12-18 14:48:06,083 [DEBUG] Extracting Price for Level: Level 1 | 21.870 | 47
+2024-12-18 14:48:06,084 [DEBUG] Order Price: 21.85, Quantity: 25
+2024-12-18 14:48:06,084 [INFO] Creating order data
+2024-12-18 14:48:06,085 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 1, 'side': 1, 'productType': 'INTRADAY', 'limitPrice': 21.85, 'validity': 'DAY'}
+2024-12-18 14:48:06,277 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800390544'}
+2024-12-18 14:48:06,283 [DEBUG] Entry order object created:.....
+2024-12-18 14:48:06,283 [INFO] Processing after placing the order
+2024-12-18 14:48:06,283 [DEBUG] Order placed successfully: 24121800390544
+2024-12-18 14:48:06,283 [DEBUG] Placing exit order... Level 0 | 24.300 | 47
+2024-12-18 14:48:06,284 [DEBUG] Extracting Price for Level: Level 0 | 24.300 | 47
+2024-12-18 14:48:06,284 [DEBUG] Order Price: 26.75, Quantity: 25
+2024-12-18 14:48:06,284 [INFO] Creating order data
+2024-12-18 14:48:06,284 [INFO] Placing order for level: {'symbol': 'NSE:NIFTY24D1924450CE', 'qty': 25, 'type': 1, 'side': -1, 'productType': 'INTRADAY', 'limitPrice': 26.75, 'validity': 'DAY'}
+2024-12-18 14:48:06,431 [INFO] Handling order response after placing order {'code': 1101, 'message': 'Successfully placed order', 's': 'ok', 'id': '24121800390551'}
+2024-12-18 14:48:06,437 [DEBUG] Exit order object created:.....
+2024-12-18 14:48:06,438 [INFO] Processing after placing the order
+2024-12-18 14:48:06,438 [DEBUG] Order placed successfully: 24121800390551
+2024-12-18 14:48:06,439 [INFO] Both orders sent for level 0: Entry=24121800390544, Exit=24121800390551
