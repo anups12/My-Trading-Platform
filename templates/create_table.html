@@ -5,7 +5,7 @@
 <div class="container my-5">
     <h2 class="mb-4">Create Table</h2>
 
-    <form id="dynamicForm" method="post" action="{% url 'add_table' %}">
+    <form id="dynamicForm" method="post" action="{% url 'add_table' %}"  style="border-color: lightpink; background-color: #f8f9fa; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); padding: 10px;">
         {% csrf_token %}
         <div class="row mb-3">
             <div class="col-md-2">
@@ -17,33 +17,34 @@
             <!-- Initial Row Template -->
             <div class="row mb-3 form-row">
                 <div class="col-md-2">
-                    <label class="form-label">Main Price %</label>
+                    <label class="form-label" style="color: lightseagreen;">Main Price %</label>
                     <input type="number" class="form-control" name="main_percentage[]" placeholder="Main Trade %" required>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Main Trade Quantity</label>
+                    <label class="form-label" style="color: lightseagreen;">Main Trade Quantity</label>
                     <input type="number" class="form-control" name="main_quantity[]" placeholder="Main Trade Qty" required>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Main Trade Target %</label>
+                    <label class="form-label" style="color: lightseagreen;">Main Trade Target %</label>
                     <input type="number" class="form-control" name="main_target[]" placeholder="Main Target" required>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Hedge Market Qty</label>
+                    <label class="form-label" style="color: lightseagreen;">Hedge Market Qty</label>
                     <input type="number" class="form-control" name="hedge_market_quantity[]" placeholder="Hedge Market Qty" required>
                 </div>
                 <div class="col-md-2">
-                    <label  class="form-label">Hedge Price %</label>
-                    <input type="number" class="form-control" name="hedge_percentage[]" placeholder="Hedge price %" required>
-                </div>
-                <div class="col-md-1">
-                    <label class="form-label">Hedge Limit Qty %</label>
+                    <label class="form-label" style="color: lightseagreen;">Hedge Limit Qty %</label>
                     <input type="number" class="form-control" name="hedge_quantity[]" placeholder="Hedge Limit Qty" required>
                 </div>
-<!--                <div class="col-md-2">-->
-<!--                    <label class="form-label">Hedge limit order percentage</label>-->
-<!--                    <input type="number" class="form-control" name="percentage_down[]" placeholder="% down limit order" required>-->
-<!--                </div>-->
+                <div class="col-md-1">
+                    <label class="form-label" style="color: lightseagreen;">Hedge Price</label>
+                    <input type="number" class="form-control" name="hedge_percentage[]" placeholder="Hedge price %" required>
+                </div>
+
+                <!--                <div class="col-md-2">-->
+                <!--                    <label class="form-label">Hedge limit order percentage</label>-->
+                <!--                    <input type="number" class="form-control" name="percentage_down[]" placeholder="% down limit order" required>-->
+                <!--                </div>-->
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-danger removeRow">Delete</button>
                 </div>

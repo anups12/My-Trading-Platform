@@ -190,12 +190,12 @@ class PlaceOrderView(APIView):
             trade_mode = data.get("tradeMode")
             transaction_type = data.get("transactionType")
             order_type = data.get("orderType")
-            target = int(data.get("profitTarget"))  # Ensure target is a float
+            target = float(data.get("profitTarget"))  # Ensure target is a float
             limit_price = int(data.get("limitPrice")) if data.get("limitPrice") else None
             quantity = int(data.get("quantity"))  # Ensure quantity is integer
             expiry = int(data.get("expiry", 0))  # Default expiry to 0 if not provided
             table_id = int(data.get("selected_table"))
-            hedging = data.get("hedging")
+            hedging = data.get("isHedging")
 
             # Ensure all hedging-related fields are validated
             hedging_strike_distance = int(data.get("hedgeStrikeDistance"))
@@ -204,7 +204,6 @@ class PlaceOrderView(APIView):
             hedging_limit_price = float(data.get("hedgingLimitPercentage"))
             limit_order_change_time = int(data.get("HedgingTimeToChangeOrder"))
 
-            print('hedging fields', hedging_strike_distance, hedging_quantity, hedging_limit_quantity, hedging_limit_price, limit_order_change_time)
             # Determine hedging strike direction
             hedging_strike_direction = 'call' if strike_direction == 'put' else 'put'
 
@@ -243,10 +242,10 @@ class PlaceOrderView(APIView):
                 )
 
             # Start the trading strategy in a separate thread
-            access_token = get_access_token()
+            token = get_access_token()
             strategy_parameters = {
                 "strategy": strategy,
-                "access_token": access_token,
+                "access_token": token,
                 "data_table": data_table,
                 "target": target,
                 "hedging_limit_price": hedging_limit_price,
@@ -267,7 +266,7 @@ class PlaceOrderView(APIView):
             )
 
             # Log success and redirect
-            print("Strategy started successfully in the background.")
+            messages.success(request, f"Strategy started Successfully..")
             return redirect('start_strategy')
 
         except ValueError as ve:

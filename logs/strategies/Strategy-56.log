@@ -1,4 +1,0 @@
-2024-12-19 14:00:32,551 [INFO] Initialized TradingStrategy1 with ID: 56
-2024-12-19 14:00:32,552 [INFO] Strategy started for strategy id: 56
-2024-12-19 14:00:32,579 [INFO] websocket started
-2024-12-19 14:00:32,599 [ERROR] Error in strategy: 'OrderStrategy' object has no attribute 'strategy'
