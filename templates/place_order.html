@@ -3,28 +3,28 @@
 {% block broker_login %}
 <!-- Broker login/logout logic -->
 {% if access_token %}
-<li class="nav-item"><a class="nav-link">Broker Added</a></li>
+<li class="nav-item fw-bold fs-5"><a class="nav-link">Broker Added</a></li>
 {% else %}
-<li class="nav-item"><a class="nav-link" href="{% url 'oauth_login' %}">Login To Broker</a></li>
+<li class="nav-item fw-bold fs-5"><a class="nav-link" href="{% url 'oauth_login' %}">Login To Broker</a></li>
 {% endif %}
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5 p-4 shadow-lg p-3 mb-5 bg-body rounded" style="background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 8px;">
+
+<div class="container mt-5 p-4 shadow-lg p-3 mb-5 bg-body rounded" style="background-color: #ffe6f0; border: 2px solid #ffb3c6; border-radius: 8px; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
 
     <!-- Display balance -->
     <h3 class="text-center" style="color: lightseagreen;">Start Strategy</h3>
 
     <!-- Trade Form -->
-    <form method="post">
+    <form method="post" style="padding: 20px;">
         {% csrf_token %}
 
         <!-- Row for primary dropdowns -->
         <div class="row">
-            <!-- Index Selection -->
-            <div class="col-md-3 mb-4">
+            <div class="col-md-4 ">
                 <label for="indexSelect" style="color: lightseagreen;">Select Option</label>
-                <select name="indexSelect" id="indexSelect" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                <select name="indexSelect" id="indexSelect" class="form-control border rounded" style="border-color: lightseagreen;">
                     <option value="NSE:NIFTY50-INDEX">Nifty</option>
                     <option value="NSE:NIFTYBANK-INDEX">Bank Nifty</option>
                     <option value="NSE:FINNIFTY-INDEX">Fin Nifty</option>
@@ -32,27 +32,25 @@
                 </select>
             </div>
 
-            <!-- Strike Direction -->
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="strikeDirection" style="color: lightseagreen;">Strike Direction</label>
-                <select name="strikeDirection" id="strikeDirection" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                <select name="strikeDirection" id="strikeDirection" class="form-control border rounded" style="border-color: lightseagreen;">
                     <option value="call" selected>Call</option>
                     <option value="put">Put</option>
                 </select>
             </div>
 
-            <!-- Strike Distance -->
-            <div class="col-md-3 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="strikeDistance" style="color: lightseagreen;">Strike Distance</label>
-                <input type="number" name="strikeDistance" id="strikeDistance" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter Strike Distance" required>
+                <input type="number" name="strikeDistance" id="strikeDistance" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Strike Distance" required>
             </div>
         </div>
 
         <!-- Row for table selection -->
         <div class="row">
-            <div class="mb-4 col-md-3">
+            <div class="col-md-4 mb-3">
                 <label for="table-select" class="form-label" style="color: lightseagreen;">Choose a Table</label>
-                <select id="table-select" name="selected_table" class="form-select border rounded" style="border-color: lightseagreen; width: 100%;" required>
+                <select id="table-select" name="selected_table" class="form-select border rounded" style="border-color: lightseagreen;" required>
                     <option value="" disabled selected>Select a table</option>
                     {% for table_name, table_id in table_options.items %}
                     <option value="{{ table_id.id }}" data-id="{{ table_id }}">
@@ -62,20 +60,20 @@
                 </select>
             </div>
             <!-- Placeholder for dynamic input fields -->
-            <div id="input-fields" class="mb-4"></div>
+            <div id="input-fields" class="col-md-8"></div>
         </div>
 
         <!-- Trade Mode and Type -->
         <div class="row">
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="tradeMode" style="color: lightseagreen;">Trade Mode</label>
-                <select name="tradeMode" id="tradeMode" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;">
+                <select name="tradeMode" id="tradeMode" class="form-control border rounded" style="border-color: lightseagreen;">
                     <option value="single_trade">Single Trade</option>
                     <option value="flip_trade">Flip Trade</option>
                 </select>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label style="color: lightseagreen;">Trade Type</label><br>
                 <div class="btn-group" role="group" style="width: 100%;">
                     <input type="radio" class="btn-check" name="transactionType" id="buy" value="buy" autocomplete="off" checked>
@@ -86,9 +84,9 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="orderType" style="color: lightseagreen;">Order Type</label>
-                <select name="orderType" id="orderType" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" onchange="toggleInputField()">
+                <select name="orderType" id="orderType" class="form-control border rounded" style="border-color: lightseagreen;" onchange="toggleInputField()">
                     <option value="market">----Select Order Type----</option>
                     <option value="market">Market</option>
                     <option value="limit">Limit</option>
@@ -98,48 +96,56 @@
 
         <!-- Additional input fields -->
         <div class="row">
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="limitPrice" style="color: lightseagreen;">Limit Price</label>
-                <input type="text" name="limitPrice" id="limitPrice" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter price for limit order">
+                <input type="text" name="limitPrice" id="limitPrice" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter price for limit order">
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="quantity" style="color: lightseagreen;">Quantity / Capital Allocation</label>
-                <input type="number" name="quantity" id="quantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Enter fixed quantity or capital" required>
+                <input type="number" name="quantity" id="quantity" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter fixed quantity or capital" required>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="profitTarget" style="color: lightseagreen;">Profit Target</label>
-                <input type="number" name="profitTarget" id="profitTarget" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Set profit target" required>
+                <input type="number" name="profitTarget" id="profitTarget" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Set profit target" required>
             </div>
         </div>
 
         <!-- Hedging-related fields -->
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <input type="checkbox" name="isHedging" id="isHedging" class="form-check-input">
+                <label for="isHedging" style="color: lightseagreen;">Is Hedging</label>
+            </div>
+        </div>
         <div class="row" id="hedgingOptions">
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="hedgeStrikeDistance" style="color: lightseagreen;">Hedging Strike Distance</label>
-                <input type="number" name="hedgeStrikeDistance" id="hedgeStrikeDistance" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Strike Distance" required>
+                <input type="number" name="hedgeStrikeDistance" id="hedgeStrikeDistance" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Hedging Strike Distance" required>
             </div>
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="hedgingQuantity" style="color: lightseagreen;">Hedging Market Quantity</label>
-                <input type="number" name="hedgingQuantity" id="hedgingQuantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Market Quantity" required>
+                <input type="number" name="hedgingQuantity" id="hedgingQuantity" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Hedging Market Quantity" required>
             </div>
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="hedgingLimitQuantity" style="color: lightseagreen;">Hedging Limit Quantity</label>
-                <input type="number" name="hedgingLimitQuantity" id="hedgingLimitQuantity" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Limit Quantity" required>
+                <input type="number" name="hedgingLimitQuantity" id="hedgingLimitQuantity" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Hedging Limit Quantity" required>
             </div>
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="hedgingLimitPercentage" style="color: lightseagreen;">Hedging Limit Price</label>
-                <input type="number" name="hedgingLimitPercentage" id="hedgingLimitPercentage" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Hedging Limit %" required>
+                <input type="number" name="hedgingLimitPercentage" id="hedgingLimitPercentage" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Hedging Limit %" required>
             </div>
-            <div class="col-md-2 mb-4">
+            <div class="col-md-4 mb-3">
                 <label for="HedgingTimeToChangeOrder" style="color: lightseagreen;">Hedging Limit Order Time</label>
-                <input type="number" name="HedgingTimeToChangeOrder" id="HedgingTimeToChangeOrder" class="form-control border rounded" style="border-color: lightseagreen; width: 100%;" placeholder="Time after which LO becomes MO" required>
+                <input type="number" name="HedgingTimeToChangeOrder" id="HedgingTimeToChangeOrder" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Time after which LO becomes MO" required>
             </div>
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-success mt-4 w-50 shadow-lg p-3" style="border-radius: 30px;">Submit</button>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success mt-4 shadow-lg p-2" style="border-radius: 30px; font-size: 18px; width: 200px;">Submit</button>
+        </div>
     </form>
 </div>
 {% endblock %}
