@@ -1,9 +1,7 @@
 import json
 import logging
-import time
 import warnings
 from datetime import datetime
-from functools import wraps
 
 import pandas as pd
 from django.db import transaction
@@ -11,7 +9,7 @@ from fyers_apiv3 import fyersModel
 
 logger = logging.getLogger(__name__)
 
-from .constants import OPTION_MAPPING, RETRY_ATTEMPTS
+from .constants import OPTION_MAPPING
 
 pd.set_option('display.max_columns', None)
 warnings.filterwarnings('ignore')
@@ -40,7 +38,6 @@ def get_access_token():
         return access_tokens.first().access_token
     else:
         return None
-
 
 access_token = get_access_token()
 
@@ -108,8 +105,9 @@ def process_option_data(data):
         print(f"Error: {e}")
         return {}, {}
 
+
 def get_instrument(index, expiry, strike_distance, strike_direction):
-    """Fetches the instrument and its price based on index, expiry, and strike distance/direction."""
+
     strike_direction = OPTION_MAPPING.get(strike_direction.upper())
     if not strike_direction:
         raise ValueError("Invalid strike direction. It must be 'CALL' or 'PUT'.")
@@ -121,44 +119,33 @@ def get_instrument(index, expiry, strike_distance, strike_direction):
             "strikecount": abs(strike_distance) + 1,
             "timestamp": ""
         }
-
-        # Fetch initial option chain data
         initial_response = fyers.optionchain(data=data)
-        if not initial_response.get('data') or not initial_response['data'].get('expiryData'):
+        if 'data' not in initial_response or 'expiryData' not in initial_response['data']:
             raise KeyError("Invalid response structure or no expiry data found.")
 
         response_expiry = initial_response['data']['expiryData']
         if expiry:
-            if expiry not in response_expiry:
-                raise ValueError("Specified expiry not found in the response.")
-            data['timestamp'] = response_expiry[expiry]
+            expiry_timestamp = response_expiry[expiry]
+            data['timestamp'] = expiry_timestamp
             response = fyers.optionchain(data=data)
         else:
             response = initial_response
-
-        if not response.get('data') or not response['data'].get('optionsChain'):
+        if 'data' not in response or 'optionsChain' not in response['data']:
             raise KeyError("Invalid response structure or no options chain data found.")
 
-        # Process options data
         option_chain_data = response['data']['optionsChain']
         call_options, put_options = process_option_data(option_chain_data)
-
-        option = call_options.get(str(strike_distance)) if strike_direction == "CE" else put_options.get(str(strike_distance))
-        if not option:
-            raise ValueError("Specified strike distance not found in the options chain.")
+        if strike_direction == "CE":
+            option = call_options.get(str(strike_distance))
+        else:
+            option = put_options.get(str(strike_distance))
 
         instrument = option['symbol']
         price = option['ltp']
         return instrument, price
 
-    except ValueError as ve:
-        print(f"Value Error: {ve}")
-        return None, None
-    except KeyError as ke:
-        print(f"Key Error: {ke}")
-        return None, None
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"An error occurred: {e}")
         return None, None
 
 def get_lot_size(symbol):
@@ -166,7 +153,7 @@ def get_lot_size(symbol):
     if 'BANKNIFTY' in symbol:
         return 15  # Lot size for Bank Nifty
     elif 'NIFTY' in symbol:
-        return 75  # Lot size for Nifty
+        return 25  # Lot size for Nifty
     elif 'FINNIFTY' in symbol:
         return 25  # Lot size for Fin Nifty
     elif 'MIDCAP' in symbol:
@@ -174,10 +161,8 @@ def get_lot_size(symbol):
     else:
         return 1  # Default lot size for other instruments
 
-
 def round_to_tick_size(price, tick_size):
     return round(float(price) / tick_size) * tick_size
-
 
 def get_order_status_value(order_status):
     if order_status == "PreSubmitted":
@@ -189,6 +174,7 @@ def get_order_status_value(order_status):
     elif order_status == 'Filled':
         order_status = 1
     return order_status
+
 
 
 def create_table(main_price, target, strategy, hedging_limit_price, quantity=None, table=None, hedging_quantity=None, hedging_limit_quantity=None):
@@ -256,35 +242,3 @@ def create_table(main_price, target, strategy, hedging_limit_price, quantity=Non
         print("Error decoding JSON data.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
-
-def retry_on_exception(max_retries=RETRY_ATTEMPTS, delay=2, exceptions=(Exception,)):
-    """Decorator for retrying a function if specified exceptions occur."""
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            retries = 0
-            while retries < max_retries:
-                try:
-                    return func(*args, **kwargs)
-                except exceptions as e:
-                    retries += 1
-                    if retries >= max_retries:
-                        raise
-                    time.sleep(delay)
-        return wrapper
-    return decorator
-
-
-class OrderPlacementError(Exception):
-    """Custom exception for errors during order placement."""
-
-    def __init__(self, message=None, order_details=None):
-        super().__init__(message)
-        self.order_details = order_details
-
-    def __str__(self):
-        base_message = super().__str__()
-        if self.order_details:
-            return f"{base_message} | Order Details: {self.order_details}"
-        return base_message

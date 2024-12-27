@@ -9,7 +9,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ['entry_order_id', 'entry_order_status', 'entry_price', 'entry_time', 'is_main', 'exit_order_id', 'exit_order_status', 'exit_price', 'is_entry', 'is_complete']
+    list_display = ['entry_time', 'exit_time', 'level']
 
 @admin.register(OrderStrategy)
 class OrderStrategyAdmin(admin.ModelAdmin):

@@ -16,19 +16,20 @@ class FyersWebSocketManager:
     def on_order(self, message):
         """Callback for order updates."""
         if message:
+            print('Message in WebSocket:', message)
             self.q.put(message)
 
     def on_error(self, message):
         """Callback for WebSocket errors."""
-        logging.info(f"WebSocket Error: {message}", )
+        print("WebSocket Error:", message)
 
     def on_close(self, message):
         """Callback for WebSocket disconnections."""
-        logging.info(f'WebSocket Closed: {message}', )
+        print('WebSocket Closed:', message)
 
     def on_open(self):
         """Callback for WebSocket connection."""
-        logging.info('WebSocket Open and Ready to Subscribe')
+        print('WebSocket Open and Ready to Subscribe')
 
     def start(self):
         """Starts the WebSocket connection in a separate thread."""
