@@ -9865,3 +9865,67 @@ TypeError: keys must be str, int, float, bool or None, not OrderLevel
 2024-12-19 17:07:13,920 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2024-12-19 17:07:32,611 [INFO] django.server: "POST /start_strategy/ HTTP/1.1" 302 0
 2024-12-19 17:07:32,899 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11625
+2024-12-27 10:38:54,331 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-12-27 10:42:24,353 [INFO] django.server: "GET /admin/accounts/orders/ HTTP/1.1" 200 52283
+2024-12-27 10:42:24,885 [WARNING] django.request: Not Found: /favicon.ico
+2024-12-27 10:42:24,890 [INFO] django.server: - Broken pipe from ('127.0.0.1', 62247)
+2024-12-27 10:42:24,992 [INFO] django.server: - Broken pipe from ('127.0.0.1', 62218)
+2024-12-27 10:42:25,020 [INFO] django.server: "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+2024-12-27 10:42:25,022 [INFO] django.server: "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+2024-12-27 10:42:26,487 [INFO] django.server: "GET /admin/accounts/accesstoken/ HTTP/1.1" 200 10176
+2024-12-27 10:42:26,606 [INFO] django.server: "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+2024-12-27 10:42:30,864 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11611
+2024-12-27 10:42:31,138 [WARNING] django.request: Not Found: /favicon.ico
+2024-12-27 10:42:31,152 [INFO] django.server: - Broken pipe from ('127.0.0.1', 62263)
+2024-12-27 10:42:34,173 [INFO] django.server: "GET /oauth_login/ HTTP/1.1" 200 4810
+2024-12-27 10:42:38,816 [INFO] django.server: "POST /oauth_login/ HTTP/1.1" 302 0
+2024-12-27 10:43:18,703 [INFO] django.server: "GET /fyers_login?s=ok&code=200&auth_code=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkubG9naW4uZnllcnMuaW4iLCJpYXQiOjE3MzUyNzYzOTksImV4cCI6MTczNTMwNjM5OSwibmJmIjoxNzM1Mjc1Nzk5LCJhdWQiOiJbXCJ4OjBcIiwgXCJ4OjFcIiwgXCJ4OjJcIiwgXCJkOjFcIiwgXCJkOjJcIiwgXCJ4OjFcIiwgXCJ4OjBcIl0iLCJzdWIiOiJhdXRoX2NvZGUiLCJkaXNwbGF5X25hbWUiOiJYQTQ2NTI1Iiwib21zIjoiSzEiLCJoc21fa2V5IjoiNWQzMThjOTk4NzkwZGFiN2JlMzk3OTMyNjRjMGJkNGJiOTc4MjQ3ZTljMTA4NDFmMmJjM2RmMTQiLCJub25jZSI6IiIsImFwcF9pZCI6IlJHQjFJNVBENkYiLCJ1dWlkIjoiODIyMzYxN2M5Mjk2NGM0MDlhODM3NTRlMThlOGY5ZWEiLCJpcEFkZHIiOiIwLjAuMC4wIiwic2NvcGUiOiIifQ.fTmr8UKiterNaEf5Z9k8Kl60LI91N3j8IedDrbfgJt8&state=sample HTTP/1.1" 301 0
+2024-12-27 10:43:18,989 [INFO] django.server: "GET /fyers_login/?s=ok&code=200&auth_code=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkubG9naW4uZnllcnMuaW4iLCJpYXQiOjE3MzUyNzYzOTksImV4cCI6MTczNTMwNjM5OSwibmJmIjoxNzM1Mjc1Nzk5LCJhdWQiOiJbXCJ4OjBcIiwgXCJ4OjFcIiwgXCJ4OjJcIiwgXCJkOjFcIiwgXCJkOjJcIiwgXCJ4OjFcIiwgXCJ4OjBcIl0iLCJzdWIiOiJhdXRoX2NvZGUiLCJkaXNwbGF5X25hbWUiOiJYQTQ2NTI1Iiwib21zIjoiSzEiLCJoc21fa2V5IjoiNWQzMThjOTk4NzkwZGFiN2JlMzk3OTMyNjRjMGJkNGJiOTc4MjQ3ZTljMTA4NDFmMmJjM2RmMTQiLCJub25jZSI6IiIsImFwcF9pZCI6IlJHQjFJNVBENkYiLCJ1dWlkIjoiODIyMzYxN2M5Mjk2NGM0MDlhODM3NTRlMThlOGY5ZWEiLCJpcEFkZHIiOiIwLjAuMC4wIiwic2NvcGUiOiIifQ.fTmr8UKiterNaEf5Z9k8Kl60LI91N3j8IedDrbfgJt8&state=sample HTTP/1.1" 302 0
+2024-12-27 10:43:19,019 [INFO] django.server: "GET / HTTP/1.1" 200 7876
+2024-12-27 10:43:23,941 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11587
+2024-12-27 10:46:23,763 [INFO] django.server: "GET /admin/accounts/accesstoken/ HTTP/1.1" 200 12647
+2024-12-27 10:46:23,839 [INFO] django.server: "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+2024-12-27 10:46:23,858 [INFO] django.server: "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+2024-12-28 00:25:34,549 [INFO] django.utils.autoreload: C:\Users\Ankit Tomar\OneDrive\Desktop\project\myproject\accounts\strategy_handler.py changed, reloading.
+2024-12-28 00:25:39,128 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-12-28 00:25:51,116 [INFO] django.server: "GET / HTTP/1.1" 200 7510
+2024-12-28 00:25:53,340 [INFO] django.server: "GET / HTTP/1.1" 200 7510
+2024-12-28 00:25:54,867 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11611
+2024-12-28 00:26:02,299 [INFO] django.server: "GET /oauth_login/ HTTP/1.1" 200 4810
+2024-12-28 00:26:05,884 [INFO] django.server: "POST /oauth_login/ HTTP/1.1" 302 0
+2024-12-28 00:26:07,045 [INFO] django.server: "GET /fyers_login?s=ok&code=200&auth_code=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkubG9naW4uZnllcnMuaW4iLCJpYXQiOjE3MzUzMjU3NjgsImV4cCI6MTczNTM1NTc2OCwibmJmIjoxNzM1MzI1MTY4LCJhdWQiOiJbXCJ4OjBcIiwgXCJ4OjFcIiwgXCJ4OjJcIiwgXCJkOjFcIiwgXCJkOjJcIiwgXCJ4OjFcIiwgXCJ4OjBcIl0iLCJzdWIiOiJhdXRoX2NvZGUiLCJkaXNwbGF5X25hbWUiOiJYQTQ2NTI1Iiwib21zIjoiSzEiLCJoc21fa2V5IjoiNWQzMThjOTk4NzkwZGFiN2JlMzk3OTMyNjRjMGJkNGJiOTc4MjQ3ZTljMTA4NDFmMmJjM2RmMTQiLCJub25jZSI6IiIsImFwcF9pZCI6IlJHQjFJNVBENkYiLCJ1dWlkIjoiYTQzNzlkY2EzNWU4NGY0Yzg5ZGE1NTY4MTgzMjAyYjQiLCJpcEFkZHIiOiIwLjAuMC4wIiwic2NvcGUiOiIifQ.XgArArJcrSWGC7zYpjR0BHo2dGf3MRPqvwG9nkGfRZk&state=sample HTTP/1.1" 301 0
+2024-12-28 00:26:07,405 [INFO] django.server: "GET /fyers_login/?s=ok&code=200&auth_code=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkubG9naW4uZnllcnMuaW4iLCJpYXQiOjE3MzUzMjU3NjgsImV4cCI6MTczNTM1NTc2OCwibmJmIjoxNzM1MzI1MTY4LCJhdWQiOiJbXCJ4OjBcIiwgXCJ4OjFcIiwgXCJ4OjJcIiwgXCJkOjFcIiwgXCJkOjJcIiwgXCJ4OjFcIiwgXCJ4OjBcIl0iLCJzdWIiOiJhdXRoX2NvZGUiLCJkaXNwbGF5X25hbWUiOiJYQTQ2NTI1Iiwib21zIjoiSzEiLCJoc21fa2V5IjoiNWQzMThjOTk4NzkwZGFiN2JlMzk3OTMyNjRjMGJkNGJiOTc4MjQ3ZTljMTA4NDFmMmJjM2RmMTQiLCJub25jZSI6IiIsImFwcF9pZCI6IlJHQjFJNVBENkYiLCJ1dWlkIjoiYTQzNzlkY2EzNWU4NGY0Yzg5ZGE1NTY4MTgzMjAyYjQiLCJpcEFkZHIiOiIwLjAuMC4wIiwic2NvcGUiOiIifQ.XgArArJcrSWGC7zYpjR0BHo2dGf3MRPqvwG9nkGfRZk&state=sample HTTP/1.1" 302 0
+2024-12-28 00:26:07,452 [INFO] django.server: "GET / HTTP/1.1" 200 7876
+2024-12-28 00:26:07,677 [WARNING] django.request: Not Found: /favicon.ico
+2024-12-28 00:26:07,680 [INFO] django.server: - Broken pipe from ('127.0.0.1', 65023)
+2024-12-28 00:26:09,329 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11587
+2024-12-28 00:26:16,763 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-12-28 00:26:18,860 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11597
+2024-12-28 00:26:53,430 [INFO] django.server: "GET /start_strategy/ HTTP/1.1" 200 11597
+2024-12-28 00:27:02,839 [INFO] django.server: "GET / HTTP/1.1" 200 7510
+2024-12-28 00:27:06,840 [INFO] django.server: "GET /admin/ HTTP/1.1" 200 11729
+2024-12-28 00:27:07,029 [INFO] django.server: "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+2024-12-28 00:27:07,044 [INFO] django.server: "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+2024-12-28 00:27:07,046 [INFO] django.server: "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+2024-12-28 00:27:07,062 [WARNING] django.request: Not Found: /favicon.ico
+2024-12-28 00:27:07,062 [INFO] django.server: - Broken pipe from ('127.0.0.1', 65060)
+2024-12-28 00:27:11,088 [INFO] django.server: "GET /admin/accounts/pricequantitytable/ HTTP/1.1" 200 11535
+2024-12-28 00:27:11,168 [INFO] django.server: "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+2024-12-28 00:27:11,186 [INFO] django.server: - Broken pipe from ('127.0.0.1', 65061)
+2024-12-28 00:27:16,220 [INFO] django.server: "GET /admin/accounts/pricequantitytable/1/change/ HTTP/1.1" 200 13617
+2024-12-28 00:27:16,291 [INFO] django.server: "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+2024-12-28 00:27:20,353 [INFO] django.server: "GET /admin/accounts/pricequantitytable/ HTTP/1.1" 200 11535
+2024-12-28 00:27:22,511 [INFO] django.server: "GET /admin/accounts/pricequantitytable/add/ HTTP/1.1" 200 12240
+2024-12-28 00:27:22,565 [INFO] django.server: "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+2024-12-28 00:27:41,045 [INFO] django.server: "GET /add_table/ HTTP/1.1" 200 6430
+2024-12-28 00:27:41,101 [WARNING] django.request: Not Found: /add_table/script.js
+2024-12-28 00:27:41,101 [WARNING] django.server: "GET /add_table/script.js HTTP/1.1" 404 7074
+2024-12-28 00:27:41,152 [WARNING] django.request: Not Found: /add_table/script.js
+2024-12-28 00:27:41,152 [WARNING] django.server: "GET /add_table/script.js HTTP/1.1" 404 7074
+2024-12-28 00:37:40,531 [INFO] django.utils.autoreload: C:\Users\Ankit Tomar\OneDrive\Desktop\project\myproject\accounts\strategy_handler.py changed, reloading.
+2024-12-28 00:37:42,966 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2024-12-28 00:38:06,845 [INFO] django.server: "GET /add_table/ HTTP/1.1" 200 6430
+2024-12-28 00:38:06,938 [WARNING] django.request: Not Found: /add_table/script.js
+2024-12-28 00:38:06,940 [WARNING] django.server: "GET /add_table/script.js HTTP/1.1" 404 7074
+2024-12-28 00:38:07,026 [WARNING] django.request: Not Found: /favicon.ico
+2024-12-28 00:38:07,027 [INFO] django.server: - Broken pipe from ('127.0.0.1', 65215)
