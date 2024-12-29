@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Customer, PriceQuantityTable, OrderLevel, Orders, OrderStrategy, AccessToken
 
 
@@ -9,11 +10,13 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ['id','level','entry_order_id', 'entry_order_status', 'entry_price', 'entry_time', 'is_main', 'exit_order_id', 'exit_order_status', 'exit_price', 'is_complete', 'exit_time']
+    list_display = ['id', 'level', 'entry_order_id', 'entry_order_status', 'entry_price', 'entry_time', 'is_main', 'exit_order_id', 'exit_order_status', 'exit_price', 'is_complete', 'exit_time']
+
 
 @admin.register(OrderStrategy)
 class OrderStrategyAdmin(admin.ModelAdmin):
     list_display = ['id', 'is_active', 'user']
+
 
 @admin.register(PriceQuantityTable)
 class PriceQuantityModelAdmin(admin.ModelAdmin):
@@ -28,7 +31,7 @@ class PriceQuantityModelAdmin(admin.ModelAdmin):
 
 @admin.register(OrderLevel)
 class OrderLevelAdmin(admin.ModelAdmin):
-    list_display = ['level_number', 'timestamp_created', 'strategy','main_percentage', 'main_quantity', 'main_target', 'percentage_down', 'hedging_quantity','hedging_limit_price','hedging_limit_quantity',]
+    list_display = ['level_number', 'timestamp_created', 'strategy', 'main_percentage', 'main_quantity', 'main_target', 'percentage_down', 'hedging_quantity', 'hedging_limit_price', 'hedging_limit_quantity', ]
 
     def has_add_permission(self, request):
         return True
@@ -46,4 +49,3 @@ class AccessTokenAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return True
-

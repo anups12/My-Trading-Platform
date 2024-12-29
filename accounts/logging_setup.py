@@ -1,8 +1,9 @@
 import logging
 import os
-from logging.handlers import RotatingFileHandler
-from tabulate import tabulate
 import threading
+from logging.handlers import RotatingFileHandler
+
+from tabulate import tabulate
 
 
 class TabularLogFormatter(logging.Formatter):

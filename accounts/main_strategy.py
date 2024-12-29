@@ -182,7 +182,6 @@ class TradingStrategy1:
             self.logger.exception(f"Error processing {'previous' if is_previous_level else 'current'} level: {level} | {e}")
             raise
 
-
     def _process_order(self, entry_order, exit_order, status, order_type):
         """Processes the order confirmation based on its type."""
         if status == 'ok':
@@ -404,7 +403,6 @@ class TradingStrategy1:
         self.stop_event.set()
         self.cleanup()
 
-
     def cleanup(self):
         self.logger.info("Cleaning up resources...")
         self.cancel_orders()
@@ -435,7 +433,6 @@ class TradingStrategy1:
     def _send_order_request(self, order_data):
         """Sends the order request to the API with retry logic."""
         return self.fyers.place_order(order_data)
-
 
     def _handle_order_response(self, order_id, order_role, level, price, quantity, order_type, is_hedge=False):
         """Handles the response after an order is placed."""

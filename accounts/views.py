@@ -1,10 +1,9 @@
 import json
-import threading
 
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Window, Sum, OuterRef, Subquery
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from fyers_apiv3 import fyersModel
 from rest_framework import status
@@ -81,7 +80,7 @@ class HomeView(APIView):
         customer = get_customer(request)
         strategy_manager = StrategyManager()
 
-        active_strategies=strategy_manager.list_active_strategies()
+        active_strategies = strategy_manager.list_active_strategies()
         strategies = OrderStrategy.objects.filter(id__in=active_strategies)
         # strategies = OrderStrategy.objects.filter(id__in=[25])
 
@@ -123,6 +122,7 @@ class HomeView(APIView):
                 level_form.save()
 
         return self.get(request)  # Re-render the page
+
 
 class PlaceOrderView(APIView):
     template_name = 'place_order.html'
@@ -204,7 +204,6 @@ class PlaceOrderView(APIView):
             hedging_limit_price = float(data.get("hedgingLimitPercentage"))
             limit_order_change_time = int(data.get("HedgingTimeToChangeOrder"))
 
-            print('hedging fields', hedging_strike_distance, hedging_quantity, hedging_limit_quantity, hedging_limit_price, limit_order_change_time)
             # Determine hedging strike direction
             hedging_strike_direction = 'call' if strike_direction == 'put' else 'put'
 
@@ -229,7 +228,7 @@ class PlaceOrderView(APIView):
                     hedging_instrument=hedging_instrument_symbol,
                     hedging_strike_distance=hedging_strike_distance,
                     hedging_quantity=hedging_quantity,
-                    hedging_limit_price=(1 - hedging_limit_price/100) * main_price,
+                    hedging_limit_price=(1 - hedging_limit_price / 100) * main_price,
                     hedging_limit_quantity=hedging_limit_quantity,
                     hedge_limit_order_time_for_convert_from_lo_to_mo=limit_order_change_time
                 )
@@ -266,8 +265,6 @@ class PlaceOrderView(APIView):
                 strategy_parameters=strategy_parameters,
             )
 
-            # Log success and redirect
-            print("Strategy started successfully in the background.")
             return redirect('start_strategy')
 
         except ValueError as ve:
@@ -485,18 +482,18 @@ class GetTableDataAPIView(APIView):
         )
 
         levels = OrderLevel.objects.filter(strategy_id=strategy_id).annotate(
-        # Calculate the cumulative sum of main_quantity for previous levels
-        cumulative_quantity=Window(
-            expression=Sum('main_quantity'),
-            order_by=F('id').asc()
-        ),
-        # Calculate the product of main_price and main_quantity
-        value=F('main_percentage') * F('main_quantity'),
-        # Entry price for main trade
-        main_trade_entry_price=Subquery(main_trade_entry_price),
-        # Entry price for hedging trade
-        hedging_trade_entry_price=Subquery(hedging_trade_entry_price),
-    ).values(
+            # Calculate the cumulative sum of main_quantity for previous levels
+            cumulative_quantity=Window(
+                expression=Sum('main_quantity'),
+                order_by=F('id').asc()
+            ),
+            # Calculate the product of main_price and main_quantity
+            value=F('main_percentage') * F('main_quantity'),
+            # Entry price for main trade
+            main_trade_entry_price=Subquery(main_trade_entry_price),
+            # Entry price for hedging trade
+            hedging_trade_entry_price=Subquery(hedging_trade_entry_price),
+        ).values(
             'id', 'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity', 'cumulative_quantity', 'value', 'main_trade_entry_price', 'hedging_trade_entry_price'
         )
         return Response(list(levels), status=status.HTTP_200_OK)

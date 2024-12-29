@@ -1,7 +1,7 @@
 import threading
 
-class StrategyManager:
 
+class StrategyManager:
     _instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -15,7 +15,6 @@ class StrategyManager:
             self.strategies = {}
             self.lock = threading.Lock()
             self.__initialized = True
-
 
     def start_strategy(self, strategy_id: str, strategy_class, strategy_parameters: dict):
         with self.lock:
@@ -34,7 +33,6 @@ class StrategyManager:
                 "thread": thread,
                 "instance": strategy_instance,
             }
-        print('strategies', self.strategies)
 
     def stop_strategy(self, strategy_id: str):
         with self.lock:
