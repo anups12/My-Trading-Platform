@@ -34,6 +34,7 @@ class StrategyManager:
                 "thread": thread,
                 "instance": strategy_instance,
             }
+        print('strategies', self.strategies)
 
     def stop_strategy(self, strategy_id: str):
         with self.lock:
