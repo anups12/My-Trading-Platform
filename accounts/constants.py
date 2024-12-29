@@ -1,3 +1,4 @@
+from enum import Enum
 
 # Define constants for the option types
 OPTION_CALL = "CALL"
@@ -20,3 +21,18 @@ hedging_strike_direction_mapping = {
     'CALL': 0,
     'PUT': 1,
 }
+
+RETRY_ATTEMPTS = 10
+
+
+class OrderTypeEnum(Enum):
+    MARKET_ORDER = 2
+    LIMIT_ORDER = 1
+
+class TransactionTypeEnum(Enum):
+    BUY = 1
+    SELL = -1
+
+class OrderRoleEnum(Enum):
+    ENTRY = 'entry'
+    EXIT = 'exit'

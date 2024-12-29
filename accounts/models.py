@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.db import models
 from django.utils import timezone
 
 
@@ -61,7 +61,6 @@ class OrderLevel(models.Model):
     hedging_limit_quantity = models.IntegerField(null=True, blank=True)
     is_skip = models.BooleanField(default=False)
 
-
     def __str__(self):
         return f"Level {self.level_number} | {self.main_percentage} | {self.strategy.id}"
 
@@ -89,8 +88,9 @@ class Orders(models.Model):
     exit_time = models.DateTimeField(null=True, blank=True)
     is_main = models.BooleanField(default=True)
 
+
 def __str__(self):
-        return f"{self.level} | {self.exit_order_id} | {self.entry_order_id}"
+    return f"{self.level} | {self.exit_order_id} | {self.entry_order_id}"
 
 
 class PriceQuantityTable(models.Model):
@@ -100,6 +100,7 @@ class PriceQuantityTable(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
 
 class AccessToken(models.Model):
     timestamp_created = models.DateTimeField(default=timezone.now)

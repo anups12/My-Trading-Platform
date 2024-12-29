@@ -1,10 +1,9 @@
 import json
-import threading
 
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Window, Sum, OuterRef, Subquery
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from fyers_apiv3 import fyersModel
 from rest_framework import status
@@ -18,7 +17,7 @@ from .models import PriceQuantityTable, OrderStrategy, Orders, OrderLevel, Acces
 from .serializers import CustomerLoginSerializer
 from .serializers import CustomerRegistrationSerializer
 from .strategy_handler import StrategyManager
-from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, access_token
+from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, access_token, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError
 
 
 class CustomerRegisterView(APIView):
@@ -81,7 +80,7 @@ class HomeView(APIView):
         customer = get_customer(request)
         strategy_manager = StrategyManager()
 
-        active_strategies=strategy_manager.list_active_strategies()
+        active_strategies = strategy_manager.list_active_strategies()
         strategies = OrderStrategy.objects.filter(id__in=active_strategies)
         # strategies = OrderStrategy.objects.filter(id__in=[25])
 
@@ -123,6 +122,7 @@ class HomeView(APIView):
                 level_form.save()
 
         return self.get(request)  # Re-render the page
+
 
 class PlaceOrderView(APIView):
     template_name = 'place_order.html'
@@ -193,7 +193,7 @@ class PlaceOrderView(APIView):
             target = int(data.get("profitTarget"))  # Ensure target is a float
             limit_price = int(data.get("limitPrice")) if data.get("limitPrice") else None
             quantity = int(data.get("quantity"))  # Ensure quantity is integer
-            expiry = int(data.get("expiry", 0))  # Default expiry to 0 if not provided
+            expiry = data.get("expiry", "")  # Default expiry to 0 if not provided
             table_id = int(data.get("selected_table"))
             hedging = data.get("hedging")
 
@@ -204,7 +204,6 @@ class PlaceOrderView(APIView):
             hedging_limit_price = float(data.get("hedgingLimitPercentage"))
             limit_order_change_time = int(data.get("HedgingTimeToChangeOrder"))
 
-            print('hedging fields', hedging_strike_distance, hedging_quantity, hedging_limit_quantity, hedging_limit_price, limit_order_change_time)
             # Determine hedging strike direction
             hedging_strike_direction = 'call' if strike_direction == 'put' else 'put'
 
@@ -229,7 +228,7 @@ class PlaceOrderView(APIView):
                     hedging_instrument=hedging_instrument_symbol,
                     hedging_strike_distance=hedging_strike_distance,
                     hedging_quantity=hedging_quantity,
-                    hedging_limit_price=(1 - hedging_limit_price/100) * main_price,
+                    hedging_limit_price=(1 - hedging_limit_price / 100) * main_price,
                     hedging_limit_quantity=hedging_limit_quantity,
                     hedge_limit_order_time_for_convert_from_lo_to_mo=limit_order_change_time
                 )
@@ -266,8 +265,6 @@ class PlaceOrderView(APIView):
                 strategy_parameters=strategy_parameters,
             )
 
-            # Log success and redirect
-            print("Strategy started successfully in the background.")
             return redirect('start_strategy')
 
         except ValueError as ve:
@@ -276,15 +273,29 @@ class PlaceOrderView(APIView):
             return redirect('start_strategy')
 
         except PriceQuantityTable.DoesNotExist:
+
             # Handle table not found error
             messages.error(request, "The selected Price Quantity Table does not exist.")
             return redirect('start_strategy')
+        except InvalidStrikeDirectionError as e:
+
+            messages.error(request, f"Strike direction is invalid: {e}")
+            return redirect('start_strategy')
+        except ExpiryNotFoundError as e:
+
+            messages.error(request, f"Expiry date is not found: {e}")
+            return redirect('start_strategy')
+        except OptionChainDataError as e:
+
+            messages.error(request, f"Option chain not found: {e}")
+            return redirect('start_strategy')
 
         except Exception as e:
+
             # Handle any unexpected errors
-            print(f"Unexpected error: {e}")
-            messages.error(request, "An unexpected error occurred. Please try again.")
+            messages.error(request, f"An unexpected error occurred. Please try again. {e}")
             return redirect('start_strategy')
+
 
 class StopStrategy(APIView):
     def get(self, request):
@@ -471,18 +482,18 @@ class GetTableDataAPIView(APIView):
         )
 
         levels = OrderLevel.objects.filter(strategy_id=strategy_id).annotate(
-        # Calculate the cumulative sum of main_quantity for previous levels
-        cumulative_quantity=Window(
-            expression=Sum('main_quantity'),
-            order_by=F('id').asc()
-        ),
-        # Calculate the product of main_price and main_quantity
-        value=F('main_percentage') * F('main_quantity'),
-        # Entry price for main trade
-        main_trade_entry_price=Subquery(main_trade_entry_price),
-        # Entry price for hedging trade
-        hedging_trade_entry_price=Subquery(hedging_trade_entry_price),
-    ).values(
+            # Calculate the cumulative sum of main_quantity for previous levels
+            cumulative_quantity=Window(
+                expression=Sum('main_quantity'),
+                order_by=F('id').asc()
+            ),
+            # Calculate the product of main_price and main_quantity
+            value=F('main_percentage') * F('main_quantity'),
+            # Entry price for main trade
+            main_trade_entry_price=Subquery(main_trade_entry_price),
+            # Entry price for hedging trade
+            hedging_trade_entry_price=Subquery(hedging_trade_entry_price),
+        ).values(
             'id', 'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity', 'cumulative_quantity', 'value', 'main_trade_entry_price', 'hedging_trade_entry_price'
         )
         return Response(list(levels), status=status.HTTP_200_OK)
