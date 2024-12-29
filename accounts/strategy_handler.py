@@ -53,7 +53,6 @@ class StrategyManager:
 
     def list_active_strategies(self):
         with self.lock:
-            print('self tsts', self.strategies.keys())
             return list(self.strategies.keys())
 
     def get_strategy_status(self, strategy_id: str):

@@ -143,30 +143,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # or your broker URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,  # Disable Django's default logging setup
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,  # Prevent propagation to root logger
-        },
-    },
-}

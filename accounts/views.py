@@ -18,7 +18,7 @@ from .models import PriceQuantityTable, OrderStrategy, Orders, OrderLevel, Acces
 from .serializers import CustomerLoginSerializer
 from .serializers import CustomerRegistrationSerializer
 from .strategy_handler import StrategyManager
-from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, access_token
+from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, access_token, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError
 
 
 class CustomerRegisterView(APIView):
@@ -193,7 +193,7 @@ class PlaceOrderView(APIView):
             target = float(data.get("profitTarget"))  # Ensure target is a float
             limit_price = int(data.get("limitPrice")) if data.get("limitPrice") else None
             quantity = int(data.get("quantity"))  # Ensure quantity is integer
-            expiry = int(data.get("expiry", 0))  # Default expiry to 0 if not provided
+            expiry = data.get("expiry", "")  # Default expiry to 0 if not provided
             table_id = int(data.get("selected_table"))
             hedging = data.get("isHedging")
 
@@ -275,15 +275,29 @@ class PlaceOrderView(APIView):
             return redirect('start_strategy')
 
         except PriceQuantityTable.DoesNotExist:
+
             # Handle table not found error
             messages.error(request, "The selected Price Quantity Table does not exist.")
             return redirect('start_strategy')
+        except InvalidStrikeDirectionError as e:
+
+            messages.error(request, f"Strike direction is invalid: {e}")
+            return redirect('start_strategy')
+        except ExpiryNotFoundError as e:
+
+            messages.error(request, f"Expiry date is not found: {e}")
+            return redirect('start_strategy')
+        except OptionChainDataError as e:
+
+            messages.error(request, f"Option chain not found: {e}")
+            return redirect('start_strategy')
 
         except Exception as e:
+
             # Handle any unexpected errors
-            print(f"Unexpected error: {e}")
-            messages.error(request, "An unexpected error occurred. Please try again.")
+            messages.error(request, f"An unexpected error occurred. Please try again. {e}")
             return redirect('start_strategy')
+
 
 class StopStrategy(APIView):
     def get(self, request):
