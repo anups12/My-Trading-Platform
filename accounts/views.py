@@ -195,7 +195,7 @@ class PlaceOrderView(APIView):
             quantity = int(data.get("quantity"))  # Ensure quantity is integer
             expiry = data.get("expiry", "")  # Default expiry to 0 if not provided
             table_id = int(data.get("selected_table"))
-            hedging = data.get("hedging")
+            hedging = data.get("isHedging")
 
             # Ensure all hedging-related fields are validated
             hedging_strike_distance = int(data.get("hedgeStrikeDistance"))
