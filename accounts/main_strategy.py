@@ -1,4 +1,5 @@
 import queue
+import random
 import threading
 import time
 from datetime import datetime
@@ -114,20 +115,20 @@ class TradingStrategy1:
             current_level_order = self._process_level(
                 level=self.current_level,
                 strategy=self.strategy,
-                is_previous_level=False
+                is_previous_level=False,
+                is_main=True
             )
 
             # Process next level
             next_level_order = self._process_level(
                 level=self.next_level,
                 strategy=self.strategy,
-                is_previous_level=True
+                is_previous_level=True,
+                is_main=True
             )
 
-            self.logger.info(
-                f"Orders sent for level {self.current_level_index} | "
-                f"Entry Order: {next_level_order}, Exit Order: {current_level_order}"
-            )
+            orders_table = {"Order Placed for level": self.current_level_index, "Entry Order": next_level_order, "Exit Order": current_level_order}
+            self.logger.info(orders_table)
 
             # Wait for confirmation of the orders
             self.wait_for_order_confirmation(next_level_order, current_level_order)
@@ -139,7 +140,7 @@ class TradingStrategy1:
         except Exception as e:
             self.logger.exception(f"Unexpected error processing level {self.current_level_index}: {e}")
 
-    def _process_level(self, level, strategy, is_previous_level):
+    def _process_level(self, level, strategy, is_previous_level, is_main=False):
         """
         Processes a single level and places the corresponding order.
 
@@ -159,7 +160,9 @@ class TradingStrategy1:
                 entry_order_id__isnull=False,
                 exit_order_id__isnull=True,
                 level=level,
-                level__strategy=strategy
+                level__strategy=strategy,
+                is_complete=False,
+                is_main=is_main
             ).first()
 
             if order:
@@ -200,6 +203,7 @@ class TradingStrategy1:
         while not self.stop_event.is_set():
             try:
                 # Retrieve message from the queue
+                time.sleep(20)
                 order_info = self._get_message_from_queue(entry_order, exit_order)
                 if order_info:
                     order_id, status, order_type = order_info
@@ -241,7 +245,7 @@ class TradingStrategy1:
         self.logger.info(f'Entry Order placed from websocket {entry_order}')
         try:
             with self.lock:
-                order = Orders.objects.filter(entry_order_id=entry_order).first()
+                order = Orders.objects.filter(entry_order_id=entry_order, is_complete=False).first()
                 self.logger.debug(f'Entry order received for next level {order}, Level: {self.current_level}')
                 if not order:
                     self.logger.error(f"Order not found for Entry order:{entry_order} Level {self.current_level}")
@@ -291,16 +295,15 @@ class TradingStrategy1:
 
             if self.strategy.is_hedging:
                 self.logger.debug("Exiting hedging order ")
-                if self.strategy.is_hedging:
-                    # Place hedging orders if the strategy requires it
-                    hedging_order = self._place_and_process_order(
-                        order_type=OrderTypeEnum.MARKET_ORDER.value,
-                        side=TransactionTypeEnum.SELL.value,
-                        order_role=OrderRoleEnum.EXIT.value,
-                        level=self.current_level,
-                        is_hedging_order=True,
-                    )
-                    self.logger.info(f"Hedging market order placed successfully. Order ID: {hedging_order}")
+                # Place hedging orders if the strategy requires it
+                hedging_order = self._place_and_process_order(
+                    order_type=OrderTypeEnum.MARKET_ORDER.value,
+                    side=TransactionTypeEnum.SELL.value,
+                    order_role=OrderRoleEnum.EXIT.value,
+                    level=self.current_level,
+                    is_hedging_order=True,
+                )
+                self.logger.info(f"Hedging market order placed successfully. Order ID: {hedging_order}")
 
             # Strategy logic
             if self.current_level_index == 0:
@@ -421,7 +424,7 @@ class TradingStrategy1:
             )
             if is_hedging_order:
                 self.logger.debug("Placing hedging order")
-                self.logger.debug({order_data})
+                self.logger.debug(order_data)
             # Send order request
             response = self._send_order_request(order_data)
             return response, price, quantity
@@ -465,7 +468,8 @@ class TradingStrategy1:
                 entry_order_id=order_id,
                 entry_order_status=1 if order_type == 2 else 2,
                 is_entry=True,
-                is_main=False if is_hedge else True
+                is_main=False if is_hedge else True,
+                is_complete=False
             )
             self.logger.debug("Entry order record successfully created.")
         except Exception as e:
@@ -484,8 +488,8 @@ class TradingStrategy1:
         """
         try:
             is_main = not is_hedge
-            price = self.get_price_using_order_id(order_id) if not price else price
-            self.logger.debug(f"Updating exit order | Is Main: {is_main}")
+            price = self.get_price_using_order_id(order_id) if price in [None, ''] else price
+            self.logger.debug(f"Updating exit order | Is Main: {is_main}  price: {price}")
 
             order = Orders.objects.filter(level__strategy=self.strategy, level=level, entry_order_id__isnull=False, is_complete=False, exit_order_id__isnull=True, is_main=is_main).first()
             if not order:
@@ -493,10 +497,11 @@ class TradingStrategy1:
                 return  # Move to the next step instead of stopping the thread
 
             # Update the exit order details
-            order.exit_order_status = 2
+            order.exit_order_status = 2 if not is_hedge else 1
             order.exit_order_id = order_id
             order.exit_price = price
             order.exit_time = datetime.now()
+            order.is_complete = True if is_hedge else False
             order.save()
 
             self.logger.debug(f"Exit order updated successfully for Level {self.current_level} | Order ID: {order_id}")
@@ -527,7 +532,7 @@ class TradingStrategy1:
 
             # Validate response and fetch traded price
             if response and isinstance(response, list):
-                price = response[0].get("tradedPrice")
+                price = float(response[0].get("tradedPrice"))
 
             if price is None:
                 self.logger.warning(f"Failed to fetch price for order ID {order_id}: {response}")
@@ -586,18 +591,20 @@ class TradingStrategy1:
                 data = {"id": order_id}
                 response = self.fyers.cancel_order(data=data)
 
-                if response.get('s') == "error":
-                    order = Orders.objects.filter(Q(level__strategy=self.strategy), Q(entry_order_id=order_id) | Q(exit_order_id=order_id)).first()
+                if response.get('s') == "ok":
+                    order = Orders.objects.filter(Q(level__strategy=self.strategy), Q(entry_order_id=order_id) | Q(exit_order_id=order_id), is_complete=False).first()
                     self.logger.info(f"Cancelling order for Order id {order_id} | {order.id}")
                     if order:
                         if order.entry_order_id == order_id:
                             order.entry_order_status = 3
                             order.entry_order_id = None
                             order.entry_price = None
-                        else:
+                        elif order.exit_order_id == order_id:
                             order.exit_order_status = 3
                             order.exit_order_id = None
                             order.exit_price = None
+
+                        order.is_complete = True
                         order.save()
                         self.logger.debug(f"Order {order_id} successfully updated to 'cancelled'.")
                     else:
@@ -618,11 +625,23 @@ class TradingStrategy1:
                 for order in orders:
                     try:
                         data = {"id": order.entry_order_id}  # Assuming entry_order_id is the correct field
-                        self.logger.debug(f"Attempting to cancel order: {data['id']}")
+                        self.logger.info(f"Attempting to cancel order: {data['id']}")
                         response = self.fyers.cancel_order(data=data)
+                        order_id = response.get('id')
 
-                        if response.get('s') != "error":
-                            order.entry_order_status = 3
+                        if response.get('s') == "ok":
+                            if order.entry_order_id == order_id:
+                                self.logger.debug(f"Updating entry order id {order.entry_order_id}")
+                                order.entry_order_status = 3
+                                order.entry_order_id = None
+                                order.entry_price = None
+                            elif order.exit_order_id == order_id:
+                                self.logger.debug(f"Updating exit order id {order.exit_order_id}")
+                                order.exit_order_status = 3
+                                order.exit_order_id = None
+                                order.exit_price = None
+
+                            order.is_complete = True
                             order.save()
                             self.logger.debug(f"Order {data['id']} successfully updated to 'cancelled'.")
                         else:

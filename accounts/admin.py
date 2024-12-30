@@ -15,7 +15,7 @@ class OrdersAdmin(admin.ModelAdmin):
 
 @admin.register(OrderStrategy)
 class OrderStrategyAdmin(admin.ModelAdmin):
-    list_display = ['id', 'is_active', 'user']
+    list_display = ['id', 'is_active', 'user', 'is_hedging', 'main_instrument', 'hedging_instrument']
 
 
 @admin.register(PriceQuantityTable)
