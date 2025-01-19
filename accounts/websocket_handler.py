@@ -15,16 +15,23 @@ class FyersWebSocketManager:
         
     def on_order(self, message):
         """Callback for order updates."""
-        if message:
-            self.q.put(message)
+        try:
+            if message:
+                self.q.put(message)
+        except Exception as ex:
+            self.logger.debug("Exception inside On order function")
 
     def on_error(self, message):
         """Callback for WebSocket errors."""
-        self.logger.info(f"WebSocket Error: {message}", )
+        self.logger.error(f"WebSocket Error: {message}", )
+        self.logger.info("Attempting to reconnect...")
+        self.start()  # Restart the WebSocket connection
 
     def on_close(self, message):
         """Callback for WebSocket disconnections."""
-        self.logger.info(f'WebSocket Closed: {message}', )
+        self.logger.error(f'WebSocket Closed: {message}', )
+        self.logger.info("Attempting to reconnect...")
+        self.start()  # Restart the WebSocket connection
 
     def on_open(self):
         """Callback for WebSocket connection."""

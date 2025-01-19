@@ -31,7 +31,7 @@ class PriceQuantityModelAdmin(admin.ModelAdmin):
 
 @admin.register(OrderLevel)
 class OrderLevelAdmin(admin.ModelAdmin):
-    list_display = ['level_number', 'timestamp_created', 'strategy', 'main_percentage', 'main_quantity', 'main_target', 'percentage_down', 'hedging_quantity', 'hedging_limit_price', 'hedging_limit_quantity', ]
+    list_display = ['id', 'level_number', 'timestamp_created', 'strategy', 'main_percentage', 'main_quantity', 'main_target', 'percentage_down', 'hedging_quantity', 'hedging_limit_price', 'hedging_limit_quantity', ]
 
     def has_add_permission(self, request):
         return True

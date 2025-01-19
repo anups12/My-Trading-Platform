@@ -9,6 +9,15 @@ class OrderLevelForm(forms.ModelForm):
             'hedging_quantity', 'hedging_limit_price',
             'hedging_limit_quantity', 'is_skip'
         ]
+        labels = {
+            'main_percentage': 'Main %',
+            'main_quantity': 'Main Qty',
+            'main_target': 'Target',
+            'hedging_quantity': 'H Qty',
+            'hedging_limit_price': 'H Limit Price',
+            'hedging_limit_quantity': 'H Limit Qty',
+            'is_skip': 'Skip',
+        }
         widgets = {
             'main_percentage': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.001'}),
             'main_quantity': forms.NumberInput(attrs={'class': 'form-control'}),

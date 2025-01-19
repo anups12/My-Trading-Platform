@@ -1,14 +1,15 @@
 import json
+import random
 
 from django.contrib import messages
+from django.core.cache import cache
 from django.db import transaction
-from django.db.models import F, Window, Sum, OuterRef, Subquery
+from django.db.models import OuterRef, Subquery
 from django.http import HttpResponseBadRequest
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from fyers_apiv3 import fyersModel
-from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .forms import OrderStrategyForm, OrderLevelForm
@@ -17,7 +18,7 @@ from .models import PriceQuantityTable, OrderStrategy, Orders, OrderLevel, Acces
 from .serializers import CustomerLoginSerializer
 from .serializers import CustomerRegistrationSerializer
 from .strategy_handler import StrategyManager
-from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, access_token, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError
+from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, client_id, secret_key, redirect_uri, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError, access_token
 
 
 class CustomerRegisterView(APIView):
@@ -87,7 +88,9 @@ class HomeView(APIView):
         strategy_forms = []
 
         # Create forms for each strategy and its levels
+        ids = []
         for strategy in strategies:
+            ids.append(strategy.id)
             strategy_form = OrderStrategyForm(instance=strategy)
             level_forms = [
                 OrderLevelForm(instance=level, prefix=f"level-{level.id}")
@@ -97,18 +100,19 @@ class HomeView(APIView):
             strategy_forms.append({
                 'strategy_form': strategy_form,
                 'level_forms': level_forms,
-                'strategy_id': strategy.id,
-
+                'strategy_id': str(strategy.id),
             })
 
         return render(request, 'home.html', {
             'strategy_forms': strategy_forms,
             'customer': customer,
+            'all_ids': ids
         })
 
     def post(self, request):
         strategy_id = request.POST.get('strategy_id')
         strategy = OrderStrategy.objects.get(id=strategy_id)
+
         # Process forms
         strategy_form = OrderStrategyForm(request.POST, instance=strategy)
         if strategy_form.is_valid():
@@ -302,7 +306,6 @@ class StopStrategy(APIView):
         strategy = OrderStrategy.objects.filter(is_active=True)
         levels = OrderLevel.objects.filter(strategy__in=strategy)
         active_orders = Orders.objects.filter(level__in=levels, entry_order_id__isnull=False)
-
         return render(request, 'modify_strategy.html', {'strategies': strategy, "active_orders": active_orders})
 
     def post(self, request):
@@ -370,41 +373,38 @@ class PriceQuantityAPIView(APIView):
             return render(request, 'create_table.html', {'error': f'An unexpected error occurred: {str(e)}'}, status=500)
 
 
-class SkipActionView(APIView):
-    def get(self, request, id):
-        # Perform the skip action here
-        return Response({"message": f"Skip action triggered for ID: {id}"}, status=status.HTTP_200_OK)
-
-
 class KillActionView(APIView):
-    def get(self, request, id):
-        print('sell order triggered', id)
-        # Perform the kill action here
-        return
+    def post(self, request):
+        try:
+            row_id = request.data.get('row_id')
+            order_type = request.data.get('type')
 
+            if not row_id and not order_type:
+                return JsonResponse({'status': 'error', 'message': 'Invalid request, no ID provided'}, status=400)
 
-class PauseCallActionView(APIView):
-    def get(self, request, id):
-        # Perform the kill action here
-        return Response({"message": f"Kill action triggered for ID: {id}"}, status=status.HTTP_200_OK)
+            # Determine the target order
+            order_filter = {'level__id': row_id, 'is_entry': True, 'is_complete': False, 'is_main': True if order_type=='main' else False}
+            order = Orders.objects.filter(**order_filter).first()
 
+            if not order:
+                return JsonResponse({'status': 'error', 'message': 'Order not found'}, status=404)
 
-class PausePutActionView(APIView):
-    def get(self, request, id):
-        # Perform the kill action here
-        return Response({"message": f"Kill action triggered for ID: {id}"}, status=status.HTTP_200_OK)
+            # Initialize FyersModel
+            fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
 
+            # Exit the position
+            data = {"id": order.entry_order_id}
+            response = fyers.exit_positions(data=data)
 
-class KillHedgingActionView(APIView):
-    def get(self, request, id):
-        # Perform the kill action here
-        return Response({"message": f"Kill action triggered for ID: {id}"}, status=status.HTTP_200_OK)
+            # Check Fyers API response
+            if response.get('code') == 200:  # Example success check, adapt to actual Fyers API response
+                message = "Order Exited Successfully" if row_id else "Hedging Order Exited Successfully"
+                return JsonResponse({'status': 'success', 'message': message}, status=200)
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Failed to exit order'}, status=500)
 
-
-class PauseHedgingActionView(APIView):
-    def get(self, request, id):
-        # Perform the kill action here
-        return Response({"message": f"Kill action triggered for ID: {id}"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 class OauthLogin(APIView):
@@ -456,73 +456,106 @@ class CallBackLoginUrl(APIView):
 
 class GetTableDataAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        strategy_id = kwargs.get('strategy_id')
-        if not strategy_id:
-            return Response({"error": "Strategy ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        all_ids = request.GET.get('all_ids', '').split(',') if request.GET.get('all_ids') else []
+        static_data = []
 
-        # Subquery to get the entry price for the main trade
-        main_trade_entry_price = (
-            Orders.objects.filter(
-                level=OuterRef('id'),
-                is_entry=True,
-                is_complete=False,
-            )
-            .values('entry_price')[:1]  # Select only the first matching order
-        )
+        if not all_ids:
+            return JsonResponse({'static_data': static_data, 'error': 'No strategy IDs provided'}, status=400)
 
-        # Subquery to get the entry price for the hedging trade
-        hedging_trade_entry_price = (
-            Orders.objects.filter(
-                level=OuterRef('id'),
-                is_entry=True,
-                is_complete=False,
-            )
-            .exclude(is_main=True)
-            .values('entry_price')[:1]  # Select only the first matching order
-        )
+        try:
+            for strategy_id in all_ids:
+                cache_key = f"strategy_{strategy_id}"
+                strategy_data = cache.get(cache_key)
 
-        levels = OrderLevel.objects.filter(strategy_id=strategy_id).annotate(
-            # Calculate the cumulative sum of main_quantity for previous levels
-            cumulative_quantity=Window(
-                expression=Sum('main_quantity'),
-                order_by=F('id').asc()
-            ),
-            # Calculate the product of main_price and main_quantity
-            value=F('main_percentage') * F('main_quantity'),
-            # Entry price for main trade
-            main_trade_entry_price=Subquery(main_trade_entry_price),
-            # Entry price for hedging trade
-            hedging_trade_entry_price=Subquery(hedging_trade_entry_price),
-        ).values(
-            'id', 'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity', 'cumulative_quantity', 'value', 'main_trade_entry_price', 'hedging_trade_entry_price'
-        )
-        return Response(list(levels), status=status.HTTP_200_OK)
+                if not strategy_data:
+                    strategy = OrderStrategy.objects.filter(id=strategy_id).first()
+                    if not strategy:
+                        continue
+                    main_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=True).values('entry_order_id')[:1]
+                    hedging_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=False).values('entry_order_id')[:1]
+
+                    levels = OrderLevel.objects.filter(strategy=strategy).only(
+                        'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity'
+                    ).annotate(
+                        main_order=Subquery(main_order),
+                        hedging_order=Subquery(hedging_order)
+                    )
+
+                    cumulative_quantity = 0
+                    cumulative_amount = 0
+                    dynamic_h_cum_qty = 0
+                    dynamic_h_cum_amt = 0
+
+                    rows = []
+                    for level in levels:
+                        main_amount = level.main_percentage * level.main_quantity
+                        hedging_qty = level.hedging_quantity or 0
+                        if level.main_order:
+                            rows.append({
+                                "row_id": level.id,
+                                'static_price': level.main_percentage,
+                                'static_quantity': level.main_quantity,
+                                'static_target': level.main_target,
+                                'static_amount': main_amount,
+                                'static_h_price': random.randint(10, 30),
+                                'static_h_qty': hedging_qty,
+                                'static_h_target': random.randint(10, 30),
+                                'static_h_amount': random.randint(10, 30),
+                                'dynamic_cum_qty': (cumulative_quantity := cumulative_quantity + level.main_quantity),
+                                'dynamic_cum_amt': (cumulative_amount := cumulative_amount + main_amount),
+                                'dynamic_h_cum_qty': (dynamic_h_cum_qty := dynamic_h_cum_qty + hedging_qty),
+                                'dynamic_h_cum_amt': (dynamic_h_cum_amt := dynamic_h_cum_amt + 100),
+                                'dynamic_p_on_r': (level.main_target - level.main_percentage) * level.main_quantity,
+                            })
+
+                    strategy_data = {'id': strategy.id, 'rows': rows}
+                    cache.set(cache_key, strategy_data, timeout=5)  # Cache for 5 seconds
+                static_data.append(strategy_data)
+
+        except Exception as ex:
+            return JsonResponse({'static_data': static_data, 'error': 'An error occurred while processing data'}, status=500)
+
+        return JsonResponse({'static_data': static_data})
 
 
 class GetDynamicFieldsAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        strategy_id = request.GET.get('strategy_id')
-        if not strategy_id:
-            return Response({"error": "Strategy ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        all_ids = request.GET.get('all_ids', '')
+        if all_ids:
+            all_ids = all_ids.split(',')  # Split into a list
+        else:
+            all_ids = []  # Default to an empty list
+        dynamic_data = []
+        for strategy_id in all_ids:
+            strategy = OrderStrategy.objects.filter(id=strategy_id).first()
+            main_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=True).values('entry_order_id')[:1]
+            hedging_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=False).values('entry_order_id')[:1]
 
-        strategy = OrderStrategy.objects.get(id=strategy_id)
-        data = {
-            "symbols": f"{strategy.main_instrument},{strategy.hedging_instrument}"
-        }
-        fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
-        response = fyers.quotes(data=data)
+            levels = OrderLevel.objects.filter(strategy=strategy).only(
+                'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity'
+            ).annotate(
+                main_order=Subquery(main_order),
+                hedging_order=Subquery(hedging_order)
+            )
 
-        try:
-            orders = Orders.objects.filter(level__strategy=strategy, is_entry=True, is_complete=False)
-
-            data = {}
-            for order in orders:
-                if order.is_main:
-                    data[order.level.id] = {
-                        "price": (response['d'][0]['v']['ask'] - float(order.entry_price)) * order.level.main_quantity,
-                        "order_id": order.id,  # Assuming 'order.id' contains the main order ID
-                        "hedging_order_id": getattr(order, 'hedging_order_id', None)  # Safely get 'hedging_order_id'
-                    }
-        except Exception as ex:
-            print('exception ', ex)
-        return Response(data, status=status.HTTP_200_OK)
+            # data = {
+            #     "symbols": "NSE:SBIN-EQ,NSE:IDEA-EQ"
+            #         }
+            # fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
+            # response = fyers.quotes(data=data)
+            # main_price = response['d'][0]['v']['ask']
+            # hedge_price = response['d'][1]['v']['ask']
+            main_price = random.randint(10, 100)
+            hedge_price = random.randint(10, 100)
+            if strategy:
+                cumulative_pnl = 0
+                dynamic_data.append({
+                    'id': strategy.id,
+                    "rows": [{
+                        'dynamic_pnl': (_.main_percentage - main_price) * _.main_quantity,
+                        'dynamic_cum_pnl': (cumulative_pnl := cumulative_pnl + (_.main_percentage - main_price) * _.main_quantity),
+                        # TODO: Find a way to calculate hedging price here
+                        'dynamic_h_pnl': random.randint(3, 30),
+                        'dynamic_h_p_on_r': random.randint(3, 30),
+                    } for _ in levels if _.main_order]})
+        return JsonResponse({'dynamic_data': dynamic_data})
