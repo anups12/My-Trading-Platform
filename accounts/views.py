@@ -383,7 +383,7 @@ class KillActionView(APIView):
                 return JsonResponse({'status': 'error', 'message': 'Invalid request, no ID provided'}, status=400)
 
             # Determine the target order
-            order_filter = {'level__id': row_id, 'is_entry': True, 'is_complete': False, 'is_main': True if order_type=='main' else False}
+            order_filter = {'level__id': row_id, 'is_entry': True, 'is_complete': False, 'is_main': True if order_type == 'main' else False}
             order = Orders.objects.filter(**order_filter).first()
 
             if not order:
@@ -490,23 +490,22 @@ class GetTableDataAPIView(APIView):
                     for level in levels:
                         main_amount = level.main_percentage * level.main_quantity
                         hedging_qty = level.hedging_quantity or 0
-                        if level.main_order:
-                            rows.append({
-                                "row_id": level.id,
-                                'static_price': level.main_percentage,
-                                'static_quantity': level.main_quantity,
-                                'static_target': level.main_target,
-                                'static_amount': main_amount,
-                                'static_h_price': random.randint(10, 30),
-                                'static_h_qty': hedging_qty,
-                                'static_h_target': random.randint(10, 30),
-                                'static_h_amount': random.randint(10, 30),
-                                'dynamic_cum_qty': (cumulative_quantity := cumulative_quantity + level.main_quantity),
-                                'dynamic_cum_amt': (cumulative_amount := cumulative_amount + main_amount),
-                                'dynamic_h_cum_qty': (dynamic_h_cum_qty := dynamic_h_cum_qty + hedging_qty),
-                                'dynamic_h_cum_amt': (dynamic_h_cum_amt := dynamic_h_cum_amt + 100),
-                                'dynamic_p_on_r': (level.main_target - level.main_percentage) * level.main_quantity,
-                            })
+                        rows.append({
+                            "row_id": level.id,
+                            'static_price': level.main_percentage,
+                            'static_quantity': level.main_quantity,
+                            'static_target': level.main_target,
+                            'static_amount': main_amount,
+                            'static_h_price': random.randint(10, 30),
+                            'static_h_qty': hedging_qty,
+                            'static_h_target': random.randint(10, 30),
+                            'static_h_amount': random.randint(10, 30),
+                            'dynamic_cum_qty': (cumulative_quantity := cumulative_quantity + level.main_quantity),
+                            'dynamic_cum_amt': (cumulative_amount := cumulative_amount + main_amount),
+                            'dynamic_h_cum_qty': (dynamic_h_cum_qty := dynamic_h_cum_qty + hedging_qty),
+                            'dynamic_h_cum_amt': (dynamic_h_cum_amt := dynamic_h_cum_amt + 100),
+                            'dynamic_p_on_r': (level.main_target - level.main_percentage) * level.main_quantity,
+                        })
 
                     strategy_data = {'id': strategy.id, 'rows': rows}
                     cache.set(cache_key, strategy_data, timeout=5)  # Cache for 5 seconds
@@ -528,8 +527,8 @@ class GetDynamicFieldsAPIView(APIView):
         dynamic_data = []
         for strategy_id in all_ids:
             strategy = OrderStrategy.objects.filter(id=strategy_id).first()
-            main_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=True).values('entry_order_id')[:1]
-            hedging_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=False).values('entry_order_id')[:1]
+            main_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=True, entry_order_status=1).values('entry_order_id')[:1]
+            hedging_order = Orders.objects.filter(level=OuterRef('pk'), is_entry=True, is_complete=False, is_main=False, entry_order_status=1).values('entry_order_id')[:1]
 
             levels = OrderLevel.objects.filter(strategy=strategy).only(
                 'main_percentage', 'main_quantity', 'main_target', 'hedging_quantity'
@@ -538,22 +537,21 @@ class GetDynamicFieldsAPIView(APIView):
                 hedging_order=Subquery(hedging_order)
             )
 
-            # data = {
-            #     "symbols": "NSE:SBIN-EQ,NSE:IDEA-EQ"
-            #         }
-            # fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
-            # response = fyers.quotes(data=data)
-            # main_price = response['d'][0]['v']['ask']
+            data = {
+                "symbols": f"{strategy.main_instrument}, {strategy.hedging_instrument}"
+            }
+            fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
+            response = fyers.quotes(data=data)
+
+            main_price = response['d'][0]['v']['ask']
             # hedge_price = response['d'][1]['v']['ask']
-            main_price = random.randint(10, 100)
-            hedge_price = random.randint(10, 100)
             if strategy:
                 cumulative_pnl = 0
                 dynamic_data.append({
                     'id': strategy.id,
                     "rows": [{
-                        'dynamic_pnl': (_.main_percentage - main_price) * _.main_quantity,
-                        'dynamic_cum_pnl': (cumulative_pnl := cumulative_pnl + (_.main_percentage - main_price) * _.main_quantity),
+                        'dynamic_pnl': round((main_price - float(_.main_percentage)) * _.main_quantity, 3),
+                        'dynamic_cum_pnl': round((cumulative_pnl := cumulative_pnl + (main_price - float(_.main_percentage)) * _.main_quantity), 3),
                         # TODO: Find a way to calculate hedging price here
                         'dynamic_h_pnl': random.randint(3, 30),
                         'dynamic_h_p_on_r': random.randint(3, 30),

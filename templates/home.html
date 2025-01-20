@@ -264,37 +264,49 @@
         /**
          * Update dynamic data every 2 seconds.
          */
-        function fetchDynamicData() {
-            fetch(`/api/dynamic-data/?all_ids=${allIds.join(',')}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch dynamic data');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const dynamicData = data.dynamic_data || [];
-                    dynamicData.forEach(strategy => {
-                        const table = document.querySelector(`table[data-id="${strategy.id}"]`);
-                        if (table && strategy.rows) {
-                            const rows = table.querySelectorAll('tbody tr');
-                            strategy.rows.forEach((row, index) => {
-                                const tr = rows[index];
-                                if (tr) {
-                                    tr.querySelector('.pnl').textContent = row.dynamic_pnl || '';
-                                    tr.querySelector('.cum-pnl').textContent = row.dynamic_cum_pnl || '';
-                                    tr.querySelector('.h-pnl').textContent = row.dynamic_h_pnl || '';
-                                }
-                            });
+       function fetchDynamicData() {
+    fetch(`/api/dynamic-data/?all_ids=${allIds.join(',')}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch dynamic data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const dynamicData = data.dynamic_data || [];
+            dynamicData.forEach(strategy => {
+                const table = document.querySelector(`table[data-id="${strategy.id}"]`);
+                if (table && strategy.rows) {
+                    const rows = table.querySelectorAll('tbody tr');
+                    strategy.rows.forEach((row, index) => {
+                        const tr = rows[index];
+                        if (tr) {
+                            // Get the element references
+                            const pnlCell = tr.querySelector('.pnl');
+                            const cumPnlCell = tr.querySelector('.cum-pnl');
+                            const hPnlCell = tr.querySelector('.h-pnl');
+
+                            // Update text content
+                            pnlCell.textContent = row.dynamic_pnl || '';
+                            cumPnlCell.textContent = row.dynamic_cum_pnl || '';
+                            hPnlCell.textContent = row.dynamic_h_pnl || '';
+
+                            // Update styles based on the values
+                            pnlCell.style.color = row.dynamic_pnl < 0 ? 'red' : 'green';
+                            cumPnlCell.style.color = row.dynamic_cum_pnl < 0 ? 'red' : 'green';
+                            hPnlCell.style.color = row.dynamic_h_pnl < 0 ? 'red' : 'green';
                         }
                     });
-                })
-                .catch(error => console.error('Error fetching dynamic data:', error));
-        }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching dynamic data:', error));
+}
 
 
         // Call the APIs at their respective intervals
-        setInterval(fetchStaticData, 10000); // Call static data API every 5 seconds
+        fetchStaticData()
+<!--        setInterval(fetchStaticData, 10000); // Call static data API every 5 seconds-->
         setInterval(fetchDynamicData, 2000); // Call dynamic data API every 2 seconds
     });
 
