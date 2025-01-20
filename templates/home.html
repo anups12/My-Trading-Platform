@@ -2,41 +2,139 @@
 
 {% block content %}
 
-<div class="container my-5">
+<style>
+    /* Styling the table container */
+    .container {
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa;
+        max-width: 98%; /* Reduce max-width to minimize horizontal margins */
+    }
 
-    <!-- Loop through strategy IDs and create a table for each strategy -->
-    {% for strategy in strategy_forms %}
+    /* Styling the table */
+    table {
+        border: 3px solid lightseagreen;
+        border-collapse: collapse;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+    }
+
+    table thead {
+        background-color: lightseagreen;
+        color: white;
+        font-weight: bold;
+    }
+
+    table th, table td {
+        border: 2px solid lightseagreen;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Adding 3D effect to table cells */
+    table td {
+        background: linear-gradient(145deg, #ffffff, #e6e6e6);
+        box-shadow: inset -2px -2px 5px #ffffff, inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    table th {
+        text-transform: uppercase;
+        background: linear-gradient(145deg, lightseagreen, #137f76);
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Highlight rows on hover */
+    table tbody tr:hover {
+        background-color: rgba(0, 255, 255, 0.1);
+    }
+
+    /* Styling the modal for consistent look */
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background-color: lightseagreen;
+        color: white;
+        border-bottom: 3px solid darkseagreen;
+        font-weight: bold;
+    }
+
+    .modal-title {
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-close {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+
+    /* Form fields styling */
+    .form-group label {
+        font-weight: bold;
+        color: lightseagreen;
+    }
+
+    input, select, textarea {
+        border: 2px solid lightseagreen;
+        border-radius: 5px;
+        box-shadow: inset -1px -1px 3px #ffffff, inset 1px 1px 3px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        box-shadow: 0px 0px 5px lightseagreen;
+        border-color: lightseagreen;
+    }
+
+</style>
+
+
+{% for strategy in strategy_forms %}
+<div class="container mt-4">
     <h3 class="text-center text-primary">Strategy {{ strategy.strategy_id }}</h3>
 
     <!-- Button to trigger the modal -->
     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#strategyModal-{{ strategy.strategy_id }}">
         Modify Table {{ strategy.strategy_id }}
     </button>
-
     <div class="table-responsive">
-        <table class="table table-bordered table-hover shadow-sm rounded" id="dynamic-table-{{ strategy.strategy_id }}" style="background-color: #fff;">
-            <thead class="thead-dark">
+
+        <table class="table table-bordered table-striped table-hover shadow-sm rounded" data-id="{{ strategy.strategy_id }}">
+            <thead class="table-light">
             <tr>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Target</th>
-                <th>Cum quan</th>
+                <th>Cum Qty</th>
                 <th>Amount</th>
-                <th>Cum Amount</th>
-                <th>Target Difference</th>
-                <th>P/L</th>
-                <th>Hed Price</th>
-                <th>Hed Quantity</th>
-                <th>Hed Amount</th>
-                <th>Hed Diff</th>
-                <th>Main Exit</th>
-                <th>Hed Exit</th>
+                <th>Cum Amt</th>
+                <th>PnL</th>
+                <th>P on R</th>
+                <th>Cum PnL</th>
+                <th>H Price</th>
+                <th>H Qty</th>
+                <th>H Target</th>
+                <th>H Cum Qty</th>
+                <th>H Amount</th>
+                <th>H Cum Amt</th>
+                <th>H PnL</th>
+                <th>H P on R</th>
+                <th>Column</th>
+                <th>Column</th>
+                <th>Column</th>
+                <th>Actions</th>
             </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+            <!-- The rows for each strategy will be added dynamically here -->
+            </tbody>
         </table>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="strategyModal-{{ strategy.strategy_id }}" tabindex="-1" aria-labelledby="strategyModalLabel-{{ strategy.strategy_id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -93,108 +191,158 @@
             </div>
         </div>
     </div>
-    {% endfor %}
+
 </div>
+{% endfor %}
 
-<!-- Load jQuery for AJAX and DOM manipulation -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-function fetchStaticData(strategyId) {
-    $.getJSON(`/api/get_table_data/${strategyId}/`, function(data) {
-        const tableBody = $(`#dynamic-table-${strategyId} tbody`);
-        tableBody.empty();
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all IDs from context
+        const allIds = {{ all_ids|safe }}; // IDs from context
+        console.log("all ids", allIds);
 
-        let cumulativeAmount = 0; // Initialize cumulative amount
+        /**
+         * Update static data every 5 seconds.
+         */
+        function fetchStaticData() {
+            fetch(`/api/static-data/?all_ids=${allIds.join(',')}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch static data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const staticData = data.static_data || [];
+                    staticData.forEach(strategy => {
+                        const table = document.querySelector(`table[data-id="${strategy.id}"]`);
+                        if (table && strategy.rows) {
+                            const tbody = table.querySelector('tbody');
+                            tbody.innerHTML = ''; // Clear existing rows
 
-        data.forEach(row => {
-            cumulativeAmount += row.value;
+                            strategy.rows.forEach(row => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                                    <td class="price">${row.static_price || ''}</td>
+                                    <td class="quantity">${row.static_quantity || ''}</td>
+                                    <td class="target">${row.static_target || ''}</td>
+                                    <td class="cum-qty">${row.dynamic_cum_qty || ''}</td>
+                                    <td class="amount">${row.static_amount || ''}</td>
+                                    <td class="cum-amt">${row.dynamic_cum_amt || ''}</td>
+                                    <td class="pnl">${row.dynamic_pnl || ''}</td>
+                                    <td class="p-on-r">${row.dynamic_p_on_r || ''}</td>
+                                    <td class="cum-pnl">${row.dynamic_cum_pnl || ''}</td>
+                                    <td class="h-price">${row.static_h_price || ''}</td>
+                                    <td class="h-qty">${row.static_h_qty || ''}</td>
+                                    <td class="h-target">${row.static_h_target || ''}</td>
+                                    <td class="h-cum-qty">${row.dynamic_h_cum_qty || ''}</td>
+                                    <td class="h-amount">${row.static_h_amount || ''}</td>
+                                    <td class="h-cum-amt">${row.dynamic_h_cum_amt || ''}</td>
+                                    <td class="h-pnl">${row.dynamic_h_pnl || ''}</td>
+                                    <td class="h-p-on-r">${row.dynamic_h_p_on_r || ''}</td>
+                                    <td>Dynamic</td>
+                                    <td>Dynamic</td>
+                                    <td>Dynamic</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm exit-btn" data-row-id="${row.row_id || ''}" data-type="main" ${row.row_id ? '' : 'disabled'}>Exit</button>
+                                        <button class="btn btn-danger btn-sm exit-btn" data-row-id="${row.row_id || ''}" data-type="hedging" ${row.row_id ? '' : 'disabled'}>H Exit</button>
+                                    </td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                               // Add event listeners to the buttons after they have been added to the DOM
+                                tbody.querySelectorAll('.exit-btn').forEach(button => {
+                                    button.addEventListener('click', handleExit);
+                                });
 
-            tableBody.append(`
-                <tr data-id="${row.id}">
-                    <td>${row.main_percentage}</td>
-                    <td>${row.main_quantity}</td>
-                    <td>${row.main_target}</td>
-                    <td>${row.cumulative_quantity}</td>
-                    <td>${row.value}</td>
-                    <td>${cumulativeAmount.toFixed(2)}</td>
-                    <td>${row.target_difference}</td>
-                    <td class="dynamic-difference">0</td>
-                    <td>${row.hedging_price || '-'}</td>
-                    <td>${row.hedging_quantity || '-'}</td>
-                    <td>${row.hedging_amount || '-'}</td>
-                    <td class="dynamic-hedging-difference">0</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm exit-button" data-order-id="${row.exit_order_id}" disabled>Exit</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm hedging-exit-button" data-order-id="${row.hedging_exit_order_id}" disabled>Exit Hed</button>
-                    </td>
-                </tr>
-            `);
-        });
-    });
-}
-
-
-function updateDynamicFields(strategyId) {
-    $.getJSON(`/api/get_dynamic_fields/?strategy_id=${strategyId}`, function(data) {
-        console.log('Dynamic Data:', data); // Debugging log
-
-        // Iterate through each rowId and its corresponding data
-        for (const [rowId, rowData] of Object.entries(data)) {
-            const tableRow = $(`#dynamic-table-${strategyId} tr[data-id="${rowId}"]`);
-
-            if (tableRow.length) {
-                // Update Dynamic Difference
-                const dynamicDiffCell = tableRow.find('.dynamic-difference');
-                dynamicDiffCell.text(rowData.price.toFixed(2)); // Use 'price' field
-                dynamicDiffCell.css('color', rowData.price >= 0 ? 'green' : 'red');
-
-                // Update Exit Button
-                const exitButton = tableRow.find('.exit-button');
-                if (rowData.order_id) {
-                    exitButton.data('order-id', rowData.order_id); // Set order ID
-                    exitButton.prop('disabled', false); // Enable button
-                } else {
-                    exitButton.prop('disabled', true); // Disable if no order_id
-                }
-
-                // Update Hedging Exit Button
-                const hedgingExitButton = tableRow.find('.hedging-exit-button');
-                if (rowData.hedging_order_id) {
-                    hedgingExitButton.data('order-id', rowData.hedging_order_id); // Set hedging order ID
-                    hedgingExitButton.prop('disabled', false); // Enable button
-                } else {
-                    hedgingExitButton.prop('disabled', true); // Disable if no hedging_order_id
-                }
-            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching static data:', error));
         }
-    }).fail(function(xhr, status, error) {
-        console.error(`Failed to fetch dynamic fields for strategy ${strategyId}:`, error);
-    });
+
+        /**
+         * Update dynamic data every 2 seconds.
+         */
+       function fetchDynamicData() {
+    fetch(`/api/dynamic-data/?all_ids=${allIds.join(',')}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch dynamic data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const dynamicData = data.dynamic_data || [];
+            dynamicData.forEach(strategy => {
+                const table = document.querySelector(`table[data-id="${strategy.id}"]`);
+                if (table && strategy.rows) {
+                    const rows = table.querySelectorAll('tbody tr');
+                    strategy.rows.forEach((row, index) => {
+                        const tr = rows[index];
+                        if (tr) {
+                            // Get the element references
+                            const pnlCell = tr.querySelector('.pnl');
+                            const cumPnlCell = tr.querySelector('.cum-pnl');
+                            const hPnlCell = tr.querySelector('.h-pnl');
+
+                            // Update text content
+                            pnlCell.textContent = row.dynamic_pnl || '';
+                            cumPnlCell.textContent = row.dynamic_cum_pnl || '';
+                            hPnlCell.textContent = row.dynamic_h_pnl || '';
+
+                            // Update styles based on the values
+                            pnlCell.style.color = row.dynamic_pnl < 0 ? 'red' : 'green';
+                            cumPnlCell.style.color = row.dynamic_cum_pnl < 0 ? 'red' : 'green';
+                            hPnlCell.style.color = row.dynamic_h_pnl < 0 ? 'red' : 'green';
+                        }
+                    });
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching dynamic data:', error));
 }
 
-$(document).ready(function() {
-    {% for strategy in strategy_forms %}
-        fetchStaticData({{ strategy.strategy_id }});
 
-        setInterval(function() {
-            updateDynamicFields({{ strategy.strategy_id }});
-        }, 2000);
-    {% endfor %}
-
-    $(document).on('click', '.exit-button, .hedging-exit-button', function() {
-        const orderId = $(this).data('order-id');
-        const buttonType = $(this).hasClass('exit-button') ? 'Main Trade' : 'Hedging Trade';
-
-        $.post(`/api/exit_order/${orderId}/`, function(response) {
-            if (response.success) {
-                alert(`${buttonType} exited successfully!`);
-            } else {
-                alert(`Failed to exit ${buttonType}.`);
-            }
-        });
+        // Call the APIs at their respective intervals
+        fetchStaticData()
+<!--        setInterval(fetchStaticData, 10000); // Call static data API every 5 seconds-->
+        setInterval(fetchDynamicData, 2000); // Call dynamic data API every 2 seconds
     });
+
+
+   function handleExit(event) {
+    const rowId = event.target.getAttribute('data-row-id');
+    const order_type = event.target.getAttribute('data-type'); // Identify the button type (main or hedging)
+    console.log("row id", rowId, order_type); // Check if the rowId is fetched correctly
+    if (rowId) {
+        fetch('/sell_order/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Ensure this is rendered correctly
+            },
+            body: JSON.stringify({ row_id: rowId, type: order_type })
+        })
+            .then(response => {
+                console.log("response", response);
+                if (!response.ok) {
+                    throw new Error('Failed to process Exit request');
+                }
+                return response.json();
+            })
+            .then(data => {
+            })
+            .catch(error => console.error('Error processing Exit request:', error));
+    }
+}
+
+// Add event listeners to buttons
+table.querySelectorAll('.exit-btn').forEach(button => {
+    button.addEventListener('click', handleExit);
 });
+
 </script>
+
+
 {% endblock %}

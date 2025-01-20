@@ -1,5 +1,4 @@
 import queue
-import random
 import threading
 import time
 from datetime import datetime
@@ -62,7 +61,7 @@ class TradingStrategy1:
         # Initialize and start WebSocket client
         try:
             self.ws_client.check_and_start()
-            self.ws_client.subscribe()
+            self.ws_client.order_subscribe()
 
             self.logger.info("WebSocket started successfully.")
         except Exception as e:
@@ -172,7 +171,7 @@ class TradingStrategy1:
             else:
                 transaction_type = TransactionTypeEnum.BUY.value
                 order_role = OrderRoleEnum.ENTRY.value
-                self.logger.debug(f"Placing entry order for {'previous' if is_previous_level else 'current'} level: {level}")
+                self.logger.debug(f"Placing entry order for {'next' if is_previous_level else 'current'} level: {level}")
 
             return self._place_and_process_order(
                 order_type=OrderTypeEnum.LIMIT_ORDER.value,
@@ -197,20 +196,18 @@ class TradingStrategy1:
 
     def wait_for_order_confirmation(self, entry_order, exit_order):
         """Wait until the status of the specified orders is confirmed."""
-        self.ws_client.check_and_start()
-        self.ws_client.subscribe()
 
+        self.ws_client.check_and_start()
+        self.ws_client.order_subscribe()
         while not self.stop_event.is_set():
             try:
                 # Retrieve message from the queue
-                time.sleep(20)
                 order_info = self._get_message_from_queue(entry_order, exit_order)
                 if order_info:
                     order_id, status, order_type = order_info
 
                     self.logger.debug(f"Orders checking: entry_order={entry_order}, exit_order={exit_order}")
-                    self.logger.info(f"Processing {order_type} order: {order_id}")
-
+                    self.ws_client.order_unsubscribe()
                     self._process_order(entry_order, exit_order, status, order_type)
                     break  # Exit loop after processing the relevant order
 
@@ -222,23 +219,37 @@ class TradingStrategy1:
                 time.sleep(0.1)  # Prevent high CPU usage during polling
 
     def _get_message_from_queue(self, entry_order, exit_order):
-        """Helper function to retrieve and identify a message for the specified orders."""
-        try:
-            with self.lock:
-                if not self.ws_client.q.empty():
-                    message = self.ws_client.q.get(timeout=1)
-                    self.logger.debug(f"Message retrieved: {message}")
+        """
+        Helper function to retrieve and identify a message for the specified orders.
 
+        Args:
+            entry_order (str): Order ID for the entry order.
+            exit_order (str): Order ID for the exit order.
+
+        Returns:
+            tuple: A tuple (order_id, status, order_type) where `order_type` is either
+                   "entry" or "exit". Returns None if no matching message is found.
+        """
+        try:
+            with self.lock:  # Ensure thread-safe access to the queue
+                if not self.ws_client.q.empty():
+                    message = self.ws_client.q.get_nowait()
+
+                    self.logger.debug(f"{self.ws_client.q.qsize()} irrelevant messages discarded.")
+
+                    # Safely extract the order ID and status from the message
                     order_id = message.get('orders', {}).get('id')
                     status = message.get('s')
 
+                    # Determine if the message matches the entry or exit order
                     if order_id == entry_order:
                         return order_id, status, "entry"
                     elif order_id == exit_order:
                         return order_id, status, "exit"
         except Exception as e:
             self.logger.error(f"Error retrieving or parsing message from queue: {e}")
-        return None
+
+        return None  # Default return if no matching message is found
 
     def _handle_entry_order(self, message, entry_order, exit_order, status):
         """Handles entry order-specific logic."""

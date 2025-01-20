@@ -1,6 +1,8 @@
 import queue
 import threading
+
 from fyers_apiv3.FyersWebsocket import order_ws
+
 from accounts.utils import client_id
 
 
@@ -12,19 +14,28 @@ class FyersWebSocketManager:
         self.q = queue.Queue()
         self.thread = None  # For managing the WebSocket thread
         self.logger = logger
-        
+
     def on_order(self, message):
         """Callback for order updates."""
-        if message:
-            self.q.put(message)
+        try:
+            if message:
+                self.q.put(message)
+        except Exception as ex:
+            self.logger.debug("Exception inside On order function")
 
     def on_error(self, message):
         """Callback for WebSocket errors."""
-        self.logger.info(f"WebSocket Error: {message}", )
+        self.logger.error(f"WebSocket Error: {message}", )
+        self.logger.info("Attempting to reconnect...")
+        self.start()  # Restart the WebSocket connection
+        self.order_subscribe()
 
     def on_close(self, message):
         """Callback for WebSocket disconnections."""
-        self.logger.info(f'WebSocket Closed: {message}', )
+        self.logger.error(f'WebSocket Closed: {message}', )
+        self.logger.info("Attempting to reconnect...")
+        self.start()  # Restart the WebSocket connection
+        self.order_subscribe()
 
     def on_open(self):
         """Callback for WebSocket connection."""
@@ -54,21 +65,19 @@ class FyersWebSocketManager:
         self.thread.start()
         self.logger.debug("WebSocket thread started.")
 
-    def subscribe(self):
+    def order_subscribe(self):
         """Subscribe to 'OnOrders'."""
-        if self.ws:
-            self.logger.debug("Subscribing to OnOrders...")
+        try:
             self.ws.subscribe(data_type="OnOrders")
-        else:
-            self.logger.debug("WebSocket connection is not active. Start it first.")
+        except AttributeError as ex:
+            self.logger.debug(f"Websocket was not active. Starting it now {ex}")
+            self.start()
+            self.ws.subscribe(data_type="OnOrders")
+            self.logger.debug("Websocket subscribed")
 
-    def unsubscribe(self):
+    def order_unsubscribe(self):
         """Unsubscribe from 'OnOrders'."""
-        if self.ws:
-            self.logger.debug("Unsubscribing from OnOrders...")
-            self.ws.unsubscribe("OnOrders")
-        else:
-            self.logger.debug("WebSocket connection is not active.")
+        self.ws.unsubscribe("OnOrders")
 
     def stop(self):
         """Stops the WebSocket connection."""
