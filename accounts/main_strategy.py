@@ -47,6 +47,7 @@ class TradingStrategy1:
         self.stop_event = threading.Event()
         self.current_level_index = 0  # Start at the first level
         self.ws_client = FyersWebSocketManager(self.access_token, self.logger)
+        self.ws_client.start()
         self.current_level = None
         self.previous_level = None
         self.next_level = None
@@ -58,23 +59,10 @@ class TradingStrategy1:
         """Starts the strategy."""
         self.logger.info(f"Strategy started for strategy id: {self.strategy.id}")
 
-        # Initialize and start WebSocket client
-        try:
-            self.ws_client.check_and_start()
-            self.ws_client.order_subscribe()
-
-            self.logger.info("WebSocket started successfully.")
-        except Exception as e:
-            self.logger.error(f"WebSocket connection failed: {e}")
-            self.stop_strategy()
-            return  # Stop further execution
-
         # Fetch levels needed for the strategy
         try:
             self.fetch_levels()
-            self.logger.info("Levels fetched successfully.")
         except Exception as e:
-            self.logger.error(f"Failed to fetch levels: {e}")
             self.stop_strategy()
             return  # Stop further execution
 
@@ -155,14 +143,7 @@ class TradingStrategy1:
             Exception: If an unexpected error occurs during order placement.
         """
         try:
-            order = Orders.objects.filter(
-                entry_order_id__isnull=False,
-                exit_order_id__isnull=True,
-                level=level,
-                level__strategy=strategy,
-                is_complete=False,
-                is_main=is_main
-            ).first()
+            order = Orders.objects.filter(entry_order_id__isnull=False, exit_order_id__isnull=True, level=level, level__strategy=strategy, is_complete=False, is_main=is_main).first()
 
             if order:
                 transaction_type = TransactionTypeEnum.SELL.value
@@ -197,8 +178,6 @@ class TradingStrategy1:
     def wait_for_order_confirmation(self, entry_order, exit_order):
         """Wait until the status of the specified orders is confirmed."""
 
-        self.ws_client.check_and_start()
-        self.ws_client.order_subscribe()
         while not self.stop_event.is_set():
             try:
                 # Retrieve message from the queue
@@ -206,8 +185,9 @@ class TradingStrategy1:
                 if order_info:
                     order_id, status, order_type = order_info
 
-                    self.logger.debug(f"Orders checking: entry_order={entry_order}, exit_order={exit_order}")
-                    self.ws_client.order_unsubscribe()
+                    self.logger.info(
+                        f"Order confirmed: order_id={order_id}, status={status}, type={order_type}"
+                    )
                     self._process_order(entry_order, exit_order, status, order_type)
                     break  # Exit loop after processing the relevant order
 
@@ -227,25 +207,33 @@ class TradingStrategy1:
             exit_order (str): Order ID for the exit order.
 
         Returns:
-            tuple: A tuple (order_id, status, order_type) where `order_type` is either
+            tuple: A tuple (order_id, status, order_type), where `order_type` is either
                    "entry" or "exit". Returns None if no matching message is found.
         """
         try:
-            with self.lock:  # Ensure thread-safe access to the queue
-                if not self.ws_client.q.empty():
-                    message = self.ws_client.q.get_nowait()
+            # Fetch message from the queue with a timeout
+            message = self.ws_client.q.get(timeout=1)
 
-                    self.logger.debug(f"{self.ws_client.q.qsize()} irrelevant messages discarded.")
+            # Validate and parse the message structure
+            if message.get("s") != "ok":
+                self.logger.warning(f"Invalid WebSocket message status: {message.get('s')}")
+                return None
 
-                    # Safely extract the order ID and status from the message
-                    order_id = message.get('orders', {}).get('id')
-                    status = message.get('s')
+            # Extract order details
+            orders = message.get("orders", {})
+            order_id = orders.get("id")
+            status = orders.get("status")  # This corresponds to the order status
 
-                    # Determine if the message matches the entry or exit order
-                    if order_id == entry_order:
-                        return order_id, status, "entry"
-                    elif order_id == exit_order:
-                        return order_id, status, "exit"
+            # Determine if the message matches the entry or exit order
+            if order_id == entry_order:
+                return order_id, status, "entry"
+            elif order_id == exit_order:
+                return order_id, status, "exit"
+            else:
+                self.logger.debug(f"Order ID {order_id} does not match entry or exit order.")
+
+        except queue.Empty:
+            self.logger.debug("No messages in the queue.")
         except Exception as e:
             self.logger.error(f"Error retrieving or parsing message from queue: {e}")
 
@@ -256,8 +244,7 @@ class TradingStrategy1:
         self.logger.info(f'Entry Order placed from websocket {entry_order}')
         try:
             with self.lock:
-                order = Orders.objects.filter(entry_order_id=entry_order, is_complete=False).first()
-                self.logger.debug(f'Entry order received for next level {order}, Level: {self.current_level}')
+                order = Orders.objects.filter(level__strategy=self.strategy, entry_order_id=entry_order, is_complete=False).first()
                 if not order:
                     self.logger.error(f"Order not found for Entry order:{entry_order} Level {self.current_level}")
                     raise Orders.DoesNotExist
@@ -266,7 +253,7 @@ class TradingStrategy1:
                 order.entry_order_status = 1 if status == 'ok' else 2
                 order.is_entry = True
                 order.save()
-                self.logger.info(f"Order Updated successfully: Entry Order:{entry_order} Level {self.current_level}")
+                self.logger.info(f"Entry Order Created: Entry Order:{entry_order} Level {self.current_level}")
 
             if self.strategy.is_hedging:
                 # Place hedging orders if the strategy requires it
@@ -277,11 +264,10 @@ class TradingStrategy1:
                     level=self.current_level,
                     is_hedging_order=True,
                 )
-                self.logger.info(f"Hedging market order placed successfully. Order ID: {hedging_order}")
+                self.logger.info(f"Hedging Entry Order Placed.for Order ID: {hedging_order}")
 
             self.cancel_orders(exit_order)
             self.current_level_index += 1
-            self.logger.info(f'Processing next level... {self.current_level_index}')
             self.process_next_level()
         except Exception as ex:
             self.logger.debug(f'Exception happened inside handle_entry_order: {ex}')
@@ -306,6 +292,7 @@ class TradingStrategy1:
 
             if self.strategy.is_hedging:
                 self.logger.debug("Exiting hedging order ")
+
                 # Place hedging orders if the strategy requires it
                 hedging_order = self._place_and_process_order(
                     order_type=OrderTypeEnum.MARKET_ORDER.value,
@@ -598,7 +585,7 @@ class TradingStrategy1:
 
         try:
             if order_id:
-                self.logger.debug(f"Attempting to cancel order: {order_id}")
+                self.logger.info(f"Attempting to cancel order: {order_id}")
                 data = {"id": order_id}
                 response = self.fyers.cancel_order(data=data)
 
@@ -617,7 +604,7 @@ class TradingStrategy1:
 
                         order.is_complete = True
                         order.save()
-                        self.logger.debug(f"Order {order_id} successfully updated to 'cancelled'.")
+                        self.logger.info(f"Order {order_id} successfully updated to 'cancelled'.")
                     else:
                         self.logger.warning(f"Order {order_id} not found in the database.")
                 else:
