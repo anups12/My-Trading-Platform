@@ -15,12 +15,12 @@ redirect_uri = "http://127.0.0.1:8000/fyers_login"
 
 def get_access_token():
     today_date = datetime.now()
-    access_tokens = AccessToken.objects.filter(timestamp_created__date=today_date, is_active=True)
-    AccessToken.objects.filter(timestamp_created__date__lt=today_date).delete()
-    if access_tokens.exists():
-        return access_tokens.first().access_token
-    else:
-        return None
+    # access_tokens = AccessToken.objects.filter(timestamp_created__date=today_date, is_active=True)
+    # AccessToken.objects.filter(timestamp_created__date__lt=today_date).delete()
+    # if access_tokens.exists():
+    #     return access_tokens.first().access_token
+    # else:
+    return None
 
 
 access_token = get_access_token()
@@ -39,7 +39,7 @@ def get_customer(request):
 
 
 def get_balance(request):
-    fyers = fyersModel.FyersModel(client_id=settings.CLIENT_ID, token=access_token, is_async=False, log_path="")
+    fyers = fyersModel.FyersModel(client_id=settings.FYERS_CLIENT_ID, token=access_token, is_async=False, log_path="")
     total_balance, utilised_balance, realised_profit_loss, limit_at_start_of_day, available_balance = 0, 0, 0, 0, 0
     if "fund_limit" in fyers.funds():
         funds = fyers.funds()['fund_limit']

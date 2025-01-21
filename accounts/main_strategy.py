@@ -53,7 +53,7 @@ class TradingStrategy1:
         self.previous_level = None
         self.next_level = None
         self.levels_length = None
-        self.fyers = fyersModel.FyersModel(client_id=settings.CLIENT_ID, token=self.access_token, is_async=False, log_path="")
+        self.fyers = fyersModel.FyersModel(client_id=settings.FYERS_CLIENT_ID, token=self.access_token, is_async=False, log_path="")
         self.is_active = self.strategy.is_active
 
     def run_strategy(self):

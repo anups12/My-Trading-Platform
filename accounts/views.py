@@ -391,7 +391,7 @@ class KillActionView(APIView):
                 return JsonResponse({'status': 'error', 'message': 'Order not found'}, status=404)
 
             # Initialize FyersModel
-            fyers = fyersModel.FyersModel(client_id=settings.client_id, token=access_token, is_async=False, log_path="")
+            fyers = fyersModel.FyersModel(client_id=settings.FYERS_CLIENT_ID, token=access_token, is_async=False, log_path="")
 
             # Exit the position
             data = {"id": order.entry_order_id}
@@ -420,7 +420,7 @@ class OauthLogin(APIView):
             return HttpResponseBadRequest("API Key and API Secret are required.")
 
         # Generate the URL to redirect to
-        target_url = f"https://api-t1.fyers.in/api/v3/generate-authcode?client_id={settings.client_id}&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Ffyers_login&response_type=code&state=sample"
+        target_url = f"https://api-t1.fyers.in/api/v3/generate-authcode?client_id={settings.FYERS_CLIENT_ID}&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Ffyers_login&response_type=code&state=sample"
 
         # Redirect to the generated URL
         return redirect(target_url)
@@ -431,8 +431,8 @@ class CallBackLoginUrl(APIView):
         auth_code = request.GET.get('auth_code')
         if auth_code:
             session = fyersModel.SessionModel(
-                client_id=settings.client_id,
-                secret_key=settings.secret_key,
+                client_id=settings.FYERS_CLIENT_ID,
+                secret_key=settings.FYERS_SECRET_KEY,
                 redirect_uri=redirect_uri,
                 response_type="code",
                 grant_type="authorization_code"
@@ -541,7 +541,7 @@ class GetDynamicFieldsAPIView(APIView):
             data = {
                 "symbols": f"{strategy.main_instrument}, {strategy.hedging_instrument}"
             }
-            fyers = fyersModel.FyersModel(client_id=settings.client_id, token=access_token, is_async=False, log_path="")
+            fyers = fyersModel.FyersModel(client_id=settings.FYERS_CLIENT_ID, token=access_token, is_async=False, log_path="")
             response = fyers.quotes(data=data)
 
             main_price = response['d'][0]['v']['ask']

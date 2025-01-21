@@ -1,0 +1,10 @@
+# docker-compose.yml
+version: '3.7'
+
+services:
+  myapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}  # Pass the SSH_PRIVATE_KEY to the container
