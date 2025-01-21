@@ -4,13 +4,14 @@ import time
 from datetime import datetime
 
 import requests
+from django.conf import settings
 from django.db.models import Q
 from fyers_apiv3 import fyersModel
 
 from accounts.constants import OrderTypeEnum, TransactionTypeEnum, OrderRoleEnum
 from accounts.logging_setup import get_strategy_logger
 from accounts.models import Orders, OrderLevel
-from accounts.utils import client_id, get_instrument, create_table, OrderPlacementError, retry_on_exception
+from accounts.utils import  get_instrument, create_table, OrderPlacementError, retry_on_exception
 from accounts.websocket_handler import FyersWebSocketManager
 
 
@@ -52,7 +53,7 @@ class TradingStrategy1:
         self.previous_level = None
         self.next_level = None
         self.levels_length = None
-        self.fyers = fyersModel.FyersModel(client_id=client_id, token=self.access_token, is_async=False, log_path="")
+        self.fyers = fyersModel.FyersModel(client_id=settings.CLIENT_ID, token=self.access_token, is_async=False, log_path="")
         self.is_active = self.strategy.is_active
 
     def run_strategy(self):

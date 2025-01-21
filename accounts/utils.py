@@ -8,9 +8,7 @@ from fyers_apiv3 import fyersModel
 
 from .constants import OPTION_MAPPING, RETRY_ATTEMPTS
 from .models import Customer, OrderLevel, AccessToken
-
-client_id = "RGB1I5PD6F-100"
-secret_key = "H6I0D8T2OT"
+from django.conf import settings
 
 redirect_uri = "http://127.0.0.1:8000/fyers_login"
 
@@ -41,7 +39,7 @@ def get_customer(request):
 
 
 def get_balance(request):
-    fyers = fyersModel.FyersModel(client_id=client_id, token=access_token, is_async=False, log_path="")
+    fyers = fyersModel.FyersModel(client_id=settings.CLIENT_ID, token=access_token, is_async=False, log_path="")
     total_balance, utilised_balance, realised_profit_loss, limit_at_start_of_day, available_balance = 0, 0, 0, 0, 0
     if "fund_limit" in fyers.funds():
         funds = fyers.funds()['fund_limit']
@@ -120,7 +118,7 @@ def get_instrument(index, expiry, strike_distance, strike_direction):
 
         # Initialize Fyers client
         fyers = fyersModel.FyersModel(
-            client_id=client_id,
+            client_id=settings.client_id,
             token=access_token,
             is_async=False,
             log_path=""
