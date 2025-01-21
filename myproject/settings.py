@@ -18,6 +18,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+import pymysql
+pymysql.install_as_MySQLdb()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -92,8 +94,12 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -146,5 +152,5 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # or your broker URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
-CLIENT_ID = os.environ.get('CLIENT_ID')
-SECRET_KEY = os.environ.get('SECRET_KEY')
+FYERS_CLIENT_ID = os.environ.get('CLIENT_ID')
+FYERS_SECRET_KEY = os.environ.get('SECRET_KEY')
