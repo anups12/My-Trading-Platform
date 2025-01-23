@@ -19,7 +19,7 @@ from .models import PriceQuantityTable, OrderStrategy, Orders, OrderLevel, Acces
 from .serializers import CustomerLoginSerializer
 from .serializers import CustomerRegistrationSerializer
 from .strategy_handler import StrategyManager
-from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, redirect_uri, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError, access_token
+from .utils import get_balance, get_customer, get_instrument, create_table, get_lot_size, get_access_token, redirect_uri, InvalidStrikeDirectionError, ExpiryNotFoundError, OptionChainDataError
 
 
 class CustomerRegisterView(APIView):
@@ -375,7 +375,10 @@ class PriceQuantityAPIView(APIView):
 
 
 class KillActionView(APIView):
+
     def post(self, request):
+        access_token = get_access_token()
+
         try:
             row_id = request.data.get('row_id')
             order_type = request.data.get('type')
@@ -520,6 +523,8 @@ class GetTableDataAPIView(APIView):
 
 class GetDynamicFieldsAPIView(APIView):
     def get(self, request, *args, **kwargs):
+        access_token = get_access_token()
+
         all_ids = request.GET.get('all_ids', '')
         if all_ids:
             all_ids = all_ids.split(',')  # Split into a list

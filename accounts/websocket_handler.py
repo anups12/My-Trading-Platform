@@ -1,6 +1,7 @@
 import queue
 import threading
 
+from django.conf import settings
 from fyers_apiv3.FyersWebsocket import order_ws
 
 
@@ -14,7 +15,6 @@ class FyersWebSocketManager:
 
     def onOrder(self, message):
         """Handles incoming WebSocket messages."""
-        self.logger.info(f"Order Message Received: {message}")
         self.q.put(message)
 
     def onError(self, message):
@@ -42,7 +42,7 @@ class FyersWebSocketManager:
     def _connect(self):
         """Connects to the WebSocket."""
         self.fyers = order_ws.FyersOrderSocket(
-            access_token=self.access_token,
+            access_token=f"{settings.FYERS_CLIENT_ID}:{self.access_token}",
             write_to_file=False,
             log_path="",
             on_connect=self.onOpen,
