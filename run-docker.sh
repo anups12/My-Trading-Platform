@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Get the directory of the running script
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MYSQL_DATA_DIR="$SCRIPT_DIR/mysql-data"
 
@@ -9,42 +8,44 @@ if [ ! -d "$MYSQL_DATA_DIR" ]; then
     mkdir -p "$MYSQL_DATA_DIR"
 fi
 
-# Set variables
 IMAGE_NAME="amanboss/tradingapp:latest"
 CONTAINER_NAME="tradingapp"
+MYSQL_CONTAINER_NAME="mysql_container"
 HOST_PORT=8000
 
-# Pull the latest Docker image from Docker Hub
-echo "Pulling the latest Docker image..."
+# Pull the latest Docker image
 docker pull $IMAGE_NAME
 
-# Check if the container is already running
-if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
-    echo "Container '$CONTAINER_NAME' is already running. Stopping and removing it..."
-    docker stop $CONTAINER_NAME
-    docker rm $CONTAINER_NAME
-fi
+# Stop and remove existing containers
+for CONTAINER in $CONTAINER_NAME $MYSQL_CONTAINER_NAME; do
+    if [ "$(docker ps -q -f name=$CONTAINER)" ]; then
+        echo "Stopping and removing container '$CONTAINER'..."
+        docker stop $CONTAINER
+        docker rm $CONTAINER
+    elif [ "$(docker ps -aq -f name=$CONTAINER)" ]; then
+        echo "Removing container '$CONTAINER'..."
+        docker rm $CONTAINER
+    fi
+done
 
-# Check if the container exists (but is not running)
-if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
-    echo "Removing existing container '$CONTAINER_NAME'..."
-    docker rm $CONTAINER_NAME
-fi
+# Start MySQL container
+docker run -d \
+  --name $MYSQL_CONTAINER_NAME \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_DATABASE=your_db_name \
+  -e MYSQL_USER=your_db_user \
+  -e MYSQL_PASSWORD=your_db_password \
+  -v $MYSQL_DATA_DIR:/var/lib/mysql \
+  mysql:latest
 
-# Ensure the mysql-data directory exists
-if [ ! -d "$MYSQL_DATA_DIR" ]; then
-    echo "Creating MySQL data directory at $MYSQL_DATA_DIR..."
-    mkdir -p $MYSQL_DATA_DIR
-fi
-
-# Run the Docker container
-echo "Starting the Docker container..."
+# Start Django container
 docker run -d \
   -p $HOST_PORT:8000 \
-  -v $MYSQL_DATA_DIR:/var/lib/mysql \
+  --env-file $SCRIPT_DIR/.env \
   --name $CONTAINER_NAME \
   $IMAGE_NAME
 
-# Provide feedback to the user
-echo "Container '$CONTAINER_NAME' is up and running."
+echo "Containers are running:"
+docker ps
+
 echo "Visit the app at http://localhost:$HOST_PORT"
