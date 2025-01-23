@@ -104,7 +104,7 @@ class PriceQuantityTable(models.Model):
 
 class AccessToken(models.Model):
     timestamp_created = models.DateTimeField(default=timezone.now)
-    access_token = models.CharField(max_length=100)
+    access_token = models.CharField(max_length=1000)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

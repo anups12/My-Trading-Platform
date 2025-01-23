@@ -11,7 +11,7 @@ from fyers_apiv3 import fyersModel
 from accounts.constants import OrderTypeEnum, TransactionTypeEnum, OrderRoleEnum
 from accounts.logging_setup import get_strategy_logger
 from accounts.models import Orders, OrderLevel
-from accounts.utils import  get_instrument, create_table, OrderPlacementError, retry_on_exception
+from accounts.utils import get_instrument, create_table, OrderPlacementError, retry_on_exception
 from accounts.websocket_handler import FyersWebSocketManager
 
 
@@ -33,7 +33,7 @@ class TradingStrategy1:
         self.hedging_strike_distance = self.strategy_parameters.get("hedging_strike_distance")
         self.hedging_strike_direction = self.strategy_parameters.get("hedging_strike_direction")
         self.strategy = self.strategy_parameters.get("strategy")
-        self.main_target = self.strategy_parameters.get("main_target")
+        self.main_target = self.strategy_parameters.get("target")
         self.data_table = self.strategy_parameters.get("data_table")
         self.hedging_limit_price = self.strategy_parameters.get("hedging_limit_price")
         self.instrument = self.strategy.main_instrument
@@ -100,7 +100,7 @@ class TradingStrategy1:
             )
 
             # Process current level
-            current_level_order = self._process_level(
+            order_role_current, current_level_order = self._process_level(
                 level=self.current_level,
                 strategy=self.strategy,
                 is_previous_level=False,
@@ -108,7 +108,7 @@ class TradingStrategy1:
             )
 
             # Process next level
-            next_level_order = self._process_level(
+            order_role_next, next_level_order = self._process_level(
                 level=self.next_level,
                 strategy=self.strategy,
                 is_previous_level=True,
@@ -118,8 +118,11 @@ class TradingStrategy1:
             orders_table = {"Order Placed for level": self.current_level_index, "Entry Order": next_level_order, "Exit Order": current_level_order}
             self.logger.info(orders_table)
 
+            entry_order_id = next_level_order if order_role_next == OrderRoleEnum.ENTRY.value else current_level_order
+            exit_order_id = current_level_order if order_role_current == OrderRoleEnum.EXIT.value else next_level_order
+
             # Wait for confirmation of the orders
-            self.wait_for_order_confirmation(next_level_order, current_level_order)
+            self.wait_for_order_confirmation(entry_order_id, exit_order_id)
 
         except ValueError as ve:
             self.logger.error(f"Configuration error at level {self.current_level_index}: {ve}")
@@ -155,7 +158,7 @@ class TradingStrategy1:
                 order_role = OrderRoleEnum.ENTRY.value
                 self.logger.debug(f"Placing entry order for {'next' if is_previous_level else 'current'} level: {level}")
 
-            return self._place_and_process_order(
+            return order_role, self._place_and_process_order(
                 order_type=OrderTypeEnum.LIMIT_ORDER.value,
                 side=transaction_type,
                 order_role=order_role,
@@ -176,20 +179,20 @@ class TradingStrategy1:
         else:
             self.logger.error(f"{order_type} order failed with status: {status}")
 
-    def wait_for_order_confirmation(self, entry_order, exit_order):
+    def wait_for_order_confirmation(self, entry_order_id, exit_order_id):
         """Wait until the status of the specified orders is confirmed."""
 
         while not self.stop_event.is_set():
             try:
                 # Retrieve message from the queue
-                order_info = self._get_message_from_queue(entry_order, exit_order)
+                order_info = self._get_message_from_queue(entry_order_id, exit_order_id)
                 if order_info:
                     order_id, status, order_type = order_info
 
                     self.logger.info(
                         f"Order confirmed: order_id={order_id}, status={status}, type={order_type}"
                     )
-                    self._process_order(entry_order, exit_order, status, order_type)
+                    self._process_order(entry_order_id, exit_order_id, status, order_type)
                     break  # Exit loop after processing the relevant order
 
             except queue.Empty:
@@ -223,12 +226,14 @@ class TradingStrategy1:
             # Extract order details
             orders = message.get("orders", {})
             order_id = orders.get("id")
-            status = orders.get("status")  # This corresponds to the order status
+            status = message.get("s")  # This corresponds to the order status
 
             # Determine if the message matches the entry or exit order
             if order_id == entry_order:
+                self._clear_queue()
                 return order_id, status, "entry"
             elif order_id == exit_order:
+                self._clear_queue()
                 return order_id, status, "exit"
             else:
                 self.logger.debug(f"Order ID {order_id} does not match entry or exit order.")
@@ -239,6 +244,17 @@ class TradingStrategy1:
             self.logger.error(f"Error retrieving or parsing message from queue: {e}")
 
         return None  # Default return if no matching message is found
+
+    def _clear_queue(self):
+        """
+        Helper function to clear all remaining messages in the queue.
+        """
+        try:
+            while not self.ws_client.q.empty():
+                self.ws_client.q.get_nowait()  # Non-blocking removal of messages
+            self.logger.debug("Queue cleared.")
+        except Exception as e:
+            self.logger.error(f"Error while clearing the queue: {e}")
 
     def _handle_entry_order(self, message, entry_order, exit_order, status):
         """Handles entry order-specific logic."""
@@ -334,7 +350,7 @@ class TradingStrategy1:
         hedging_instrument, hedging_instrument_price = get_instrument(self.index, self.expiry, self.hedging_strike_distance, self.hedging_strike_direction)
         self.hedging_instrument = hedging_instrument
 
-        create_table(instrument_price, self.main_target, self.strategy, self.hedging_limit_price)
+        create_table(instrument_price, self.main_target, self.strategy, self.hedging_limit_price, table=self.data_table)
         self.instrument = instrument_symbol
         self.strategy.main_instrument = self.instrument
         self.strategy.hedging_instrument = self.hedging_instrument
