@@ -12,12 +12,12 @@
             <thead class="bg-lightseagreen text-dark font-weight-bold">
             <tr>
                 <th>Level</th>
-                <th>Sell Quantity</th>
-                <th>Buy Quantity</th>
-                <th>Level Call</th>
-                <th>Level Put</th>
-                <th>Buy Quantity</th>
-                <th>Sell Quantity</th>
+                <th>Call Sell Qty</th>
+                <th>Call Buy Qty</th>
+                <th>Call Price</th>
+                <th>Put Price</th>
+                <th>Put Buy Qty</th>
+                <th>Put Sell Qty</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -25,12 +25,12 @@
             {% for level, data in my_list.items %}
             <tr>
                 <td><input type="text" class="form-control" name="level" oninput="validateNumberInput(this)" value="{{ level }}"></td>
-                <td><input type="text" class="form-control" name="buyQuantity" oninput="validateNumberInput(this)" value="{{ data.buy_quantity }}"></td>
-                <td><input type="text" class="form-control" name="callQuantity" oninput="validateNumberInput(this)" value="{{ data.call_quantity }}"></td>
+                <td><input type="text" class="form-control" name="callSellQty" oninput="validateNumberInput(this)" value="{{ data.buy_quantity }}"></td>
+                <td><input type="text" class="form-control" name="callBuyQty" oninput="validateNumberInput(this)" value="{{ data.call_quantity }}"></td>
                 <td><input type="text" class="form-control" name="callPrice" oninput="validateNumberInput(this)" value="{{ data.call_price }}"></td>
                 <td><input type="text" class="form-control" name="putPrice" oninput="validateNumberInput(this)" value="{{ data.put_price }}"></td>
-                <td><input type="text" class="form-control" name="putQuantity" oninput="validateNumberInput(this)" value="{{ data.put_quantity }}"></td>
-                <td><input type="text" class="form-control" name="sellQuantity" oninput="validateNumberInput(this)" value="{{ data.sell_quantity }}"></td>
+                <td><input type="text" class="form-control" name="putBuyQty" oninput="validateNumberInput(this)" value="{{ data.put_quantity }}"></td>
+                <td><input type="text" class="form-control" name="putSellQty" oninput="validateNumberInput(this)" value="{{ data.sell_quantity }}"></td>
                 <td>
                     <button class="btn btn-success me-2" onclick="handleAction(this, 'buy')">Buy</button>
                     <button class="btn btn-danger me-2" onclick="handleAction(this, 'sell')">Sell</button>

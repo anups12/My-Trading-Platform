@@ -38,12 +38,12 @@ class StrategyBuySell(APIView):
         price_factor = 1 - (percentage_down / 100)
         table_name = request.POST.get('tableName')
         levels = {
-            f"{i}": {"call_quantity": 100, "put_quantity": 50, "call_price": round(call_instrument_price * (1 - percentage_down / 100) * (price_factor ** (i - 1)), 2)}
+            f"{i}": {"call_quantity": 150, "put_quantity": 75, "call_price": round(call_instrument_price * (1 - percentage_down / 100) * (price_factor ** (i - 1)), 2)}
             for i in range(1, levels_count + 1)
         }
 
         levels.update({
-            f"-{i}": {"put_quantity": 100, "call_quantity": 50, "put_price": round(put_instrument_price * (1 - percentage_down / 100) * (price_factor ** (i - 1)), 2)}
+            f"-{i}": {"put_quantity": 150, "call_quantity": 75, "put_price": round(put_instrument_price * (1 - percentage_down / 100) * (price_factor ** (i - 1)), 2)}
             for i in range(1, levels_count + 1)
         })
 
@@ -142,10 +142,8 @@ worker_instances = {}
 class PlaceBuySellOrders(APIView):
     def post(self, request, *args, **kwargs):
         """Handles Buy/Sell order placement per table."""
-        print('worker instances', worker_instances)
         table_id = request.data.get("table_id")  # Get table_id from request
         new_click = request.data  # Expecting {"table_id": "123", "button": "buy", "symbol": "AAPL"}
-        print('table id ', table_id, new_click)
         if not table_id:
             return Response({"error": "table_id is required"}, status=400)
 
@@ -155,5 +153,4 @@ class PlaceBuySellOrders(APIView):
 
         # Send click to the corresponding worker
         response_message = worker_instances[table_id].add_click(new_click)
-        print('response message', response_message)
         return Response(response_message, status=200)
