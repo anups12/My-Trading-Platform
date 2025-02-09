@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="text-dark font-weight-bold">Trade Form</h2>
+        <button class="btn btn-danger" onclick="handleDelete()">Delete Table</button>
+    </div>
+
+    <div class="table-container bg-lightseagreen p-4 rounded shadow mt-3">
+        <table class="table table-bordered">
+            <thead class="bg-lightseagreen text-dark font-weight-bold">
+            <tr>
+                <th>Level</th>
+                <th>Sell Quantity</th>
+                <th>Buy Quantity</th>
+                <th>Level Call</th>
+                <th>Level Put</th>
+                <th>Buy Quantity</th>
+                <th>Sell Quantity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for level, data in my_list.items %}
+            <tr>
+                <td><input type="text" class="form-control" name="level" oninput="validateNumberInput(this)" value="{{ level }}"></td>
+                <td><input type="text" class="form-control" name="buyQuantity" oninput="validateNumberInput(this)" value="{{ data.buy_quantity }}"></td>
+                <td><input type="text" class="form-control" name="callQuantity" oninput="validateNumberInput(this)" value="{{ data.call_quantity }}"></td>
+                <td><input type="text" class="form-control" name="callPrice" oninput="validateNumberInput(this)" value="{{ data.call_price }}"></td>
+                <td><input type="text" class="form-control" name="putPrice" oninput="validateNumberInput(this)" value="{{ data.put_price }}"></td>
+                <td><input type="text" class="form-control" name="putQuantity" oninput="validateNumberInput(this)" value="{{ data.put_quantity }}"></td>
+                <td><input type="text" class="form-control" name="sellQuantity" oninput="validateNumberInput(this)" value="{{ data.sell_quantity }}"></td>
+                <td>
+                    <button class="btn btn-success me-2" onclick="handleAction(this, 'buy')">Buy</button>
+                    <button class="btn btn-danger me-2" onclick="handleAction(this, 'sell')">Sell</button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script>
+    const TABLE_ID = "{{ table_id }}"; // Table ID passed from Django context
+
+    // Function to validate input fields to allow only numbers
+    function validateNumberInput(input) {
+      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    }
+
+       // Function to handle Buy/Sell actions
+    function handleAction(button, action) {
+      const row = button.closest('tr'); // Get the closest row
+      const inputs = row.querySelectorAll('input'); // Get all input fields in the row
+      const data = {
+        table_id: TABLE_ID,
+        action: action
+      };
+
+      // Extract data from input fields, using their "name" attributes as keys
+      inputs.forEach(input => {
+        data[input.name] = input.value;
+      });
+
+      console.log('Data to be sent:', data);
+
+      // Send data to Django backend API
+      fetch('/api/buy_sell/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}', // CSRF token for Django
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(result => {
+           showMessage(result.message, 'success');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    // Function to handle Delete Table action
+    function handleDelete() {
+      if (!TABLE_ID) {
+        console.error("Table ID is missing!");
+        return;
+      }
+
+      // Confirm before deleting
+      if (!confirm("Are you sure you want to delete this entire table?")) {
+        return;
+      }
+
+      // Send DELETE request
+      fetch(`/api/delete_table/${TABLE_ID}/`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('Delete Response:', result);
+          if (result.success) {
+            alert("Table deleted successfully!");
+            window.location.reload(); // Reload the page after deletion
+          } else {
+            alert('Failed to delete table.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}

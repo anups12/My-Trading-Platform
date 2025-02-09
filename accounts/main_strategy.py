@@ -343,11 +343,11 @@ class TradingStrategy1:
         self.close_all_open_orders()
         self.strike_direction = 'call' if self.strike_direction == 'put' else 'put'
         instrument_symbol, instrument_price = get_instrument(
-            self.index, self.expiry, self.strike_distance, self.strike_direction
+            self.index, self.strike_distance, self.strike_direction, expiry=self.expiry
         )
 
         self.hedging_strike_direction = 'call' if self.strike_direction == 'put' else 'put'
-        hedging_instrument, hedging_instrument_price = get_instrument(self.index, self.expiry, self.hedging_strike_distance, self.hedging_strike_direction)
+        hedging_instrument, hedging_instrument_price = get_instrument(self.index, self.hedging_strike_distance, self.hedging_strike_direction, expiry=self.expiry)
         self.hedging_instrument = hedging_instrument
 
         create_table(instrument_price, self.main_target, self.strategy, self.hedging_limit_price, table=self.data_table)

@@ -2,7 +2,6 @@ import logging
 import os
 import threading
 from logging.handlers import RotatingFileHandler
-
 from tabulate import tabulate
 
 

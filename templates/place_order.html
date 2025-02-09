@@ -148,4 +148,70 @@
         </div>
     </form>
 </div>
+
+<div class="container mt-5 p-4 shadow-lg p-3 mb-5 bg-body rounded" style="background-color: #ffe6f0; border: 2px solid #ffb3c6; border-radius: 8px; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);">
+
+    <!-- Display balance -->
+    <h3 class="text-center" style="color: lightseagreen;">Start Strategy Buy Sell</h3>
+
+    <!-- Trade Form -->
+    <form method="post" style="padding: 20px;" action="{% url 'strategy_buy_sell' %}">
+        {% csrf_token %}
+
+        <!-- Row for primary dropdowns -->
+        <div class="row">
+            <div class="col-md-4 ">
+                <label for="indexSelect" style="color: lightseagreen;">Select Option</label>
+                <select name="indexSelect" id="index" class="form-control border rounded" style="border-color: lightseagreen;">
+                    <option value="NSE:NIFTY50-INDEX">Nifty</option>
+                    <option value="NSE:NIFTYBANK-INDEX">Bank Nifty</option>
+                    <option value="NSE:FINNIFTY-INDEX">Fin Nifty</option>
+                    <option value="NSE:MIDCPNIFTY-INDEX">Midcap Nifty</option>
+                </select>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="callStrike" style="color: lightseagreen;">Call Strike Distance</label>
+                <input type="number" name="callStrike" id="callStrike" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Strike Distance" required>
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+                <label for="putStrike" style="color: lightseagreen;">Put Strike Distance</label>
+                <input type="number" name="putStrike" id="putStrike" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Strike Distance" required>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label for="percentageDown" style="color: lightseagreen;">Percentage Down</label>
+                <input type="number" name="percentageDown" id="percentageDown" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Strike Distance" required>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="levelsCount" style="color: lightseagreen;">Total Levels of Call</label>
+                <input type="number" name="levelsCount" id="levelsCount" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Strike Distance" required>
+            </div>
+             <div class="col-md-4 mb-3">
+                <label for="callBaseQuantity" style="color: lightseagreen;">Call Base Quantity</label>
+                <input type="number" name="callBaseQuantity" id="callBaseQuantity" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Quantity" required>
+            </div>
+             <div class="col-md-4 mb-3">
+                <label for="putBaseQuantity" style="color: lightseagreen;">Put Base Quantity</label>
+                <input type="number" name="putBaseQuantity" id="putBaseQuantity" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Quantity" required>
+            </div>
+             <div class="col-md-4 mb-3">
+                <label for="tableName" style="color: lightseagreen;">Table Name</label>
+                <input type="text" name="tableName" id="tableName" class="form-control border rounded" style="border-color: lightseagreen;" placeholder="Enter Table Name" required>
+            </div>
+
+        </div>
+
+        <!-- Submit button -->
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-success mt-4 shadow-lg p-2" style="border-radius: 30px; font-size: 18px; width: 200px;">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

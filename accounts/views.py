@@ -214,11 +214,11 @@ class PlaceOrderView(APIView):
 
             # Fetch lot size and instrument details
             lot_size = get_lot_size(index)
-            instrument_symbol, instrument_price = get_instrument(index, expiry, strike_distance, strike_direction)
+            instrument_symbol, instrument_price = get_instrument(index, strike_distance, strike_direction, expiry=expiry)
 
             # Fetch hedging instrument details
             hedging_instrument_symbol, hedging_instrument_price = get_instrument(
-                index, expiry, hedging_strike_distance, hedging_strike_direction
+                index, hedging_strike_distance, hedging_strike_direction, expiry=expiry
             )
             # Determine main price for the trade
             main_price = limit_price if limit_price else instrument_price
@@ -469,7 +469,7 @@ class GetTableDataAPIView(APIView):
         try:
             for strategy_id in all_ids:
                 cache_key = f"strategy_{strategy_id}"
-                strategy_data = cache.get(cache_key)
+                strategy_data = get(cache_key)
 
                 if not strategy_data:
                     strategy = OrderStrategy.objects.filter(id=strategy_id).first()
