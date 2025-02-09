@@ -1,5 +1,6 @@
 from django.urls import path
 
+from strategies.views import StrategyBuySell, PlaceBuySellOrders
 from .views import CustomerRegisterView, CustomerLoginView, CustomerLogoutView, HomeView, PlaceOrderView, \
     PriceQuantityAPIView, StopStrategy, KillActionView, OauthLogin, CallBackLoginUrl, GetTableDataAPIView, \
     GetDynamicFieldsAPIView
@@ -22,5 +23,8 @@ urlpatterns = [
 
     path('api/static-data/', GetTableDataAPIView.as_view(), name='static_data_api'),
     path('api/dynamic-data/', GetDynamicFieldsAPIView.as_view(), name='dynamic_data_api'),
+    path('strategy_buy_sell/', StrategyBuySell.as_view(), name='strategy_buy_sell'),
+    path('api/buy_sell/', PlaceBuySellOrders.as_view(), name='buy_sell'),
+
 
 ]

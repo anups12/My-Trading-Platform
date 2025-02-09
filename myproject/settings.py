@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['localhost', 'localhost:8000', "localhost:7000", 'localhost:6000', "127.0.0.1:8000"]
+ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localhost:8000', "localhost:7000", 'localhost:6000', "127.0.0.1:8000"]
 
 
 # Application definition
@@ -142,5 +142,9 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'  # or your broker URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
-FYERS_CLIENT_ID = os.environ.get('CLIENT_ID')
-FYERS_SECRET_KEY = os.environ.get('CLIENT_SECRET')
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+
+
+FYERS_CLIENT_ID = config('CLIENT_ID')
+FYERS_SECRET_KEY = config('CLIENT_SECRET')

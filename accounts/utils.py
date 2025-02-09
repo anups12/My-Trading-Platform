@@ -1,8 +1,7 @@
 import json
 import time
-from datetime import datetime
 from functools import wraps
-
+from django.utils import timezone
 from django.db import transaction
 from fyers_apiv3 import fyersModel
 
@@ -12,16 +11,23 @@ from django.conf import settings
 
 redirect_uri = "http://127.0.0.1:8000/fyers_login"
 
+def delete_old_tokens():
+    today = timezone.now().date()
+    AccessToken.objects.filter(timestamp_created__date__lt=today).delete()
 
 def get_access_token():
-    today_date = datetime.now()
-    access_tokens = AccessToken.objects.filter(is_active=True)
-    AccessToken.objects.filter(timestamp_created__date__lt=today_date).delete()
-    if access_tokens.exists():
-        return access_tokens.first().access_token
-    else:
-        return None
+    try:
+        today = timezone.now().date()
+        AccessToken.objects.filter(timestamp_created__date__lt=today).delete()
+        access_tokens = AccessToken.objects.filter(is_active=True).order_by('-timestamp_created')
 
+        if access_tokens.exists():
+            return access_tokens.first().access_token
+        else:
+            return None
+    except Exception as e:
+        print(f"Error getting access token: {e}")
+        return None
 
 
 def get_customer(request):
@@ -89,7 +95,7 @@ def process_option_data(data):
         return {}, {}
 
 
-def get_instrument(index, expiry, strike_distance, strike_direction):
+def get_instrument(index, strike_distance, strike_direction, expiry=None):
     access_token = get_access_token()
 
     """

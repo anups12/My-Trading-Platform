@@ -22,7 +22,7 @@ class Customer(models.Model):
 class OrderStrategy(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     main_instrument = models.CharField(max_length=255, null=True, blank=True)
-    original_price = models.DecimalField(max_digits=6, decimal_places=3)
+    original_price = models.DecimalField(max_digits=6, decimal_places=3, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_hedging = models.BooleanField(default=False)
@@ -32,6 +32,7 @@ class OrderStrategy(models.Model):
     hedging_limit_price = models.DecimalField(max_digits=6, null=True, blank=True, decimal_places=3)
     hedging_limit_quantity = models.IntegerField(null=True, blank=True)
     hedge_limit_order_time_for_convert_from_lo_to_mo = models.CharField(max_length=50, null=True, blank=True)
+    table = models.ForeignKey('PriceQuantityTable', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         """

@@ -18,6 +18,22 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
+        /* Sidebar default (collapsed state) */
+.offcanvas-start {
+    width: 250px !important; /* Full width when opened */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Adjust sidebar links for a small view */
+.offcanvas:not(.show) .nav-link {
+    text-align: center;
+    font-size: 12px; /* Reduce text size */
+    padding: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
     </style>
 </head>
 <body>
@@ -88,6 +104,11 @@
                     Strategy Page
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link text-white fw-bold fs-5" href="{% url 'strategy_buy_sell' %}">
+                    Strategy Buy Sell
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link text-white fw-bold fs-5" href="{% url 'add_table' %}">
                     Add Table
@@ -101,11 +122,28 @@
 <div class="container-fluid mt-3">
     <div class="row">
         <main class="col-md-12 ms-sm-auto px-4">
+            <div id="alert-box" class="alert d-none" role="alert"></div>
+
             <div class="container-fluid">
                 {% block content %}{% endblock %}
             </div>
         </main>
     </div>
 </div>
+
+<script>
+    function showMessage(message, type = 'success') {
+  const alertBox = document.getElementById('alert-box');
+  alertBox.textContent = message;
+  alertBox.className = `alert alert-${type} mt-3`; // Bootstrap alert classes
+  alertBox.classList.remove('d-none');
+
+  // Auto-hide after 3 seconds
+  setTimeout(() => {
+    alertBox.classList.add('d-none');
+  }, 3000);
+}
+
+</script>
 </body>
 </html>
