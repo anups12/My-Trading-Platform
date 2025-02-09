@@ -10,7 +10,7 @@ fi
 
 IMAGE_NAME="amanboss/tradingapp:latest"
 CONTAINER_NAME="tradingapp"
-MYSQL_CONTAINER_NAME="mysql_container"
+MYSQL_CONTAINER_NAME="mysqlcontainer"
 HOST_PORT=8000
 
 # Pull the latest Docker image
@@ -39,11 +39,7 @@ docker run -d \
   mysql:latest
 
 # Start Django container
-docker run -d \
-  -p $HOST_PORT:8000 \
-  --env-file $SCRIPT_DIR/.env \
-  --name $CONTAINER_NAME \
-  $IMAGE_NAME
+docker run -d -p $HOST_PORT:8000 --env-file $SCRIPT_DIR/.env --name $CONTAINER_NAME $IMAGE_NAME
 
 echo "Containers are running:"
 docker ps
