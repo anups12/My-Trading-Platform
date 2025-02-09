@@ -74,7 +74,7 @@ class Orders(models.Model):
         (3, 'CANCELLED')
     ]
 
-    level = models.ForeignKey(OrderLevel, on_delete=models.CASCADE)
+    level = models.ForeignKey(OrderLevel, on_delete=models.CASCADE, null=True, blank=True)
     entry_order_id = models.CharField(max_length=100, null=True, blank=True)
     entry_order_status = models.IntegerField(choices=order_status_choices, default=0)
     order_side = models.CharField(max_length=10, null=True, blank=True)  # 'buy' or 'sell'
