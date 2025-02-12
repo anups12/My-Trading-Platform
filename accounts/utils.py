@@ -273,26 +273,35 @@ def create_table(main_price, target, strategy, hedging_limit_price, quantity=Non
         print(f"An error occurred: {e}")
 
 
-def retry_on_exception(max_retries=RETRY_ATTEMPTS, delay=2, exceptions=(Exception,)):
-    """Decorator for retrying a function if specified exceptions occur."""
+def retry_on_exception(max_retries=RETRY_ATTEMPTS, delay=2, backoff=2, exceptions=(Exception,)):
+    """Decorator for retrying a function if specified exceptions occur.
+
+    :param max_retries: Maximum number of retry attempts.
+    :param delay: Initial delay before retrying (in seconds).
+    :param backoff: Multiplier to increase delay after each failure (Exponential backoff).
+    :param exceptions: Tuple of exceptions to catch and retry on.
+    """
 
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             retries = 0
+            current_delay = delay
+
             while retries < max_retries:
                 try:
                     return func(*args, **kwargs)
                 except exceptions as e:
                     retries += 1
                     if retries >= max_retries:
-                        raise
-                    time.sleep(delay)
+                        raise  # Re-raise the original exception
+
+                    time.sleep(current_delay)
+                    current_delay *= backoff  # Exponential backoff
 
         return wrapper
 
     return decorator
-
 
 class OrderPlacementError(Exception):
     """Custom exception for errors during order placement."""

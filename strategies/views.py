@@ -38,6 +38,7 @@ class StrategyBuySell(APIView):
         put_instrument_symbol, put_instrument_price = get_instrument(index, put_strike, 'put', expiry=None)
 
         call_order_id = place_order(call_instrument_symbol, call_base_quantity, 2, 1)
+
         if call_order_id:
             Orders.objects.create(entry_order_id=call_order_id, entry_order_status=1, order_side='buy', is_entry=True, order_quantity=call_base_quantity)
 
@@ -95,7 +96,6 @@ class StrategyBuySell(APIView):
 #
 #         return JsonResponse({"message": "Order placed", "active_orders": active_orders})
 
-@retry_on_exception()
 def place_order(instrument, quantity, order_type, side, price=None):
     """
     Places an order via the Fyers API and handles errors properly.
@@ -130,7 +130,7 @@ def place_order(instrument, quantity, order_type, side, price=None):
             raise RuntimeError("No response received from the order placement API.")
 
         # Validate API success
-        if response.get("s") == "ok":
+        if response.get("s") != "ok":
             error_message = response.get("message", "Unknown error occurred")
             raise RuntimeError(f"Order placement failed: {error_message}")
 
