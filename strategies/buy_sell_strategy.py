@@ -134,27 +134,32 @@ class BackgroundProcessor:
         try:
             # Fetch message from the queue with a timeout
             message = self.ws_client.q.get(timeout=1)
+            self.logger.debug(f"Message received from queue: {message}")
+            orders = message.get("orders", {})
 
             # Validate and parse the message structure
-            if message.get("s") != "ok":
-                self.logger.warning(f"Invalid WebSocket message status: {message.get('s')}")
+            if message.get("s") != "ok" or orders.get('status') != 2:
+                self.logger.warning(f"Invalid WebSocket message status: {message.get('s')}, {orders.get('status')}")
                 return None
 
             # Extract order details
-            orders = message.get("orders", {})
             order_id = orders.get("id")
             status = message.get("s")  # This corresponds to the order status
+
+            self.logger.debug(f"Order ID: {order_id} First Order: {first_order}, Second Order: {second_order}")
 
             # Determine if the message matches the entry or exit order
             if order_id == first_order:
                 self._clear_queue()
+                self.logger.debug(f'First Order matched {order_id} {first_order}')
                 return order_id, status, "first_order"
             elif order_id == second_order:
                 self._clear_queue()
+                self.logger.debug(f'Second Order matched {order_id} {second_order}')
+
                 return order_id, status, "second_order"
             else:
                 self.logger.debug(f"Order ID {order_id} does not match entry or exit order.")
-
         except Exception as e:
             self.logger.error(f"Error retrieving or parsing message from queue: {e}")
 
@@ -178,8 +183,10 @@ class BackgroundProcessor:
             try:
                 order_info = self._get_message_from_queue(first_order, second_order)
                 if not order_info:
+                    self.logger.debug("Its here many times")
                     continue
 
+                self.logger.debug("Its here many times 1")
                 order_id, status, order_type = order_info
                 self.logger.info(f"Order confirmed: order_id={order_id}, status={status}, type={order_type}")
 
@@ -198,8 +205,8 @@ class BackgroundProcessor:
                         )
                     self.logger.debug(f"Order {new_order_id} updated to status 1")
 
-                self.cancel_orders(second_order if order_type == 'first_order' else first_order)
-                self.stop_event.set()
+                    self.cancel_orders(second_order if order_type == 'first_order' else first_order)
+                    self.stop_event.set()
 
             except Exception as e:
                 self.logger.error(f"Unexpected error while retrieving or processing message: {e}")
@@ -220,7 +227,6 @@ class BackgroundProcessor:
             return None, None, None
         return instrument, int(quantity), side
 
-    @retry_on_exception()
     def place_order(self, instrument, quantity, order_type, side, price=None):
         """
         Places an order via the Fyers API and handles errors properly.
@@ -286,6 +292,7 @@ class BackgroundProcessor:
                 data = {"id": order_id}
                 response = self.fyers.cancel_order(data=data)
 
+                self.logger.debug(f"Cancelling order {order_id} Response: {response}")
                 if response.get('s') == "ok":
                     order = Orders.objects.filter(entry_order_id=order_id, is_complete=False).first()
                     self.logger.info(f"Cancelling order for Order id {order_id} | {order.id}")
