@@ -1,4 +1,3 @@
-import random
 import threading
 import time
 from queue import Queue
@@ -38,13 +37,14 @@ class BackgroundProcessor:
         self.second_order_values = None
         self.fyers = fyersModel.FyersModel(client_id=settings.FYERS_CLIENT_ID, token=self.access_token, is_async=False, log_path="")
 
+        self.logger.info(f"Strategy started for strategy id: {self.strategy.id}")
+
     @staticmethod
     def _round_to_tick_size(price, tick_size):
         """Rounds a price to the nearest tick size."""
         return round(float(price) / tick_size) * tick_size
 
     def add_click(self, click_data):
-        self.logger.info(f"Strategy started for strategy id: {self.strategy.id}")
 
         """Adds a click to the queue and wakes up the worker if needed."""
         with self.condition:
@@ -68,6 +68,8 @@ class BackgroundProcessor:
                 # Start processing
                 self.is_processing = True
 
+                self.stop_event = threading.Event()
+
                 # Retrieve two click commands
                 self.first_order_values = self.click_queue.get()
                 self.second_order_values = self.click_queue.get()
@@ -75,14 +77,13 @@ class BackgroundProcessor:
                 # Process clicks
                 self.logger.debug(f'Both clicks received and processing {self.first_order_values}, {self.second_order_values}')
                 self.logger.info(self.first_order_values)
-                self.logger.info(self.second_order_values)
 
                 if self.first_order_values.get('callPrice') not in [None, '']:
-                    quantity = self.first_order_values.get('callBuyQty') if self.first_order_values.get('action') == 'buy' else self.first_order_values.get('callSellQty')
+                    quantity = self.first_order_values.get('callSellQty') or self.first_order_values.get('callBuyQty')
                     price = self.first_order_values.get('callPrice')
                     instrument = self.call_instrument
                 elif self.first_order_values.get('putPrice') not in [None, '']:
-                    quantity = self.first_order_values.get('putBuyQty') if self.first_order_values.get('action') == 'buy' else self.first_order_values.get('putSellQty')
+                    quantity = self.first_order_values.get('putSellQty') or self.first_order_values.get('putBuyQty')
                     price = self.first_order_values.get('putPrice')
                     instrument = self.put_instrument
                 price = self._round_to_tick_size(price, 0.05)
@@ -91,14 +92,14 @@ class BackgroundProcessor:
                 first_order = self.place_order(instrument, quantity=int(quantity), order_type=1, side=side, price=float(price))
                 if first_order:
                     Orders.objects.create(entry_order_id=first_order, entry_order_status=2, order_side='buy', is_entry=True, order_quantity=quantity, entry_price=price)
-                    order_id = self.place_order(self.put_instrument if instrument == self.call_instrument else self.call_instrument, quantity=int(quantity), order_type=2, side=1)
-                    if order_id:
-                        Orders.objects.create(entry_order_id=order_id, entry_order_status=1, order_side='buy', is_entry=True, order_quantity=quantity)
+
+                self.logger.info(self.second_order_values)
+
                 if self.second_order_values.get('callPrice') not in [None, '']:
-                    quantity = self.second_order_values.get('callBuyQty') if self.second_order_values.get('action') == 'buy' else self.second_order_values.get('callSellQty')
+                    quantity = self.second_order_values.get('callSellQty') or self.second_order_values.get('callBuyQty')
                     price = self.second_order_values.get('callPrice')
                 elif self.second_order_values.get('putPrice') not in [None, '']:
-                    quantity = self.second_order_values.get('putBuyQty') if self.second_order_values.get('action') == 'buy' else self.second_order_values.get('putSellQty')
+                    quantity = self.second_order_values.get('putSellQty') or self.second_order_values.get('putBuyQty')
                     price = self.second_order_values.get('putPrice')
 
                 price = self._round_to_tick_size(price, 0.05)
@@ -107,10 +108,8 @@ class BackgroundProcessor:
                 second_order = self.place_order(self.put_instrument, quantity=int(quantity), order_type=1, side=side, price=float(price))
                 if second_order:
                     Orders.objects.create(entry_order_id=second_order, entry_order_status=2, order_side='buy', is_entry=True, order_quantity=price, entry_price=quantity)
-                    order_id = self.place_order(self.put_instrument if instrument == self.call_instrument else self.call_instrument, quantity=int(quantity), order_type=2, side=1)
-                    if order_id:
-                        Orders.objects.create(entry_order_id=order_id, entry_order_status=1, order_side='buy', is_entry=True, order_quantity=quantity)
 
+                self.logger.debug("Both orders are placed. Waiting for confirmation.")
                 self.wait_for_order_confirmation(first_order, second_order)
 
             # Mark as completed
@@ -158,7 +157,6 @@ class BackgroundProcessor:
 
         except Exception as e:
             self.logger.error(f"Error retrieving or parsing message from queue: {e}")
-            return random.choice([(first_order, 'ok', "exit"), (second_order, 'ok', "entry")])
 
         return None  # Default return if no matching message is found
 
@@ -178,28 +176,49 @@ class BackgroundProcessor:
 
         while not self.stop_event.is_set():
             try:
-                # Retrieve message from the queue
                 order_info = self._get_message_from_queue(first_order, second_order)
-                if order_info:
-                    order_id, status, order_type = order_info
+                if not order_info:
+                    continue
 
-                    self.logger.info(
-                        f"Order confirmed: order_id={order_id}, status={status}, type={order_type}"
-                    )
-                    if order_type == 'first_order':
-                        Orders.objects.filter(entry_order_id=order_id).update(entry_order_status=1)
-                        self.logger.debug(f"Order {order_id} updated to status 1")
-                        self.cancel_orders(second_order)
-                    elif order_type == 'second_order':
-                        Orders.objects.filter(entry_order_id=order_id).update(entry_order_status=1)
-                        self.logger.debug(f"Order {order_id} updated to status 1 second")
-                        self.cancel_orders(first_order)
+                order_id, status, order_type = order_info
+                self.logger.info(f"Order confirmed: order_id={order_id}, status={status}, type={order_type}")
 
-                    self.stop_event.set()
+                Orders.objects.filter(entry_order_id=order_id).update(entry_order_status=1)
+                order_values = self.first_order_values if order_type == 'first_order' else self.second_order_values
+
+                instrument, quantity, side = self._get_order_details(order_values)
+                self.logger.debug({"Order Number": order_type, "Instrument": instrument, "Quantity": quantity, "Side": side})
+
+                if quantity and quantity > 0:
+                    new_order_id = self.place_order(instrument, quantity=int(quantity), order_type=2, side=side)
+                    if new_order_id:
+                        Orders.objects.create(
+                            entry_order_id=new_order_id, entry_order_status=1, order_side='buy',
+                            is_entry=True, order_quantity=quantity, is_complete=True
+                        )
+                    self.logger.debug(f"Order {new_order_id} updated to status 1")
+
+                self.cancel_orders(second_order if order_type == 'first_order' else first_order)
+                self.stop_event.set()
+
             except Exception as e:
                 self.logger.error(f"Unexpected error while retrieving or processing message: {e}")
             finally:
                 time.sleep(0.1)  # Prevent high CPU usage during polling
+
+    def _get_order_details(self, order_values):
+        """Extracts instrument, quantity, and side from order values."""
+        if order_values.get('callPrice') not in [None, '']:
+            quantity = order_values.get('putSellQty') or order_values.get('putBuyQty')
+            instrument = self.put_instrument
+            side = -1 if order_values.get('putSellQty') not in [None, ''] else 1
+        elif order_values.get('putPrice') not in [None, '']:
+            quantity = order_values.get('callSellQty') or order_values.get('callBuyQty')
+            instrument = self.call_instrument
+            side = -1 if order_values.get('callSellQty') not in [None, ''] else 1
+        else:
+            return None, None, None
+        return instrument, int(quantity), side
 
     @retry_on_exception()
     def place_order(self, instrument, quantity, order_type, side, price=None):
@@ -234,7 +253,7 @@ class BackgroundProcessor:
                 raise RuntimeError("No response received from the order placement API.")
 
             # Validate API success
-            if response.get("s") == "ok":
+            if response.get("s") != "ok":
                 error_message = response.get("message", "Unknown error occurred")
                 raise RuntimeError(f"Order placement failed: {error_message}")
 
@@ -267,7 +286,7 @@ class BackgroundProcessor:
                 data = {"id": order_id}
                 response = self.fyers.cancel_order(data=data)
 
-                if response.get('s') != "ok":
+                if response.get('s') == "ok":
                     order = Orders.objects.filter(entry_order_id=order_id, is_complete=False).first()
                     self.logger.info(f"Cancelling order for Order id {order_id} | {order.id}")
                     if order:

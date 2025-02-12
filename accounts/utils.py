@@ -11,14 +11,13 @@ from django.conf import settings
 
 redirect_uri = "http://127.0.0.1:8000/fyers_login"
 
-def delete_old_tokens():
-    today = timezone.now().date()
+def delete_old_tokens(today):
     AccessToken.objects.filter(timestamp_created__date__lt=today).delete()
 
 def get_access_token():
     try:
         today = timezone.now().date()
-        AccessToken.objects.filter(timestamp_created__date__lt=today).delete()
+        delete_old_tokens(today)
         access_tokens = AccessToken.objects.filter(is_active=True).order_by('-timestamp_created')
 
         if access_tokens.exists():
