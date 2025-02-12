@@ -7,7 +7,7 @@ from fyers_apiv3 import fyersModel
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import PriceQuantityTable, OrderStrategy
+from accounts.models import PriceQuantityTable, OrderStrategy, Orders
 from accounts.utils import get_customer, get_instrument, retry_on_exception, get_access_token
 from strategies.buy_sell_strategy import BackgroundProcessor
 
@@ -22,7 +22,7 @@ class StrategyBuySell(APIView):
         customer = get_customer(request)
         table = PriceQuantityTable.objects.filter(is_active=True).last()
         data = json.loads(table.price_quantity_data)
-        return render(request, 'strategy_buy_sell.html', {'my_list': data, "customer": customer, "table_id": table.id})
+        return render(request, 'strategy_buy_sell.html', {'my_list': data, "customer": customer, "table_id": table.id, 'name': table.name})
 
     def post(self, request, *args, **kwargs):
         customer = get_customer(request)
@@ -31,10 +31,20 @@ class StrategyBuySell(APIView):
         put_strike = int(request.POST.get('putStrike'))
         percentage_down = float(request.POST.get('percentageDown'))
         levels_count = int(request.POST.get('levelsCount'))
+        call_base_quantity = int(request.POST.get('callBaseQuantity'))
+        put_base_quantity = int(request.POST.get('putBaseQuantity'))
+
         call_instrument_symbol, call_instrument_price = get_instrument(index, call_strike, 'call', expiry=None)
         put_instrument_symbol, put_instrument_price = get_instrument(index, put_strike, 'put', expiry=None)
-        call_base_quantity = request.POST.get('callBaseQuantity')
-        put_base_quantity = request.POST.get('putBaseQuantity')
+
+        call_order_id = place_order(call_instrument_symbol, call_base_quantity, 2, 1)
+        if call_order_id:
+            Orders.objects.create(entry_order_id=call_order_id, entry_order_status=1, order_side='buy', is_entry=True, order_quantity=call_base_quantity)
+
+        put_order_id = place_order(put_instrument_symbol, put_base_quantity, 2, 1)
+        if put_order_id:
+            Orders.objects.create(entry_order_id=put_order_id, entry_order_status=1, order_side='buy', is_entry=True, order_quantity=put_base_quantity)
+
         price_factor = 1 - (percentage_down / 100)
         table_name = request.POST.get('tableName')
         levels = {
@@ -120,7 +130,7 @@ def place_order(instrument, quantity, order_type, side, price=None):
             raise RuntimeError("No response received from the order placement API.")
 
         # Validate API success
-        if response.get("s") != "ok":
+        if response.get("s") == "ok":
             error_message = response.get("message", "Unknown error occurred")
             raise RuntimeError(f"Order placement failed: {error_message}")
 
