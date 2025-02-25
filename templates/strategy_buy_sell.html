@@ -48,9 +48,12 @@
 <script>
     const TABLE_ID = "{{ table_id }}"; // Table ID passed from Django context
 
-    // Function to validate input fields to allow only numbers
+    // Function to validate input fields to allow only numbers and decimal points
     function validateNumberInput(input) {
-      input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+      input.value = input.value.replace(/[^0-9.]/g, ''); // Allow only numbers and decimal points
+      if ((input.value.match(/\./g) || []).length > 1) {
+        input.value = input.value.slice(0, -1); // Prevent multiple decimal points
+      }
     }
 
        // Function to handle Buy/Sell actions

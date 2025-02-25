@@ -7,7 +7,7 @@ from fyers_apiv3 import fyersModel
 
 from accounts.logging_setup import get_strategy_logger
 from accounts.models import OrderStrategy, Orders
-from accounts.utils import get_access_token, retry_on_exception
+from accounts.utils import get_access_token
 from accounts.websocket_handler import FyersWebSocketManager
 
 
@@ -65,59 +65,49 @@ class BackgroundProcessor:
                 while self.click_queue.qsize() < 2:
                     self.condition.wait()  # Wait for two clicks
 
-                # Start processing
                 self.is_processing = True
-
                 self.stop_event = threading.Event()
 
-                # Retrieve two click commands
-                self.first_order_values = self.click_queue.get()
-                self.second_order_values = self.click_queue.get()
+                # Retrieve orders
+                first_order_values = self.click_queue.get()
+                second_order_values = self.click_queue.get()
 
-                # Process clicks
-                self.logger.debug(f'Both clicks received and processing {self.first_order_values}, {self.second_order_values}')
-                self.logger.info(self.first_order_values)
+                self.logger.debug(f'Both clicks received: {first_order_values}, {second_order_values}')
 
-                if self.first_order_values.get('callPrice') not in [None, '']:
-                    quantity = self.first_order_values.get('callSellQty') or self.first_order_values.get('callBuyQty')
-                    price = self.first_order_values.get('callPrice')
-                    instrument = self.call_instrument
-                elif self.first_order_values.get('putPrice') not in [None, '']:
-                    quantity = self.first_order_values.get('putSellQty') or self.first_order_values.get('putBuyQty')
-                    price = self.first_order_values.get('putPrice')
-                    instrument = self.put_instrument
-                price = self._round_to_tick_size(price, 0.05)
-                side = 1 if self.first_order_values.get('action') == 'buy' else -1
+                first_order = self._process_order(first_order_values)
+                second_order = self._process_order(second_order_values)
 
-                first_order = self.place_order(instrument, quantity=int(quantity), order_type=1, side=side, price=float(price))
-                if first_order:
-                    Orders.objects.create(entry_order_id=first_order, entry_order_status=2, order_side='buy', is_entry=True, order_quantity=quantity, entry_price=price)
-
-                self.logger.info(self.second_order_values)
-
-                if self.second_order_values.get('callPrice') not in [None, '']:
-                    quantity = self.second_order_values.get('callSellQty') or self.second_order_values.get('callBuyQty')
-                    price = self.second_order_values.get('callPrice')
-                elif self.second_order_values.get('putPrice') not in [None, '']:
-                    quantity = self.second_order_values.get('putSellQty') or self.second_order_values.get('putBuyQty')
-                    price = self.second_order_values.get('putPrice')
-
-                price = self._round_to_tick_size(price, 0.05)
-                side = 1 if self.second_order_values.get('action') == 'buy' else -1
-
-                second_order = self.place_order(self.put_instrument, quantity=int(quantity), order_type=1, side=side, price=float(price))
-                if second_order:
-                    Orders.objects.create(entry_order_id=second_order, entry_order_status=2, order_side='buy', is_entry=True, order_quantity=price, entry_price=quantity)
-
-                self.logger.debug("Both orders are placed. Waiting for confirmation.")
+                self.logger.debug("Both orders placed. Waiting for confirmation.")
                 self.wait_for_order_confirmation(first_order, second_order)
 
             # Mark as completed
             with self.condition:
-                self.is_processing = False  # Allow new clicks
-                self.click_queue.queue.clear()  # Ensure queue is empty before new clicks
+                self.is_processing = False
+                while not self.click_queue.empty():
+                    self.click_queue.get()  # Clear queue safely
 
             self.logger.debug("Processing Completed. Ready for new commands.")
+
+    def _process_order(self, order_values):
+        """Helper function to process a single order."""
+        instrument = self.call_instrument if order_values.get('callPrice') else self.put_instrument
+        quantity = order_values.get('callSellQty') or order_values.get('callBuyQty') or \
+                   order_values.get('putSellQty') or order_values.get('putBuyQty')
+        price = order_values.get('callPrice') or order_values.get('putPrice')
+
+        if not price:
+            self.logger.warning("Order price missing, skipping order.")
+            return None
+
+        price = self._round_to_tick_size(price, 0.05)
+        side = 1 if order_values.get('action') == 'buy' else -1
+
+        order = self.place_order(instrument, quantity=int(quantity), order_type=1, side=side, price=float(price))
+        if order:
+            Orders.objects.create(entry_order_id=order, entry_order_status=2, order_side='buy' if side == 1 else 'sell',
+                                  is_entry=True, order_quantity=quantity, entry_price=price)
+
+        return order
 
     def _get_message_from_queue(self, first_order, second_order):
         """
@@ -161,8 +151,7 @@ class BackgroundProcessor:
             else:
                 self.logger.debug(f"Order ID {order_id} does not match entry or exit order.")
         except Exception as e:
-            self.logger.error(f"Error retrieving or parsing message from queue: {e}")
-
+            pass
         return None  # Default return if no matching message is found
 
     def _clear_queue(self):
@@ -183,10 +172,8 @@ class BackgroundProcessor:
             try:
                 order_info = self._get_message_from_queue(first_order, second_order)
                 if not order_info:
-                    self.logger.debug("Its here many times")
                     continue
 
-                self.logger.debug("Its here many times 1")
                 order_id, status, order_type = order_info
                 self.logger.info(f"Order confirmed: order_id={order_id}, status={status}, type={order_type}")
 
