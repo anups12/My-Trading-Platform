@@ -69,13 +69,13 @@ class BackgroundProcessor:
                 self.stop_event = threading.Event()
 
                 # Retrieve orders
-                first_order_values = self.click_queue.get()
-                second_order_values = self.click_queue.get()
+                self.first_order_values = self.click_queue.get()
+                self.second_order_values = self.click_queue.get()
 
-                self.logger.debug(f'Both clicks received: {first_order_values}, {second_order_values}')
+                self.logger.debug(f'Both clicks received: {self.first_order_values}, {self.second_order_values}')
 
-                first_order = self._process_order(first_order_values)
-                second_order = self._process_order(second_order_values)
+                first_order = self._process_order(self.first_order_values)
+                second_order = self._process_order(self.second_order_values)
 
                 self.logger.debug("Both orders placed. Waiting for confirmation.")
                 self.wait_for_order_confirmation(first_order, second_order)
@@ -91,8 +91,10 @@ class BackgroundProcessor:
     def _process_order(self, order_values):
         """Helper function to process a single order."""
         instrument = self.call_instrument if order_values.get('callPrice') else self.put_instrument
-        quantity = order_values.get('callSellQty') or order_values.get('callBuyQty') or \
-                   order_values.get('putSellQty') or order_values.get('putBuyQty')
+        if order_values.get('callPrice') not in [None, '']:
+            quantity = order_values.get('callSellQty') or order_values.get('callBuyQty')
+        else:
+            quantity = order_values.get('putSellQty') or order_values.get('putBuyQty')
         price = order_values.get('callPrice') or order_values.get('putPrice')
 
         if not price:
@@ -124,12 +126,10 @@ class BackgroundProcessor:
         try:
             # Fetch message from the queue with a timeout
             message = self.ws_client.q.get(timeout=1)
-            self.logger.debug(f"Message received from queue: {message}")
             orders = message.get("orders", {})
 
             # Validate and parse the message structure
             if message.get("s") != "ok" or orders.get('status') != 2:
-                self.logger.warning(f"Invalid WebSocket message status: {message.get('s')}, {orders.get('status')}")
                 return None
 
             # Extract order details
@@ -179,7 +179,6 @@ class BackgroundProcessor:
 
                 Orders.objects.filter(entry_order_id=order_id).update(entry_order_status=1)
                 order_values = self.first_order_values if order_type == 'first_order' else self.second_order_values
-
                 instrument, quantity, side = self._get_order_details(order_values)
                 self.logger.debug({"Order Number": order_type, "Instrument": instrument, "Quantity": quantity, "Side": side})
 
@@ -202,6 +201,8 @@ class BackgroundProcessor:
 
     def _get_order_details(self, order_values):
         """Extracts instrument, quantity, and side from order values."""
+        self.logger.debug(f"Order values {order_values}")
+
         if order_values.get('callPrice') not in [None, '']:
             quantity = order_values.get('putSellQty') or order_values.get('putBuyQty')
             instrument = self.put_instrument

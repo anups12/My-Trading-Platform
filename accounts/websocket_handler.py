@@ -24,7 +24,6 @@ class FyersWebSocketManager:
 
     def onError(self, message):
         """Handles WebSocket errors."""
-        self.logger.error(f"WebSocket Error: {message}")
         self._handle_disconnection()
 
     def onClose(self, message):
